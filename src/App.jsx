@@ -15,6 +15,7 @@ import {
   Star,
   Menu,
   X,
+  Plus, // Añadido para los acordeones
   Target,
   Rocket,
   ShieldCheck,
@@ -30,7 +31,7 @@ import {
   Building2,
   Activity,
   Briefcase,
-  AlertCircle // Añadido correctamente aquí
+  AlertCircle
 } from 'lucide-react';
 
 // Hook para animar números (Success Metrics)
@@ -99,10 +100,10 @@ export default function App() {
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
   const [showTopBar, setShowTopBar] = useState(true);
   const [pricingTab, setPricingTab] = useState('all'); // 'all', 'one-time', 'recurring'
-  const canvasRef = useRef(null);
   const heroRef = useRef(null);
 
-  const logoUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png";
+  // URLs de logos corregidas
+  const logoUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778462963/ChatGPT_Image_May_10_2026_08_28_28_PM_mqoqmv.png";
   const faviconUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png";
 
   useEffect(() => {
@@ -238,75 +239,16 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
-  // --- EFECTO DE ONDAS 3D DINÁMICAS (DISEÑO METAL LÍQUIDO VELUZ) ---
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let animationFrameId;
-    let phase = 0;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const animateWaves = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      const linesCount = window.innerWidth < 768 ? 16 : 28;
-      const pointsCount = 45;
-      const stepX = canvas.width / (pointsCount - 1);
-      
-      ctx.lineWidth = 1.3;
-
-      for (let j = 0; j < linesCount; j++) {
-        const factor = j / linesCount;
-        const baseOpacity = 0.04 + Math.sin(factor * Math.PI) * 0.15;
-        
-        ctx.strokeStyle = theme === 'dark' 
-          ? `rgba(191, 255, 0, ${baseOpacity})` 
-          : `rgba(0, 0, 0, ${baseOpacity * 0.4})`;
-
-        ctx.beginPath();
-        for (let i = 0; i < pointsCount; i++) {
-          const x = i * stepX;
-          
-          const wave1 = Math.sin(i * 0.12 + phase + j * 0.15) * 35;
-          const wave2 = Math.cos(i * 0.06 - phase * 0.6 + j * 0.08) * 20;
-          
-          const centerY = (canvas.height * 0.5) + (j - linesCount / 2) * (20 + (j * 0.4));
-          const y = centerY + wave1 + wave2;
-
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        ctx.stroke();
-      }
-
-      phase += 0.004;
-      animationFrameId = requestAnimationFrame(animateWaves);
-    };
-
-    animateWaves();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resizeCanvas);
-    };
-  }, [theme]);
-
-  // Manejo de scroll para Navbar
+  // Manejo de scroll para Navbar y visibilidad de componentes
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY;
       setIsScrolled(scrollPos > 20);
       setShowFloatingBtn(scrollPos > 800);
+      if (heroRef.current && window.innerWidth > 768) {
+        heroRef.current.style.transform = `translateY(${scrollPos * 0.1}px)`;
+        heroRef.current.style.opacity = 1 - scrollPos / 1000;
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -338,14 +280,18 @@ export default function App() {
   const [revealFq, isVisibleFq] = useScrollReveal();
 
   return (
-    <div className={`min-h-screen transition-colors duration-1000 ease-in-out font-sans ${theme === 'dark' ? 'bg-black text-[#e5e2e1]' : 'bg-white text-black'}`}>
+    <div className={`min-h-screen transition-colors duration-1000 ease-in-out font-sans ${theme === 'dark' ? 'bg-[#131313] text-[#e5e2e1]' : 'bg-white text-black'}`}>
       
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Literata:ital,wght@1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Literata:ital,wght@1,400;1,700&display=swap');
         body { font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         .instrument-serif { font-family: 'Literata', serif; font-style: italic; }
+        
+        /* Bug 1 Solucionado: btn-glow y shadow-lima-glow ahora definidos correctamente */
+        .btn-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
         .shadow-lima-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
         .hover-lima-glow:hover { box-shadow: 0 15px 50px -5px rgba(191, 255, 0, 0.6); transform: translateY(-4px); }
+        
         .glass-nav { backdrop-filter: blur(10px); background: rgba(19, 19, 19, 0.85); transition: all 0.3s ease; }
         .pulse-dot { animation: pulse 2s infinite; }
         @keyframes pulse {
@@ -353,6 +299,13 @@ export default function App() {
             70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(191, 255, 0, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(191, 255, 0, 0); }
         }
+        
+        @keyframes bounce-subtle { 
+          0%, 100% { transform: translateY(0); } 
+          50% { transform: translateY(10px); } 
+        }
+        .animate-bounce-subtle { animation: bounce-subtle 2s infinite ease-in-out; }
+
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -370,6 +323,7 @@ export default function App() {
         }
         .animate-spin-slow { animation: spin 8s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
         .accordion-content {
             display: grid;
             grid-template-rows: 0fr;
@@ -382,10 +336,23 @@ export default function App() {
             margin-top: 1rem;
         }
         .accordion-inner { overflow: hidden; }
-      `}</style>
 
-      {/* Canvas Dinámico de Metal Líquido / Ondas */}
-      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none opacity-50" />
+        /* Estilo Premium de Noise + Glow en el fondo del Hero */
+        .hero-noise { 
+          background: #000; 
+          position: relative; 
+          overflow: hidden;
+        }
+        .hero-noise::before { 
+          content: ''; 
+          position: absolute; 
+          inset: 0; 
+          opacity: 0.18; 
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+          pointer-events: none; 
+          z-index: 1; 
+        }
+      `}</style>
 
       {/* 1. TOP BAR / URGENCY BAR */}
       {showTopBar && (
@@ -404,7 +371,6 @@ export default function App() {
       <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'top-0 py-2' : `${showTopBar ? 'top-10' : 'top-4'} py-3`} glass-nav border-b border-white/10`} id="main-nav">
         <div className="max-w-[1440px] mx-auto px-6 md:px-8 flex justify-between items-center">
           <div className="flex items-center cursor-pointer group" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
-            {/* Logo de alta fidelidad, maximizado para perfecta presencia visual */}
             <img src={logoUrl} alt="Veluz Logo" className="h-16 md:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
           </div>
           
@@ -438,23 +404,41 @@ export default function App() {
         </div>
       </div>
 
-      {/* 4. HERO SECTION */}
-      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-32 overflow-hidden bg-black" ref={heroRef}>
-        <div className="relative z-10 max-w-4xl">
-          <div className="inline-flex items-center gap-3 bg-neutral-900/50 border border-white/10 px-4 py-2 rounded-full mb-8">
-            <span className="w-3 h-3 bg-[#BFFF00] rounded-full pulse-dot"></span>
-            <p className="text-[12px] font-bold tracking-widest uppercase text-[#BFFF00]">5 negocios activados este mes</p>
+      {/* 4. HERO SECTION REPLICANDO EL ESTILO DE SCREENSHOT 10.55.54 AM (CON NOISE & GLOW DEL CANVAS) */}
+      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-32 overflow-hidden hero-noise" ref={heroRef}>
+        {/* Efecto visual de fondo Noise + Glow de alta fidelidad */}
+        <div className="absolute inset-0 z-0">
+          {/* Glow central premium */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[250px] sm:h-[350px] bg-[radial-gradient(ellipse,rgba(191,255,0,0.14)_0%,rgba(191,255,0,0.03)_50%,transparent_70%)] blur-2xl" />
+          {/* Línea de luz inferior muy sutil */}
+          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[rgba(191,255,0,0.3)] to-transparent" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl">
+          {/* Badge superior estilizado y minimalista */}
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-900/80 border border-white/5 mb-10 shadow-lg">
+            <div className="flex gap-0.5 text-[#BFFF00]">
+              <Star size={10} fill="currentColor" stroke="none" />
+              <Star size={10} fill="currentColor" stroke="none" />
+              <Star size={10} fill="currentColor" stroke="none" />
+            </div>
+            <span className="text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase text-white/80">
+              ARQUITECTURA DE CRECIMIENTO ORGÁNICO
+            </span>
           </div>
           
-          <h1 className="text-[48px] md:text-[80px] font-black tracking-tighter leading-tight text-white mb-8">
-            Digitalizamos tu <br />
-            <span className="instrument-serif text-[#BFFF00]">negocio con IA.</span>
+          {/* Titular exactamente con el contraste de tipografía moderno */}
+          <h1 className="text-[52px] md:text-[96px] font-black tracking-tighter leading-[1.0] text-white uppercase mb-8">
+            DIGITALIZAMOS TU <br />
+            <span className="instrument-serif text-[#BFFF00] capitalize font-normal italic">negocio con IA.</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
-            Escala tus operaciones, elimina cuellos de botella y multiplica tu facturación con infraestructura digital de élite.
+          {/* Subtexto descriptivo optimizado */}
+          <p className="text-lg md:text-2xl text-[#e5e2e1] max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4 opacity-90">
+            Convertimos operaciones manuales en <span className="instrument-serif text-[#BFFF00] text-[1.15em] font-normal italic">máquinas de eficiencia</span> que cierran ventas sin que estés presente.
           </p>
 
+          {/* Botones de acción mejorados */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl px-4 mx-auto">
             <button 
               onClick={() => scrollToSection('agendar')} 
@@ -474,14 +458,15 @@ export default function App() {
           </div>
 
           <div className="mt-16 opacity-30 animate-bounce-subtle cursor-pointer" onClick={() => scrollToSection('problema')}>
-            <ArrowDown size={32} />
+            <ArrowDown size={32} className="mx-auto" />
           </div>
         </div>
       </section>
 
       {/* 5. TARGET AUDIENCE / FOR WHO */}
+      {/* Bug 2 Solucionado: Reemplazado max-[1440px] por max-w-[1440px] para evitar desbordamiento */}
       <section ref={revealPr} className={`reveal py-20 md:py-32 bg-[#0e0e0e] border-y border-white/5 ${isVisiblePr ? 'active' : ''}`}>
-        <div className="max-[1440px] mx-auto px-6">
+        <div className="max-w-[1440px] mx-auto px-6">
           <p className="text-[#BFFF00] text-xs font-black tracking-widest uppercase text-center mb-4">La Autoselección Consciente</p>
           <p className="text-zinc-400 text-sm md:text-base text-center max-w-xl mx-auto mb-12">Si te identificas con alguno de estos perfiles, el diagnóstico gratuito de Veluz es exactamente lo que necesitas hoy.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -590,7 +575,13 @@ export default function App() {
                         <span className="bg-[#BFFF00]/10 text-[#BFFF00] px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase">{s.tag}</span>
                         <h4 className={`text-xl md:text-2xl font-black transition-colors ${openService === s.id ? 'text-[#BFFF00]' : 'text-white group-hover:text-[#BFFF00]'}`}>{s.title}</h4>
                       </div>
-                      <span className={`material-symbols-outlined text-[#BFFF00] transition-all duration-300 ${openService === s.id ? 'rotate-45' : ''}`}>{openService === s.id ? 'close' : 'add'}</span>
+                      
+                      {/* Bug 3 Solucionado: Removido el wrapper span .material-symbols-outlined para un renderizado nativo y limpio */}
+                      {openService === s.id ? (
+                        <X size={20} className="text-[#BFFF00] shrink-0" />
+                      ) : (
+                        <Plus size={20} className="text-[#BFFF00] shrink-0" />
+                      )}
                     </div>
                     
                     <div className={`accordion-content ${openService === s.id ? 'active' : ''}`}>
