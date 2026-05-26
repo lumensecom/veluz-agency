@@ -99,10 +99,11 @@ export default function App() {
   const [openFaq, setOpenFaq] = useState(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
   const [showTopBar, setShowTopBar] = useState(true);
-  const [pricingTab, setPricingTab] = useState('all'); // 'all', 'one-time', 'recurring'
+  const [pricingTab, setPricingTab] = useState('all'); // 'all', 'marketing', 'automatizaciones-ia'
+  const [expandedPlans, setExpandedPlans] = useState({}); // Control de subpestañas desplegables para precios
   const heroRef = useRef(null);
+  const heroCanvasRef = useRef(null); // Canvas dedicado para el Hero
 
-  // URLs de logos corregidas
   const logoUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778462963/ChatGPT_Image_May_10_2026_08_28_28_PM_mqoqmv.png";
   const faviconUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png";
 
@@ -120,39 +121,122 @@ export default function App() {
   const services = [
     {
       id: 'ia',
-      tag: "INTELIGENCIA",
+      tag: "INTELIGENCIA & RESPUESTA",
       title: "Agentes IA Nativa",
       icon: <BrainCircuit size={24} />,
-      desc: "Entrenamos cerebros digitales con el conocimiento de tu empresa. No son simples bots; son vendedores que razonan.",
-      features: ["Venta por WhatsApp 24/7", "Calificación de Leads", "Agendamiento Autónomo"],
-      result: "Autonomía Total",
+      desc: "Entrenamos cerebros digitales con el conocimiento de tu empresa. No son simples bots rígidos; son agentes con capacidad de razonamiento que venden, perfilan leads de alto valor y agendan citas en tu calendario las 24 horas del día.",
+      features: ["Venta conversacional por WhatsApp 24/7", "Calificación automática de Leads calificados", "Agendamiento autónomo en Google Calendar / Calendly", "Conexión directa a tu CRM favorito en tiempo real"],
+      result: "Autonomía de atención",
       graph: "99",
       suffix: "%",
-      visualUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuB6bbfJ8zlz9-dUT_FpXAE8caXm4vT4V16gkXt8yCDpAUi95M1pOui3QoKHSCz63CXQFVTOSelOcsQUY4GPggC4QntrAwBc7ZPA4vFBp830tKMTyt2Dgy1BqFm3zNSo6zJZhQnqxxrKX6SSOLm_-VOLqAbFEF1owKAN1Wcmluh8YolC1QE1eBkltzI4xL92IRWFhUzuMcclqIZ8SKCs7i7GLpRY0Czo3FFWsNKvtUfiDhbyXa4C5jN_kf8QTkR5UHdv-w0hs_Y9fCo9"
+      before: "Leads fríos que mueren en tu bandeja de entrada porque tardas horas o días en responder.",
+      after: "Agente IA responde de forma personalizada en menos de 10 segundos, califica el presupuesto y agenda la cita.",
+      visual: (
+        <div className="w-full bg-zinc-900 rounded-2xl border border-white/10 overflow-hidden text-left font-mono text-xs">
+          {/* Header de WhatsApp simulado */}
+          <div className="bg-zinc-800 p-3 border-b border-white/5 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
+              <span className="font-bold text-white text-[11px] font-sans">Agente IA Veluz (Activo)</span>
+            </div>
+            <span className="text-[9px] text-[#BFFF00] font-sans font-bold uppercase tracking-wider bg-[#BFFF00]/10 px-2 py-0.5 rounded">En vivo</span>
+          </div>
+          {/* Cuerpo del chat simulado */}
+          <div className="p-4 space-y-3 max-h-56 overflow-y-auto">
+            <div className="bg-zinc-850 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] border border-white/5">
+              <p className="text-zinc-400 text-[10px] mb-1 font-sans">Cliente (09:41 AM)</p>
+              <p className="text-white font-sans text-xs">Hola, me interesa agendar una consulta médica especializada para el jueves. ¿Tienen cupos?</p>
+            </div>
+            <div className="bg-[#BFFF00]/10 p-2.5 rounded-l-xl rounded-br-xl max-w-[85%] ml-auto border border-[#BFFF00]/20">
+              <p className="text-[#BFFF00] text-[10px] mb-1 text-right font-sans">Veluz Agent IA (09:41 AM)</p>
+              <p className="text-white font-sans text-xs">¡Hola! Claro que sí, tenemos espacios disponibles para el jueves con el Dr. Silva. Para agendarte con éxito, ¿buscas cita de primera vez o control?</p>
+            </div>
+            <div className="bg-zinc-850 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] border border-white/5 animate-pulse">
+              <p className="text-zinc-400 text-[10px] mb-1 font-sans">Cliente (Escribiendo...)</p>
+              <div className="flex gap-1 py-1">
+                <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce"></span>
+                <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-150"></span>
+                <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-300"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
     },
     {
       id: 'content',
-      tag: "VISIBILIDAD",
+      tag: "VISIBILIDAD & AUTORIDAD",
       title: "Contenido Orgánico & GEO",
       icon: <Megaphone size={24} />,
-      desc: "Construimos autoridad real sin gastar en anuncios. Creamos contenido que los motores de búsqueda tradicionales y las IAs como ChatGPT y Gemini aman citar. Tu negocio aparece cuando buscan lo que ofreces.",
-      features: ["SEO & GEO Premium", "Autoridad de Marca", "Estrategia de Viralidad"],
-      result: "Alcance",
+      desc: "Cero dólares en anuncios (Ads). Construimos tu autoridad de marca mediante un posicionamiento omnicanal. Optimizamos tu negocio para que no solo lidere Google, sino para ser la respuesta principal citada por motores de Inteligencia Artificial (GEO) como ChatGPT, Claude y Gemini.",
+      features: ["GEO (Generative Engine Optimization) optimizado", "Posicionamiento SEO local y Google Maps #1", "Estrategia de contenido de alta retención viral", "Copys estratégicos persuasivos orientados al ROI"],
+      result: "Multiplicación de tráfico",
       graph: "10",
       suffix: "X",
-      visualUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCjYGNSH9-6iuSjhNAIG5D_-s7PL5j-kpcw3NuJUjip4BResRBnouB_yeNyzb4wG3tb0EeEHX97S0-7dU81_Nf30ZD3w6ijJ_P1lzvPyez7m3Sh37J36Gxsbfsuax6oReqrfbBNC7yFoFbcAYdPioh4zdxa1fkVhaUoZ9ZMNa9CFirOk8sXLNYY1D_vbo-S1MiTpf624029lAJJA3uSIHHbmde2x0ligvE951l1RhlQ_rXd-rY0y8YtZO_foizoFvLcgndxvA8QOwuo"
+      before: "Dependes de pauta publicitaria costosa y clics inflados que dejan de llegar cuando apagas tu tarjeta de crédito.",
+      after: "Eres citado orgánicamente como referente por IAs y buscadores, captando clientes calificados sin costo de pauta.",
+      visual: (
+        <div className="w-full bg-zinc-950 rounded-2xl border border-white/10 p-4 text-left font-sans">
+          <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2 text-[10px] text-zinc-500 uppercase tracking-widest font-mono">
+            <Search size={12} className="text-[#BFFF00]" /> Simulación de Motor de Respuesta (GEO)
+          </div>
+          <div className="bg-zinc-900 p-3.5 rounded-xl border border-white/5 mb-3">
+            <p className="text-xs text-white/50 mb-2 font-mono">Pregunta en ChatGPT / Gemini:</p>
+            <p className="text-xs text-white font-semibold">¿Cuál es la mejor clínica especializada en implantes dentales de alta complejidad?</p>
+          </div>
+          <div className="bg-[#BFFF00]/5 border-l-2 border-[#BFFF00] p-3.5 rounded-r-xl">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <Sparkles size={12} className="text-[#BFFF00]" />
+              <p className="text-[10px] text-[#BFFF00] font-black uppercase tracking-wider font-mono">Respuesta Citada de IA</p>
+            </div>
+            <p className="text-xs text-white leading-relaxed">
+              Basado en el análisis de opiniones médicas y autoridad orgánica local, la opción más recomendada es <strong className="text-[#BFFF00]">tu_empresa.com</strong> por sus procesos digitalizados de vanguardia...
+            </p>
+            <div className="mt-2.5 flex items-center gap-2">
+              <span className="text-[9px] text-zinc-500 font-mono">Fuentes citadas:</span>
+              <span className="text-[8px] bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded border border-white/5 font-mono">Google Maps</span>
+              <span className="text-[8px] bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded border border-white/5 font-mono">tu_empresa.com</span>
+            </div>
+          </div>
+        </div>
+      )
     },
     {
       id: 'auto',
-      tag: "EFICIENCIA",
+      tag: "PROCESOS & PRODUCTIVIDAD",
       title: "Automatización de Procesos",
       icon: <Zap size={24} />,
-      desc: "Conectamos tu CRM, pagos y administración para eliminar tareas manuales repetitivas. Si tu equipo lo hace a mano todos los días, nosotros lo convertimos en código que corre solo.",
-      features: ["Flujos con Make/Zapier", "Dashboard en tiempo real", "Sincronización total"],
-      result: "Tiempo ahorrado",
+      desc: "Conectamos todo tu software e infraestructura. Integramos CRM, pasarelas de pago, bases de datos y herramientas de comunicación para eliminar tareas operativas redundantes. Si tu equipo hoy lo hace a mano, nosotros lo convertimos en código autónomo.",
+      features: ["Flujos automatizados Make / Zapier", "Sincronización automatizada de CRMs de venta", "Alertas, notificaciones e integraciones webhook", "Métricas operativas centralizadas sin intervención humana"],
+      result: "Horas operativas ahorradas",
       graph: "15",
       suffix: "h/s",
-      visualUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBJctiDRFrXf5px-JVKkYWVMyNpJAcummv6sKwaRXosHo9XqFKLD3LgK8P29HSk2cW_pGnzeJWcvLnOfqhBDhF-kmGJC8y_2wqVbL5rbY3Kb1gbJOJIGx_eGT1W8iiBrLS-KZ-NwPpPHHDIJS0SpptMZJwHt8TzByxIRn9Gd5-bWfxNuLpZo2pE9gfPDlAGgFYoQjKWFFtR9XRV0lCjSNdTbmvjRJFsUv7tnb2fb8vZB8OmjJjZZx3Zrk9SwvRnAfIsKnSPwd-T46J2"
+      before: "Tu equipo pierde el 40% del día copiando datos entre Excel, WhatsApp, facturas y correos manuales.",
+      after: "Un lead se registra, se crea en el CRM, se genera su factura y se notifica al equipo de forma inmediata y automática.",
+      visual: (
+        <div className="w-full bg-zinc-900 rounded-2xl border border-white/10 p-4 text-left font-mono text-[10px]">
+          <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2 text-zinc-500">
+            <span>DIAGRAMA DE FLUJO VELUZ-3X</span>
+            <span className="text-[#BFFF00] animate-pulse">ACTIVO</span>
+          </div>
+          <div className="space-y-3 relative">
+            <div className="flex items-center gap-3 bg-zinc-950 p-2 rounded-xl border border-white/5">
+              <div className="w-5 h-5 bg-[#BFFF00]/10 border border-[#BFFF00]/20 rounded flex items-center justify-center text-[#BFFF00] font-bold">1</div>
+              <span className="text-white font-sans font-medium">Registro de Lead Orgánico</span>
+            </div>
+            <div className="h-4 w-px bg-[#BFFF00]/40 ml-4"></div>
+            <div className="flex items-center gap-3 bg-zinc-950 p-2 rounded-xl border border-[#BFFF00]/30 shadow-[0_0_15px_rgba(191,255,0,0.05)]">
+              <div className="w-5 h-5 bg-[#BFFF00] rounded flex items-center justify-center text-black font-black">2</div>
+              <span className="text-white font-sans font-medium">Asignación automática a CRM</span>
+            </div>
+            <div className="h-4 w-px bg-[#BFFF00]/40 ml-4"></div>
+            <div className="flex items-center gap-3 bg-zinc-950 p-2 rounded-xl border border-white/5">
+              <div className="w-5 h-5 bg-[#BFFF00]/10 border border-[#BFFF00]/20 rounded flex items-center justify-center text-[#BFFF00] font-bold">3</div>
+              <span className="text-white font-sans font-medium">WhatsApp IA + Factura Generada</span>
+            </div>
+          </div>
+        </div>
+      )
     }
   ];
 
@@ -169,10 +253,11 @@ export default function App() {
     { q: "¿Cómo sé que funcionará para mí?", a: "Por eso ofrecemos un diagnóstico gratuito. Solo aceptamos clientes donde la tecnología pueda generar un ROI claro en los primeros 60 días." }
   ];
 
+  // --- NUEVA DATA DE PLANES Y PRECIOS OPTIMIZADA CON NUEVAS CATEGORÍAS ---
   const pricingPlans = [
     {
       id: 'web-profesional',
-      type: 'one-time',
+      type: 'marketing', // Categoría Marketing
       category: 'Activo digital',
       title: "Página Web Profesional",
       desc: "Landing page de alta conversión, optimizada para móvil, con botón de WhatsApp y conectada a Google Maps. El sitio le pertenece al cliente para siempre.",
@@ -185,7 +270,7 @@ export default function App() {
     },
     {
       id: 'chatbot-ia',
-      type: 'recurring',
+      type: 'automatizaciones-ia', // Categoría Automatizaciones con IA
       category: 'Servicio activo',
       title: "Chatbot WhatsApp con IA",
       desc: "Agente inteligente entrenado con el conocimiento de tu negocio. Responde, califica y agenda solo 24/7 sin que muevas un dedo.",
@@ -198,7 +283,7 @@ export default function App() {
     },
     {
       id: 'presencia-digital',
-      type: 'recurring',
+      type: 'marketing', // Categoría Marketing
       category: 'Pack completo',
       title: "Pack Presencia Digital",
       desc: "Web profesional o rediseño completo + Google Maps optimizado + 1 red social gestionada + 5 piezas de contenido orgánico mensual.",
@@ -211,7 +296,7 @@ export default function App() {
     },
     {
       id: 'automatizaciones-custom',
-      type: 'one-time',
+      type: 'automatizaciones-ia', // Categoría Automatizaciones con IA
       category: 'Sistemas a medida',
       title: "Automatizaciones de Procesos",
       desc: "Conexión integral de tus aplicaciones. Integramos CRM, pasarelas de pago, bases de datos y correos para eliminar tareas repetitivas.",
@@ -239,6 +324,115 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  // --- EFECTO DE ONDAS METALIZADAS 3D PROFUNDAS ---
+  useEffect(() => {
+    const canvas = heroCanvasRef.current;
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+    let phase = 0;
+    
+    // Rastreador suave de posición de mouse
+    const mouse = { x: undefined, y: undefined, tx: undefined, ty: undefined };
+
+    const resizeCanvas = () => {
+      canvas.width = canvas.parentElement.offsetWidth;
+      canvas.height = canvas.parentElement.offsetHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const handleMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.tx = e.clientX - rect.left;
+      mouse.ty = e.clientY - rect.top;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.tx = undefined;
+      mouse.ty = undefined;
+    };
+
+    const parentElement = canvas.parentElement;
+    parentElement.addEventListener('mousemove', handleMouseMove);
+    parentElement.addEventListener('mouseleave', handleMouseLeave);
+
+    const animateLiquidMetal = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Interpolación suave del cursor para efecto fluido
+      if (mouse.tx !== undefined && mouse.ty !== undefined) {
+        if (mouse.x === undefined) {
+          mouse.x = mouse.tx;
+          mouse.y = mouse.ty;
+        } else {
+          mouse.x += (mouse.tx - mouse.x) * 0.08;
+          mouse.y += (mouse.ty - mouse.y) * 0.08;
+        }
+      } else {
+        mouse.x = undefined;
+        mouse.y = undefined;
+      }
+
+      const linesCount = window.innerWidth < 768 ? 14 : 26;
+      const pointsCount = 40;
+      const stepX = canvas.width / (pointsCount - 1);
+
+      for (let j = 0; j < linesCount; j++) {
+        const factor = j / linesCount;
+        const baseOpacity = 0.04 + Math.sin(factor * Math.PI) * 0.22;
+        
+        ctx.lineWidth = 1.8 - (factor * 0.9);
+        // Color lima Veluz con desvanecimiento de profundidad
+        ctx.strokeStyle = `rgba(191, 255, 0, ${baseOpacity})`;
+
+        ctx.beginPath();
+        for (let i = 0; i < pointsCount; i++) {
+          const x = i * stepX;
+          
+          // Ecuación matemática orgánica para modelar las ondas principales
+          let wave1 = Math.sin(i * 0.15 + phase + j * 0.18) * 35;
+          let wave2 = Math.cos(i * 0.08 - phase * 0.4 + j * 0.1) * 15;
+          
+          let centerY = (canvas.height * 0.45) + (j - linesCount / 2) * (18 + (j * 0.4));
+          
+          // Interacción de gravedad hacia el mouse (Efecto Metal Líquido Magnético)
+          if (mouse.x !== undefined && mouse.y !== undefined) {
+            const dx = x - mouse.x;
+            const dy = centerY - mouse.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 240) {
+              const pull = Math.cos((distance / 240) * Math.PI * 0.5) * 40 * (1 - factor * 0.5);
+              centerY += (dy > 0 ? -pull : pull) * 0.6;
+            }
+          }
+
+          const y = centerY + wave1 + wave2;
+
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.stroke();
+      }
+
+      phase += 0.004; // Velocidad del flujo líquido
+      animationFrameId = requestAnimationFrame(animateLiquidMetal);
+    };
+
+    animateLiquidMetal();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', resizeCanvas);
+      parentElement.removeEventListener('mousemove', handleMouseMove);
+      parentElement.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
   // Manejo de scroll para Navbar y visibilidad de componentes
   useEffect(() => {
     const handleScroll = () => {
@@ -246,8 +440,8 @@ export default function App() {
       setIsScrolled(scrollPos > 20);
       setShowFloatingBtn(scrollPos > 800);
       if (heroRef.current && window.innerWidth > 768) {
-        heroRef.current.style.transform = `translateY(${scrollPos * 0.1}px)`;
-        heroRef.current.style.opacity = 1 - scrollPos / 1000;
+        heroRef.current.style.transform = `translateY(${scrollPos * 0.05}px)`;
+        heroRef.current.style.opacity = 1 - scrollPos / 1200;
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -258,7 +452,7 @@ export default function App() {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if(element) {
-        const offset = window.innerWidth < 768 ? 80 : 100;
+        const offset = window.innerWidth < 768 ? 70 : 90;
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = element.getBoundingClientRect().top;
         const offsetPosition = elementRect - bodyRect - offset;
@@ -269,6 +463,14 @@ export default function App() {
   const StatCounter = ({ value, suffix = "" }) => {
     const [count, ref] = useCountUp(value);
     return <span ref={ref}>{count}{suffix}</span>;
+  };
+
+  // Función para colapsar/desplegar subpestaña de precios
+  const togglePlanExpansion = (id) => {
+    setExpandedPlans(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
 
   // Referencias para las animaciones del scroll
@@ -287,7 +489,7 @@ export default function App() {
         body { font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         .instrument-serif { font-family: 'Literata', serif; font-style: italic; }
         
-        /* Bug 1 Solucionado: btn-glow y shadow-lima-glow ahora definidos correctamente */
+        /* Bug 1 Solucionado: btn-glow definido elegantemente en CSS */
         .btn-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
         .shadow-lima-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
         .hover-lima-glow:hover { box-shadow: 0 15px 50px -5px rgba(191, 255, 0, 0.6); transform: translateY(-4px); }
@@ -337,6 +539,20 @@ export default function App() {
         }
         .accordion-inner { overflow: hidden; }
 
+        /* Subpestaña de precios colapsable */
+        .subtab-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+        .subtab-content.active {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
         /* Estilo Premium de Noise + Glow en el fondo del Hero */
         .hero-noise { 
           background: #000; 
@@ -355,23 +571,22 @@ export default function App() {
       `}</style>
 
       {/* 1. TOP BAR / URGENCY BAR */}
-      {showTopBar && (
-        <div className="fixed top-0 w-full bg-[#BFFF00] text-black z-[100] py-2 px-6 flex items-center justify-between shadow-md" id="urgency-bar">
-          <div className="flex-1 text-center text-[10px] md:text-[11px] font-black tracking-widest uppercase flex items-center justify-center gap-2">
-            <AlertCircle size={14} className="animate-pulse" />
-            Cupos limitados — Mayo casi completo — <span onClick={() => scrollToSection('agendar')} className="underline cursor-pointer font-bold">[Reservar Ahora]</span>
-          </div>
-          <button onClick={() => setShowTopBar(false)} className="p-1 hover:bg-black/10 rounded-full transition-colors">
-            <X size={14} />
-          </button>
+      <div className="fixed top-0 w-full bg-[#BFFF00] text-black z-[100] py-2.5 px-6 flex items-center justify-center shadow-md select-none transition-all duration-300" id="urgency-bar">
+        <div className="text-center text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase flex items-center justify-center gap-2">
+          <AlertCircle size={14} className="animate-pulse" />
+          <span>Cupos limitados por mes</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-black opacity-30"></span>
+          <span>Mayo casi completo</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-black opacity-30"></span>
+          <span onClick={() => scrollToSection('agendar')} className="underline cursor-pointer font-black hover:text-neutral-800 transition-colors">Reservar Ahora</span>
         </div>
-      )}
+      </div>
 
       {/* 2. NAVBAR */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'top-0 py-2' : `${showTopBar ? 'top-10' : 'top-4'} py-3`} glass-nav border-b border-white/10`} id="main-nav">
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'top-0 py-2' : 'top-10 py-3'} glass-nav border-b border-white/10`} id="main-nav">
         <div className="max-w-[1440px] mx-auto px-6 md:px-8 flex justify-between items-center">
           <div className="flex items-center cursor-pointer group" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
-            <img src={logoUrl} alt="Veluz Logo" className="h-16 md:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+            <img src={logoUrl} alt="Veluz Logo" className="h-14 md:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
           </div>
           
           <div className="hidden md:flex items-center gap-8">
@@ -404,41 +619,45 @@ export default function App() {
         </div>
       </div>
 
-      {/* 4. HERO SECTION REPLICANDO EL ESTILO DE SCREENSHOT 10.55.54 AM (CON NOISE & GLOW DEL CANVAS) */}
-      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-32 overflow-hidden hero-noise" ref={heroRef}>
-        {/* Efecto visual de fondo Noise + Glow de alta fidelidad */}
+      {/* 4. HERO SECTION */}
+      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 z-10 pt-36 md:pt-48 overflow-hidden hero-noise animate-fade-in" ref={heroRef}>
+        {/* Fondo interactivo de alta fidelidad exclusivo para el Hero */}
         <div className="absolute inset-0 z-0">
-          {/* Glow central premium */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[250px] sm:h-[350px] bg-[radial-gradient(ellipse,rgba(191,255,0,0.14)_0%,rgba(191,255,0,0.03)_50%,transparent_70%)] blur-2xl" />
-          {/* Línea de luz inferior muy sutil */}
-          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[rgba(191,255,0,0.3)] to-transparent" />
+          {/* Canvas de Metal Líquido Animado */}
+          <canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-60" />
+          {/* Glow central premium de contraste */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[250px] sm:h-[350px] bg-[radial-gradient(ellipse,rgba(191,255,0,0.12)_0%,rgba(191,255,0,0.02)_50%,transparent_70%)] blur-2xl pointer-events-none" />
+          {/* Línea de luz de base */}
+          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[rgba(191,255,0,0.3)] to-transparent pointer-events-none" />
         </div>
 
         <div className="relative z-10 max-w-5xl">
-          {/* Badge superior estilizado y minimalista */}
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-900/80 border border-white/5 mb-10 shadow-lg">
+          {/* Badge superior con las 5 estrellas y texto de validación */}
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-900/90 border border-white/10 mb-10 shadow-lg">
             <div className="flex gap-0.5 text-[#BFFF00]">
-              <Star size={10} fill="currentColor" stroke="none" />
-              <Star size={10} fill="currentColor" stroke="none" />
-              <Star size={10} fill="currentColor" stroke="none" />
+              <Star size={11} fill="currentColor" stroke="none" />
+              <Star size={11} fill="currentColor" stroke="none" />
+              <Star size={11} fill="currentColor" stroke="none" />
+              <Star size={11} fill="currentColor" stroke="none" />
+              <Star size={11} fill="currentColor" stroke="none" />
             </div>
-            <span className="text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase text-white/80">
-              ARQUITECTURA DE CRECIMIENTO ORGÁNICO
+            <span className="text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase text-white/90">
+              VALIDADO POR + DE 20 NEGOCIOS CON RESULTADOS
             </span>
           </div>
           
-          {/* Titular exactamente con el contraste de tipografía moderno */}
+          {/* Titular con contraste de tipografía */}
           <h1 className="text-[52px] md:text-[96px] font-black tracking-tighter leading-[1.0] text-white uppercase mb-8">
             DIGITALIZAMOS TU <br />
             <span className="instrument-serif text-[#BFFF00] capitalize font-normal italic">negocio con IA.</span>
           </h1>
 
-          {/* Subtexto descriptivo optimizado */}
+          {/* Subtexto descriptivo */}
           <p className="text-lg md:text-2xl text-[#e5e2e1] max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4 opacity-90">
             Convertimos operaciones manuales en <span className="instrument-serif text-[#BFFF00] text-[1.15em] font-normal italic">máquinas de eficiencia</span> que cierran ventas sin que estés presente.
           </p>
 
-          {/* Botones de acción mejorados */}
+          {/* Botones de acción paralelos */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl px-4 mx-auto">
             <button 
               onClick={() => scrollToSection('agendar')} 
@@ -464,7 +683,7 @@ export default function App() {
       </section>
 
       {/* 5. TARGET AUDIENCE / FOR WHO */}
-      {/* Bug 2 Solucionado: Reemplazado max-[1440px] por max-w-[1440px] para evitar desbordamiento */}
+      {/* Bug 2 Solucionado: max-w-[1440px] para control de ancho de contenedor en pantallas grandes */}
       <section ref={revealPr} className={`reveal py-20 md:py-32 bg-[#0e0e0e] border-y border-white/5 ${isVisiblePr ? 'active' : ''}`}>
         <div className="max-w-[1440px] mx-auto px-6">
           <p className="text-[#BFFF00] text-xs font-black tracking-widest uppercase text-center mb-4">La Autoselección Consciente</p>
@@ -564,7 +783,7 @@ export default function App() {
       {/* 8. SERVICIOS (Acordeón Animado y Enriquecido) */}
       <section id="servicios" ref={revealSe} className={`reveal py-20 md:py-32 bg-[#131313] z-10 ${isVisibleSe ? 'active' : ''}`}>
         <div className="max-w-[1440px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div>
               <h2 className="text-4xl md:text-[80px] font-black tracking-tighter uppercase mb-12">Lo que <br /><span className="instrument-serif text-[#BFFF00]">activamos.</span></h2>
               <div className="space-y-6">
@@ -576,28 +795,62 @@ export default function App() {
                         <h4 className={`text-xl md:text-2xl font-black transition-colors ${openService === s.id ? 'text-[#BFFF00]' : 'text-white group-hover:text-[#BFFF00]'}`}>{s.title}</h4>
                       </div>
                       
-                      {/* Bug 3 Solucionado: Removido el wrapper span .material-symbols-outlined para un renderizado nativo y limpio */}
+                      {/* Bug 3 Solucionado: Removido el wrapper span .material-symbols-outlined para un renderizado nativo y limpio con Lucide */}
                       {openService === s.id ? (
-                        <X size={20} className="text-[#BFFF00] shrink-0" />
+                        <X size={20} className="text-[#BFFF00] shrink-0 animate-spin-once" />
                       ) : (
                         <Plus size={20} className="text-[#BFFF00] shrink-0" />
                       )}
                     </div>
                     
                     <div className={`accordion-content ${openService === s.id ? 'active' : ''}`}>
-                      <div className="accordion-inner">
-                        <p className="text-slate-400 text-sm leading-relaxed mb-4">{s.desc}</p>
+                      <div className="accordion-inner space-y-6">
+                        <p className="text-slate-300 text-sm leading-relaxed">{s.desc}</p>
                         
-                        <div className="space-y-3 mb-6">
+                        {/* Listado visual de características del servicio */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {s.features.map((f, i) => (
-                            <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-300">
-                              <CheckCircle2 size={14} className="text-[#BFFF00]" />
-                              {f}
+                            <div key={i} className="flex items-center gap-2.5 text-xs font-bold text-slate-300 bg-white/[0.02] border border-white/5 p-2 rounded-xl">
+                              <CheckCircle2 size={14} className="text-[#BFFF00] shrink-0" />
+                              <span>{f}</span>
                             </div>
                           ))}
                         </div>
 
-                        <img alt={s.title} className="w-full h-48 object-cover rounded-xl border border-white/10 transition-transform hover:scale-[1.02] duration-500" src={s.visualUrl} />
+                        {/* Contraste visual Antes vs Después específico del servicio */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                          <div className="bg-red-500/5 border border-red-500/10 p-4 rounded-2xl">
+                            <p className="text-red-400 font-bold text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                              <XCircle size={12} /> El problema común (Antes)
+                            </p>
+                            <p className="text-zinc-400 text-xs leading-relaxed font-light">{s.before}</p>
+                          </div>
+                          <div className="bg-[#BFFF00]/5 border border-[#BFFF00]/10 p-4 rounded-2xl">
+                            <p className="text-[#BFFF00] font-bold text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                              <CheckCircle2 size={12} /> Solución Veluz (Después)
+                            </p>
+                            <p className="text-zinc-300 text-xs leading-relaxed font-semibold">{s.after}</p>
+                          </div>
+                        </div>
+
+                        {/* Botón y métricas del servicio */}
+                        <div className="bg-black/50 border border-white/10 p-5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+                          <div>
+                            <p className="text-[#BFFF00] text-[9px] font-black uppercase tracking-widest mb-1">{s.result}</p>
+                            <p className="text-3xl font-black text-white">
+                              <StatCounter value={parseInt(s.graph)} suffix={s.suffix} />
+                            </p>
+                          </div>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              scrollToSection('inversion');
+                            }} 
+                            className="w-full sm:w-auto bg-[#BFFF00] text-black px-6 py-3.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-transform"
+                          >
+                            Ver Costeo de este servicio →
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -605,12 +858,31 @@ export default function App() {
               </div>
             </div>
 
-            <div className="relative flex items-center justify-center">
-              <div className="w-full aspect-square bg-zinc-900 rounded-3xl border border-white/5 flex flex-col items-center justify-center p-12 text-center group overflow-hidden relative">
-                <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#BFFF00]/10 blur-[100px] transition-all group-hover:bg-[#BFFF00]/20"></div>
-                <LineChart className="text-[#BFFF00] w-24 h-24 mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500" />
-                <h5 className="text-5xl font-black mb-4">+300%</h5>
-                <p className="text-slate-400 text-base leading-relaxed">Incremento promedio en eficiencia operativa reportado por nuestros clientes tras los primeros 90 días de implementación de activos.</p>
+            {/* MOCKUP INTERACTIVO SIMULADO AL COSTADO */}
+            <div className="relative sticky top-28 bg-zinc-900/50 rounded-3xl border border-white/5 p-6 md:p-8 flex flex-col justify-between overflow-hidden">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#BFFF00]/5 blur-[100px] pointer-events-none"></div>
+              
+              <div className="mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-[#BFFF00] animate-ping"></div>
+                  <span className="text-[10px] font-black tracking-widest text-[#BFFF00] uppercase">Simulación de interfaz en tiempo real</span>
+                </div>
+                <span className="text-[9px] text-zinc-500 font-mono font-semibold">VELUZ_3X_SYS_V4.0</span>
+              </div>
+
+              {/* Render dinámico del mockup según la pestaña del acordeón activa */}
+              <div className="transition-all duration-500">
+                {services.find(s => s.id === openService)?.visual}
+              </div>
+
+              <div className="mt-8 border-t border-white/5 pt-6 text-center lg:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex flex-col text-left">
+                  <span className="text-3xl font-black text-white">+300%</span>
+                  <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider">Eficiencia Operativa</span>
+                </div>
+                <p className="text-zinc-500 text-[11px] max-w-[280px] leading-relaxed text-left">
+                  Incremento promedio de productividad documentado por nuestros socios comerciales tras los primeros 90 días de implementación de activos.
+                </p>
               </div>
             </div>
           </div>
@@ -658,7 +930,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 10. PRICING SECTION */}
+      {/* 10. PRICING SECTION (COSTEOS) */}
       <section id="inversion" ref={revealIn} className={`reveal py-20 md:py-32 bg-black overflow-hidden ${isVisibleIn ? 'active' : ''}`}>
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
@@ -668,24 +940,26 @@ export default function App() {
               <span className="text-[#BFFF00] italic font-serif normal-case">El sitio es tuyo.</span> <br />
               El bot trabaja mientras duermes.
             </h2>
+            
+            {/* Nuevas categorías solicitadas */}
             <div className="flex justify-center gap-4 flex-wrap mt-10">
               <button 
-                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'all' ? 'bg-[#BFFF00] text-black border-[#BFFF00]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
+                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'all' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
                 onClick={() => setPricingTab('all')}
               >
-                Todos
+                Todas
               </button>
               <button 
-                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'one-time' ? 'bg-[#BFFF00] text-black border-[#BFFF00]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
-                onClick={() => setPricingTab('one-time')}
+                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'marketing' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
+                onClick={() => setPricingTab('marketing')}
               >
-                Activos (Pago único)
+                Marketing
               </button>
               <button 
-                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'recurring' ? 'bg-[#BFFF00] text-black border-[#BFFF00]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
-                onClick={() => setPricingTab('recurring')}
+                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'automatizaciones-ia' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
+                onClick={() => setPricingTab('automatizaciones-ia')}
               >
-                Con soporte mensual
+                Automatizaciones con IA
               </button>
             </div>
           </div>
@@ -693,55 +967,86 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 transition-all duration-500">
             {pricingPlans
               .filter(plan => pricingTab === 'all' || plan.type === pricingTab)
-              .map((plan, idx) => (
-                <div 
-                  key={plan.id} 
-                  className={`p-10 rounded-2xl bg-zinc-950 border pricing-card flex flex-col justify-between h-full card-hover-effect ${plan.id === 'presencia-digital' ? 'border-2 border-[#BFFF00]' : 'border-white/5'}`}
-                  style={{ transitionDelay: `${idx * 0.1}s` }}
-                >
-                  <div>
-                    <span className="text-[10px] font-black tracking-widest text-[#BFFF00] bg-[#BFFF00]/10 border border-[#BFFF00]/20 px-3 py-1.5 rounded-full uppercase mb-6 inline-block">
-                      {plan.category}
-                    </span>
-                    <h4 className="text-2xl font-black text-white mb-2 uppercase">{plan.title}</h4>
-                    <p className="text-slate-400 text-xs leading-relaxed mb-8">{plan.desc}</p>
-                    
-                    <div className="mb-8">
-                      <p className="text-[9px] font-black tracking-widest text-slate-500 uppercase">{plan.setupLabel}</p>
-                      <span className="text-[#BFFF00] font-black text-3xl block">{plan.setupPrice}</span>
+              .map((plan, idx) => {
+                const isExpanded = !!expandedPlans[plan.id];
+                return (
+                  <div 
+                    key={plan.id} 
+                    className={`p-8 rounded-2xl bg-zinc-950 border pricing-card flex flex-col justify-between h-full card-hover-effect transition-all duration-300 ${plan.id === 'presencia-digital' ? 'border-2 border-[#BFFF00]' : 'border-white/5'}`}
+                    style={{ transitionDelay: `${idx * 0.05}s` }}
+                  >
+                    <div>
+                      {/* Categoría en flujo normal */}
+                      <span className="text-[10px] font-black tracking-widest text-[#BFFF00] bg-[#BFFF00]/10 border border-[#BFFF00]/20 px-3 py-1.5 rounded-full uppercase mb-4 inline-block">
+                        {plan.category}
+                      </span>
                       
-                      <div className="border-t border-white/10 pt-4 mt-4">
-                        <p className="text-[9px] font-black tracking-widest text-slate-500 uppercase">
-                          {plan.id === 'automatizaciones-custom' ? 'Sin costo mensual obligatorio' : plan.recurringLabel}
-                        </p>
-                        <span className="text-white font-bold text-sm block mt-1">
-                          {plan.id === 'automatizaciones-custom' ? 'Mantenimiento preventivo incluido' : plan.recurringPrice}
+                      <h4 className="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">{plan.title}</h4>
+                      
+                      {/* Mini descripción compacta por defecto */}
+                      <p className="text-slate-400 text-xs leading-relaxed mb-6">{plan.desc}</p>
+                      
+                      {/* Caja limpia de precios por defecto */}
+                      <div className="bg-white/5 border border-white/10 p-5 rounded-2xl mb-6 space-y-3">
+                        <div>
+                          <p className="text-[9px] font-black tracking-widest text-slate-500 uppercase">{plan.setupLabel}</p>
+                          <span className="text-[#BFFF00] font-black text-2xl block tracking-tight">{plan.setupPrice}</span>
+                        </div>
+                        
+                        <div className="border-t border-white/10 pt-3">
+                          <p className="text-[9px] font-black tracking-widest text-slate-500 uppercase">
+                            {plan.id === 'automatizaciones-custom' ? 'Sin costo mensual obligatorio' : plan.recurringLabel}
+                          </p>
+                          <span className="text-white font-bold text-xs block mt-0.5">
+                            {plan.id === 'automatizaciones-custom' ? 'Mantenimiento preventivo incluido' : plan.recurringPrice}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Botón interactivo para desplegar subpestaña (Ver detalles) */}
+                      <button 
+                        onClick={() => togglePlanExpansion(plan.id)}
+                        className="w-full flex items-center justify-between py-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors border-b border-white/5 pb-3 mb-4 group"
+                      >
+                        <span className="flex items-center gap-1.5">
+                          <Plus size={12} className={`text-[#BFFF00] transition-transform duration-300 ${isExpanded ? 'rotate-45' : ''}`} />
+                          {isExpanded ? 'Ocultar información' : 'Ver entregables e impacto'}
                         </span>
+                        <ChevronDown size={14} className={`text-slate-500 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-[#BFFF00]' : 'group-hover:text-white'}`} />
+                      </button>
+
+                      {/* SUBPESTAÑA DESPLEGABLE CON DETALLES ADICIONALES */}
+                      <div className={`subtab-content ${isExpanded ? 'active' : ''}`}>
+                        <div className="accordion-inner space-y-4">
+                          {/* Pastillas del servicio */}
+                          <div className="flex flex-wrap gap-1.5">
+                            {plan.pills.map((pill, i) => (
+                              <span key={i} className="text-[8px] font-black uppercase tracking-widest bg-white/[0.03] border border-white/5 text-slate-300 px-2 py-1 rounded-md">
+                                {pill}
+                              </span>
+                            ))}
+                          </div>
+                          
+                          {/* Caja del Pitch / Neuromarketing */}
+                          <div className="bg-[#BFFF00]/5 border-l-2 border-[#BFFF00] p-3.5 rounded-r-xl text-[10px] text-slate-300 leading-relaxed italic">
+                            "{plan.pitch}"
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      {plan.pills.map((pill, i) => (
-                        <span key={i} className="text-[9px] font-black uppercase tracking-widest bg-white/[0.03] border border-white/5 text-slate-300 px-2.5 py-1 rounded-lg">
-                          {pill}
-                        </span>
-                      ))}
+                    {/* CTA Principal de la tarjeta siempre visible y abajo */}
+                    <div className="mt-4">
+                      <button 
+                        onClick={() => scrollToSection('agendar')}
+                        className={`w-full py-3.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${plan.id === 'presencia-digital' ? 'bg-[#BFFF00] text-black btn-glow hover-lima-glow' : 'border border-[#BFFF00] text-[#BFFF00] hover:bg-[#BFFF00] hover:text-black'}`}
+                      >
+                        Empezar Ahora
+                      </button>
                     </div>
                   </div>
-
-                  <div>
-                    <div className="bg-[#BFFF00]/5 border-l-2 border-[#BFFF00] p-4 rounded-r-xl mb-6 text-[11px] text-slate-300 leading-relaxed italic">
-                      "{plan.pitch}"
-                    </div>
-                    <button 
-                      onClick={() => scrollToSection('agendar')}
-                      className={`w-full py-4 rounded-full font-bold text-xs uppercase tracking-widest transition-all active:scale-95 ${plan.id === 'presencia-digital' ? 'bg-[#BFFF00] text-black btn-glow hover-lima-glow' : 'border border-[#BFFF00] text-[#BFFF00] hover:bg-[#BFFF00] hover:text-black'}`}
-                    >
-                      Empezar Ahora
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </section>
