@@ -95,7 +95,7 @@ export default function App() {
   const [theme, setTheme] = useState('dark');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openService, setOpenService] = useState('ia');
+  const [openService, setOpenService] = useState(null); // Modificado de 'ia' a null para que todos inicien cerrados
   const [openFaq, setOpenFaq] = useState(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
   const [showTopBar, setShowTopBar] = useState(true);
@@ -253,11 +253,10 @@ export default function App() {
     { q: "¿Cómo sé que funcionará para mí?", a: "Por eso ofrecemos un diagnóstico gratuito. Solo aceptamos clientes donde la tecnología pueda generar un ROI claro en los primeros 60 días." }
   ];
 
-  // --- NUEVA DATA DE PLANES Y PRECIOS OPTIMIZADA CON NUEVAS CATEGORÍAS ---
   const pricingPlans = [
     {
       id: 'web-profesional',
-      type: 'marketing', // Categoría Marketing
+      type: 'marketing',
       category: 'Activo digital',
       title: "Página Web Profesional",
       desc: "Landing page de alta conversión, optimizada para móvil, con botón de WhatsApp y conectada a Google Maps. El sitio le pertenece al cliente para siempre.",
@@ -270,7 +269,7 @@ export default function App() {
     },
     {
       id: 'chatbot-ia',
-      type: 'automatizaciones-ia', // Categoría Automatizaciones con IA
+      type: 'automatizaciones-ia',
       category: 'Servicio activo',
       title: "Chatbot WhatsApp con IA",
       desc: "Agente inteligente entrenado con el conocimiento de tu negocio. Responde, califica y agenda solo 24/7 sin que muevas un dedo.",
@@ -283,7 +282,7 @@ export default function App() {
     },
     {
       id: 'presencia-digital',
-      type: 'marketing', // Categoría Marketing
+      type: 'marketing',
       category: 'Pack completo',
       title: "Pack Presencia Digital",
       desc: "Web profesional o rediseño completo + Google Maps optimizado + 1 red social gestionada + 5 piezas de contenido orgánico mensual.",
@@ -296,7 +295,7 @@ export default function App() {
     },
     {
       id: 'automatizaciones-custom',
-      type: 'automatizaciones-ia', // Categoría Automatizaciones con IA
+      type: 'automatizaciones-ia',
       category: 'Sistemas a medida',
       title: "Automatizaciones de Procesos",
       desc: "Conexión integral de tus aplicaciones. Integramos CRM, pasarelas de pago, bases de datos y correos para eliminar tareas repetitivas.",
@@ -452,7 +451,8 @@ export default function App() {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if(element) {
-        const offset = window.innerWidth < 768 ? 70 : 90;
+        // Optimización de offsets para evitar que la barra superior tape el inicio de la sección
+        const offset = window.innerWidth < 768 ? (showTopBar ? 110 : 70) : (showTopBar ? 130 : 90);
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = element.getBoundingClientRect().top;
         const offsetPosition = elementRect - bodyRect - offset;
@@ -489,11 +489,11 @@ export default function App() {
         body { font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         .instrument-serif { font-family: 'Literata', serif; font-style: italic; }
         
-        /* Bug 1 Solucionado: btn-glow definido elegantemente en CSS */
         .btn-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
         .shadow-lima-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
         .hover-lima-glow:hover { box-shadow: 0 15px 50px -5px rgba(191, 255, 0, 0.6); transform: translateY(-4px); }
         
+        /* Navbar con z-index alto pero menor que el menú móvil */
         .glass-nav { backdrop-filter: blur(10px); background: rgba(19, 19, 19, 0.85); transition: all 0.3s ease; }
         .pulse-dot { animation: pulse 2s infinite; }
         @keyframes pulse {
@@ -582,8 +582,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* 2. NAVBAR */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'top-0 py-2' : 'top-10 py-3'} glass-nav border-b border-white/10`} id="main-nav">
+      {/* 2. NAVBAR (Ajustado el z-index de la navegación a z-[80] para que no tape el menú de hamburguesa móvil) */}
+      <nav className={`fixed w-full z-[80] transition-all duration-300 ${isScrolled ? 'top-0 py-2' : `${showTopBar ? 'top-10' : 'top-4'} py-3`} glass-nav border-b border-white/10`} id="main-nav">
         <div className="max-w-[1440px] mx-auto px-6 md:px-8 flex justify-between items-center">
           <div className="flex items-center cursor-pointer group" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
             <img src={logoUrl} alt="Veluz Logo" className="h-14 md:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
@@ -600,12 +600,13 @@ export default function App() {
           <button onClick={() => scrollToSection('agendar')} className="bg-[#BFFF00] text-black px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest btn-glow hover-lima-glow active:scale-95 transition-all">
             Diagnóstico
           </button>
-          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden text-[#BFFF00] p-2"><Menu size={28} /></button>
+          {/* El trigger móvil con z-index alto para no ser obstaculizado por la barra de urgencia */}
+          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden text-[#BFFF00] p-2 relative z-[90]"><Menu size={28} /></button>
         </div>
       </nav>
 
-      {/* 3. MOBILE MENU */}
-      <div className={`fixed inset-0 z-[110] bg-black transition-transform duration-500 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      {/* 3. MOBILE MENU (Con z-index superior z-[120] para superponerse perfectamente sobre la barra de urgencia y el navbar sin glitches táctiles) */}
+      <div className={`fixed inset-0 z-[120] bg-black transition-transform duration-500 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-6 flex flex-col h-full">
           <div className="flex justify-between items-center mb-16">
             <img src={logoUrl} alt="Veluz" className="h-12" />
@@ -620,7 +621,8 @@ export default function App() {
       </div>
 
       {/* 4. HERO SECTION */}
-      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 z-10 pt-36 md:pt-48 overflow-hidden hero-noise animate-fade-in" ref={heroRef}>
+      {/* Ajustado el padding superior dinámico (pt-44 md:pt-52) para garantizar un espacio holgado y que ningún elemento del inicio del hero sea tapado por la top bar o el navbar */}
+      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-44 md:pt-52 pb-16 overflow-hidden hero-noise animate-fade-in" ref={heroRef}>
         {/* Fondo interactivo de alta fidelidad exclusivo para el Hero */}
         <div className="absolute inset-0 z-0">
           {/* Canvas de Metal Líquido Animado */}
@@ -683,7 +685,6 @@ export default function App() {
       </section>
 
       {/* 5. TARGET AUDIENCE / FOR WHO */}
-      {/* Bug 2 Solucionado: max-w-[1440px] para control de ancho de contenedor en pantallas grandes */}
       <section ref={revealPr} className={`reveal py-20 md:py-32 bg-[#0e0e0e] border-y border-white/5 ${isVisiblePr ? 'active' : ''}`}>
         <div className="max-w-[1440px] mx-auto px-6">
           <p className="text-[#BFFF00] text-xs font-black tracking-widest uppercase text-center mb-4">La Autoselección Consciente</p>
@@ -795,7 +796,6 @@ export default function App() {
                         <h4 className={`text-xl md:text-2xl font-black transition-colors ${openService === s.id ? 'text-[#BFFF00]' : 'text-white group-hover:text-[#BFFF00]'}`}>{s.title}</h4>
                       </div>
                       
-                      {/* Bug 3 Solucionado: Removido el wrapper span .material-symbols-outlined para un renderizado nativo y limpio con Lucide */}
                       {openService === s.id ? (
                         <X size={20} className="text-[#BFFF00] shrink-0 animate-spin-once" />
                       ) : (
@@ -872,7 +872,12 @@ export default function App() {
 
               {/* Render dinámico del mockup según la pestaña del acordeón activa */}
               <div className="transition-all duration-500">
-                {services.find(s => s.id === openService)?.visual}
+                {services.find(s => s.id === openService)?.visual || (
+                  <div className="flex flex-col items-center justify-center h-48 border border-dashed border-white/10 rounded-2xl bg-zinc-900/40">
+                    <Sparkles className="text-[#BFFF00] animate-pulse mb-3" size={28} />
+                    <p className="text-zinc-500 text-xs font-sans">Selecciona un servicio a la izquierda para visualizar el sistema activo.</p>
+                  </div>
+                )}
               </div>
 
               <div className="mt-8 border-t border-white/5 pt-6 text-center lg:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
