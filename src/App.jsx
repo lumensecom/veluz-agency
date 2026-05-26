@@ -104,7 +104,8 @@ export default function App() {
   const heroRef = useRef(null);
   const heroCanvasRef = useRef(null); 
 
-  const logoUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778462963/ChatGPT_Image_May_10_2026_08_28_28_PM_mqoqmv.png";
+  // Isotipo premium proporcionado por el usuario
+  const logoUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png";
   const faviconUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png";
 
   useEffect(() => {
@@ -450,7 +451,7 @@ export default function App() {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if(element) {
-        const offset = window.innerWidth < 768 ? (showTopBar ? 90 : 50) : (showTopBar ? 110 : 70);
+        const offset = window.innerWidth < 768 ? (showTopBar ? 95 : 50) : (showTopBar ? 110 : 70);
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = element.getBoundingClientRect().top;
         const offsetPosition = elementRect - bodyRect - offset;
@@ -485,11 +486,11 @@ export default function App() {
   const [revealFq, isVisibleFq] = useScrollReveal();
 
   return (
-    <div className={`min-h-screen transition-colors duration-1000 ease-in-out font-sans ${theme === 'dark' ? 'bg-[#131313] text-[#e5e2e1]' : 'bg-white text-black'}`}>
+    <div className={`min-h-screen transition-colors duration-1000 ease-in-out font-sans ${theme === 'dark' ? 'bg-[#131313] text-[#e5e2e1]' : 'bg-white text-black'} overflow-x-hidden`}>
       
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Literata:ital,wght@1,400;1,700&display=swap');
-        body { font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        body { font-family: 'Outfit', sans-serif; overflow-x: hidden; width: 100vw; }
         .instrument-serif { font-family: 'Literata', serif; font-style: italic; }
         
         .btn-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
@@ -570,88 +571,93 @@ export default function App() {
         }
       `}</style>
 
-      {/* 1. TOP BAR / URGENCY BAR (Delgada, copy simplificado, sin X) */}
-      <div className="fixed top-0 w-full bg-[#BFFF00] text-black z-[100] py-2 px-6 flex items-center justify-center shadow-md select-none transition-all duration-300" id="urgency-bar">
-        <div className="text-center text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase flex items-center justify-center gap-1 sm:gap-2">
-          <AlertCircle size={14} className="animate-pulse shrink-0" />
-          <span>Cupos limitados por mes</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-black opacity-30"></span>
-          <span>Mayo casi completo</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-black opacity-30"></span>
-          <span onClick={() => scrollToSection('agendar')} className="underline cursor-pointer font-black hover:text-neutral-800 transition-colors">Reservar Ahora</span>
+      {/* 1 & 2. HEADER UNIFICADO (Barra de urgencia + Navbar integrados fijos para evitar solapamientos y saltos de scroll) */}
+      <div className="fixed top-0 left-0 w-full z-[100] flex flex-col">
+        {/* Barra de urgencia ultra delgada */}
+        <div className="w-full bg-[#BFFF00] text-black py-2 px-4 flex items-center justify-center shadow-md select-none transition-all duration-300">
+          <div className="text-center text-[9px] md:text-[10px] font-black tracking-[0.25em] uppercase flex items-center justify-center gap-1 sm:gap-2">
+            <AlertCircle size={12} className="animate-pulse shrink-0" />
+            <span>Cupos limitados por mes</span>
+            <span className="w-1 h-1 rounded-full bg-black opacity-30"></span>
+            <span>Mayo casi completo</span>
+            <span className="w-1 h-1 rounded-full bg-black opacity-30"></span>
+            <span onClick={() => scrollToSection('agendar')} className="underline cursor-pointer font-black hover:text-neutral-800 transition-colors">Reservar Ahora</span>
+          </div>
         </div>
+
+        {/* Navbar fijo incorporado justo debajo */}
+        <nav className={`w-full transition-all duration-300 ${isScrolled ? 'py-1.5 bg-black/95 border-b border-white/5' : 'py-3 bg-[#131313]/90'} glass-nav border-b border-white/10`}>
+          <div className="max-w-[1440px] mx-auto px-4 md:px-8 flex justify-between items-center">
+            <div className="flex items-center cursor-pointer group" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
+              {/* Isotipo premium reemplazado perfectamente en la esquina */}
+              <img src={logoUrl} alt="Veluz Logo" className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+            </div>
+            
+            <div className="hidden md:flex items-center gap-8">
+               <button onClick={() => scrollToSection('problema')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">El Problema</button>
+               <button onClick={() => scrollToSection('metodo')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Método</button>
+               <button onClick={() => scrollToSection('servicios')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Servicios</button>
+               <button onClick={() => scrollToSection('inversion')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Inversión</button>
+               <button onClick={() => scrollToSection('faq')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Dudas</button>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button onClick={() => scrollToSection('agendar')} className="bg-[#BFFF00] text-black px-6 md:px-8 py-2.5 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-widest btn-glow hover-lima-glow active:scale-95 transition-all">
+                Diagnóstico
+              </button>
+              <button onClick={() => setMobileMenuOpen(true)} className="md:hidden text-[#BFFF00] p-1.5 relative z-[90]"><Menu size={24} /></button>
+            </div>
+          </div>
+        </nav>
       </div>
 
-      {/* 2. NAVBAR (z-index de la navegación a z-[80] para que no tape el menú de hamburguesa móvil) */}
-      <nav className={`fixed w-full z-[80] transition-all duration-300 ${isScrolled ? 'top-0 py-2' : `${showTopBar ? 'top-10' : 'top-4'} py-3`} glass-nav border-b border-white/10`} id="main-nav">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-8 flex justify-between items-center">
-          <div className="flex items-center cursor-pointer group" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
-            <img src={logoUrl} alt="Veluz Logo" className="h-14 md:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-          </div>
-          
-          <div className="hidden md:flex items-center gap-8">
-             <button onClick={() => scrollToSection('problema')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">El Problema</button>
-             <button onClick={() => scrollToSection('metodo')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Método</button>
-             <button onClick={() => scrollToSection('servicios')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Servicios</button>
-             <button onClick={() => scrollToSection('inversion')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Inversión</button>
-             <button onClick={() => scrollToSection('faq')} className="text-[12px] font-black uppercase tracking-widest text-[#c3caac] hover:text-[#BFFF00] transition-colors">Dudas</button>
-          </div>
-
-          <button onClick={() => scrollToSection('agendar')} className="bg-[#BFFF00] text-black px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest btn-glow hover-lima-glow active:scale-95 transition-all">
-            Diagnóstico
-          </button>
-          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden text-[#BFFF00] p-2 relative z-[90]"><Menu size={28} /></button>
-        </div>
-      </nav>
-
       {/* 3. MOBILE MENU (z-index superior z-[120]) */}
-      <div className={`fixed inset-0 z-[120] bg-black transition-transform duration-500 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed inset-0 z-[120] bg-black transition-transform duration-500 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} w-full max-w-full overflow-hidden`}>
         <div className="p-6 flex flex-col h-full">
           <div className="flex justify-between items-center mb-16">
-            <img src={logoUrl} alt="Veluz" className="h-10" />
+            <img src={logoUrl} alt="Veluz" className="h-10 object-contain" />
             <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-white/5 rounded-full text-[#BFFF00]"><X size={24} /></button>
           </div>
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-8">
             {['Problema', 'Método', 'Servicios', 'Inversión', 'FAQ', 'Agendar'].map((item) => (
-              <button key={item} onClick={() => scrollToSection(item === 'Inversión' ? 'inversion' : item.toLowerCase())} className="text-5xl font-black text-left uppercase tracking-tighter hover:text-[#BFFF00]">{item}</button>
+              <button key={item} onClick={() => scrollToSection(item === 'Inversión' ? 'inversion' : item.toLowerCase())} className="text-4xl font-black text-left uppercase tracking-tighter hover:text-[#BFFF00]">{item}</button>
             ))}
           </div>
         </div>
       </div>
 
       {/* 4. HERO SECTION */}
-      {/* Ajustado el padding superior para garantizar un espacio holgado */}
-      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-36 md:pt-44 pb-16 overflow-hidden hero-noise animate-fade-in" ref={heroRef}>
+      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-4 pt-32 md:pt-40 pb-16 overflow-hidden hero-noise animate-fade-in w-full max-w-full" ref={heroRef}>
         {/* Fondo interactivo de alta fidelidad exclusivo para el Hero */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 w-full h-full">
           <canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-60" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[250px] sm:h-[350px] bg-[radial-gradient(ellipse,rgba(191,255,0,0.12)_0%,rgba(191,255,0,0.02)_50%,transparent_70%)] blur-2xl pointer-events-none" />
           <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[rgba(191,255,0,0.3)] to-transparent pointer-events-none" />
         </div>
 
-        <div className="relative z-10 max-w-5xl">
+        <div className="relative z-10 w-full max-w-5xl mx-auto">
           {/* Badge superior con las 5 estrellas y texto de validación */}
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-900/90 border border-white/10 mb-10 shadow-lg">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900/90 border border-white/10 mb-8 shadow-lg">
             <div className="flex gap-0.5 text-[#BFFF00]">
-              <Star size={11} fill="currentColor" stroke="none" />
-              <Star size={11} fill="currentColor" stroke="none" />
-              <Star size={11} fill="currentColor" stroke="none" />
-              <Star size={11} fill="currentColor" stroke="none" />
-              <Star size={11} fill="currentColor" stroke="none" />
+              <Star size={10} fill="currentColor" stroke="none" />
+              <Star size={10} fill="currentColor" stroke="none" />
+              <Star size={10} fill="currentColor" stroke="none" />
+              <Star size={10} fill="currentColor" stroke="none" />
+              <Star size={10} fill="currentColor" stroke="none" />
             </div>
-            <span className="text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase text-white/90">
+            <span className="text-[9px] md:text-[10px] font-black tracking-[0.25em] uppercase text-white/90">
               VALIDADO POR + DE 20 NEGOCIOS CON RESULTADOS
             </span>
           </div>
           
           {/* Titular con contraste de tipografía */}
-          <h1 className="text-[52px] md:text-[96px] font-black tracking-tighter leading-[1.0] text-white uppercase mb-8">
+          <h1 className="text-[40px] sm:text-[56px] md:text-[88px] font-black tracking-tighter leading-[1.05] text-white uppercase mb-8">
             DIGITALIZAMOS TU <br />
             <span className="instrument-serif text-[#BFFF00] capitalize font-normal italic">negocio con IA.</span>
           </h1>
 
           {/* Subtexto descriptivo */}
-          <p className="text-lg md:text-2xl text-[#e5e2e1] max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4 opacity-90">
+          <p className="text-base sm:text-lg md:text-2xl text-[#e5e2e1] max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4 opacity-95">
             Convertimos operaciones manuales en <span className="instrument-serif text-[#BFFF00] text-[1.15em] font-normal italic">máquinas de eficiencia</span> que cierran ventas sin que estés presente.
           </p>
 
@@ -659,7 +665,7 @@ export default function App() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl px-4 mx-auto">
             <button 
               onClick={() => scrollToSection('agendar')} 
-              className="w-full sm:w-auto bg-[#BFFF00] text-black px-10 py-5 rounded-full font-black text-base flex items-center justify-center gap-3 btn-glow hover-lima-glow transition-all active:scale-95 shadow-lg shadow-[#BFFF00]/10"
+              className="w-full sm:w-auto bg-[#BFFF00] text-black px-8 py-4 sm:py-5 rounded-full font-black text-base flex items-center justify-center gap-3 btn-glow hover-lima-glow transition-all active:scale-95 shadow-lg shadow-[#BFFF00]/10"
             >
               <Calendar size={20} /> Agenda tu cita
             </button>
@@ -668,32 +674,31 @@ export default function App() {
               href="https://wa.me/573125923915?text=Hola%20Veluz,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20servicios%20de%20digitalizaci%C3%B3n%20e%20IA" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-full sm:w-auto bg-[#075E54] hover:bg-[#128C7E] text-white px-10 py-5 rounded-full font-black text-base flex items-center justify-center gap-3 transition-colors active:scale-95 shadow-lg"
+              className="w-full sm:w-auto bg-[#075E54] hover:bg-[#128C7E] text-white px-8 py-4 sm:py-5 rounded-full font-black text-base flex items-center justify-center gap-3 transition-colors active:scale-95 shadow-lg"
             >
               <MessageCircleIcon /> Hablar por WhatsApp
             </a>
           </div>
 
-          <div className="mt-16 opacity-30 animate-bounce-subtle cursor-pointer" onClick={() => scrollToSection('problema')}>
-            <ArrowDown size={32} className="mx-auto" />
+          <div className="mt-12 opacity-30 animate-bounce-subtle cursor-pointer" onClick={() => scrollToSection('problema')}>
+            <ArrowDown size={28} className="mx-auto" />
           </div>
         </div>
       </section>
 
       {/* 5. TARGET AUDIENCE / FOR WHO */}
-      {/* Bug 2 Solucionado: max-w-[1440px] para control de ancho */}
-      <section ref={revealPr} className={`reveal py-20 md:py-32 bg-[#0e0e0e] border-y border-white/5 relative ${isVisiblePr ? 'active' : ''}`}>
+      <section ref={revealPr} className={`reveal py-20 md:py-32 bg-[#0e0e0e] border-y border-white/5 relative ${isVisiblePr ? 'active' : ''} w-full max-w-full overflow-hidden`}>
         <div className="absolute inset-0 bg-gradient-to-b from-[#BFFF00]/5 to-transparent pointer-events-none opacity-40"></div>
-        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 relative z-10">
           <p className="text-[#BFFF00] text-xs font-black tracking-widest uppercase text-center mb-4">La Autoselección Consciente</p>
           <p className="text-zinc-400 text-sm md:text-base text-center max-w-xl mx-auto mb-12">Si te identificas con alguno de estos perfiles, el diagnóstico gratuito de Veluz es exactamente lo que necesitas hoy.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {targetAudience.map((item, i) => (
-              <div key={i} className="p-12 rounded-2xl bg-zinc-900 border border-white/5 group card-hover-effect hover:border-[#BFFF00]/30">
+              <div key={i} className="p-8 md:p-12 rounded-2xl bg-zinc-900 border border-white/5 group card-hover-effect hover:border-[#BFFF00]/30">
                 <div className="w-12 h-12 bg-[#BFFF00]/10 rounded-xl flex items-center justify-center text-[#BFFF00] mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(191,255,0,0.1)]">
                   {item.icon}
                 </div>
-                <h3 className="text-2xl font-black uppercase text-white mb-4 group-hover:text-[#BFFF00] transition-colors">{item.title}</h3>
+                <h3 className="text-xl md:text-2xl font-black uppercase text-white mb-4 group-hover:text-[#BFFF00] transition-colors">{item.title}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -701,24 +706,24 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. EL PROBLEMA */}
-      <section id="problema" className="py-20 md:py-32 bg-white text-black overflow-hidden relative">
-        <div className="max-w-[1440px] mx-auto px-6">
-          <div className="reveal active flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-            <h2 className="text-4xl md:text-[80px] font-black tracking-tighter leading-tight text-black max-w-2xl">
+      {/* 6. EL PROBLEMA (Fondo Blanco de Alto Impacto / Neuromarketing) */}
+      <section id="problema" className="py-20 md:py-32 bg-white text-black overflow-hidden relative w-full max-w-full">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6">
+          <div className="reveal active flex flex-col md:flex-row justify-between items-end mb-16 md:mb-20 gap-8">
+            <h2 className="text-3xl sm:text-4xl md:text-[80px] font-black tracking-tighter leading-none text-black max-w-2xl">
               Operar manual es <br />
               <span className="text-red-500 font-black uppercase inline-block hover:scale-105 transition-transform duration-300">QUEMAR DINERO</span>
             </h2>
-            <p className="text-zinc-600 text-lg max-w-sm mb-4 font-light leading-relaxed">
+            <p className="text-zinc-600 text-base md:text-lg max-w-sm mb-4 font-light leading-relaxed">
               Mientras tú pierdes tiempo en tareas repetitivas y manuales, tu competencia está automatizando con nosotros.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="reveal active bg-zinc-100 p-12 rounded-3xl border border-zinc-200 card-hover-effect">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+            <div className="reveal active bg-zinc-100 p-8 md:p-12 rounded-3xl border border-zinc-200 card-hover-effect">
               <div className="flex items-center gap-4 mb-8">
-                <AlertTriangle className="text-red-600" size={40} />
-                <h4 className="text-2xl md:text-3xl font-black uppercase">Sin Veluz</h4>
+                <AlertTriangle className="text-red-600 shrink-0" size={36} />
+                <h4 className="text-xl md:text-3xl font-black uppercase">Sin Veluz</h4>
               </div>
               <ul className="space-y-6">
                 {[
@@ -726,18 +731,18 @@ export default function App() {
                   "Errores constantes y demoras críticas en la gestión de leads.",
                   "Invisibilidad total ante búsquedas en Google y motores de IA."
                 ].map((text, idx) => (
-                  <li key={idx} className="flex items-start gap-4 text-zinc-700 text-base font-medium group">
-                    <XCircle className="text-red-600 shrink-0 transition-transform group-hover:scale-125" size={24} />
+                  <li key={idx} className="flex items-start gap-3 md:gap-4 text-zinc-700 text-sm md:text-base font-medium group">
+                    <XCircle className="text-red-600 shrink-0 transition-transform group-hover:scale-125" size={22} />
                     {text}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="reveal active bg-[#BFFF00] text-black p-12 rounded-3xl shadow-xl border border-[#BFFF00]/20 card-hover-effect">
+            <div className="reveal active bg-[#BFFF00] text-black p-8 md:p-12 rounded-3xl shadow-xl border border-[#BFFF00]/20 card-hover-effect">
               <div className="flex items-center gap-4 mb-8">
-                <CheckCircle2 className="text-black" size={40} />
-                <h4 className="text-2xl md:text-3xl font-black uppercase">Efecto Veluz</h4>
+                <CheckCircle2 className="text-black shrink-0" size={36} />
+                <h4 className="text-xl md:text-3xl font-black uppercase">Efecto Veluz</h4>
               </div>
               <ul className="space-y-6">
                 {[
@@ -745,8 +750,8 @@ export default function App() {
                   "Conversión automática de leads calificados en menos de 30 segundos.",
                   "Crecimiento orgánico predecible basado en métricas reales de negocio."
                 ].map((text, idx) => (
-                  <li key={idx} className="flex items-start gap-4 text-black text-base font-bold group">
-                    <CheckCircle className="text-black shrink-0 transition-transform group-hover:scale-125" size={24} />
+                  <li key={idx} className="flex items-start gap-3 md:gap-4 text-black text-sm md:text-base font-bold group">
+                    <CheckCircle className="text-black shrink-0 transition-transform group-hover:scale-125" size={22} />
                     {text}
                   </li>
                 ))}
@@ -757,10 +762,10 @@ export default function App() {
       </section>
 
       {/* 7. METODO VELUZ-3X */}
-      <section id="metodo" ref={revealMe} className={`reveal py-20 md:py-32 bg-black z-10 relative overflow-hidden ${isVisibleMe ? 'active' : ''}`}>
+      <section id="metodo" ref={revealMe} className={`reveal py-20 md:py-32 bg-black z-10 relative overflow-hidden ${isVisibleMe ? 'active' : ''} w-full max-w-full`}>
         <div className="absolute inset-0 bg-gradient-to-r from-[#BFFF00]/5 via-transparent to-transparent opacity-20 pointer-events-none"></div>
-        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
-          <div className="text-center mb-24">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 relative z-10">
+          <div className="text-center mb-16 md:mb-24">
             <span className="text-[#BFFF00] text-xs font-black tracking-widest uppercase block mb-4">Nuestra Ingeniería</span>
             <h2 className="text-4xl md:text-[80px] font-black tracking-tighter uppercase text-white">Método Veluz-3X</h2>
           </div>
@@ -771,8 +776,8 @@ export default function App() {
               { step: "03", title: "Escalado", desc: "Encendemos la máquina. Optimizamos en tiempo real para maximizar el ROI de cada peso invertido." }
             ].map((m, i) => (
               <div key={i} className="relative p-12 bg-zinc-950 border border-white/5 rounded-3xl h-full card-hover-effect group hover:border-[#BFFF00]/20">
-                <div className="text-[#BFFF00] font-black text-8xl opacity-10 absolute top-4 right-8 transition-all group-hover:opacity-25 group-hover:scale-110">{m.step}</div>
-                <h3 className="text-2xl font-black mb-6 text-white uppercase group-hover:text-[#BFFF00] transition-colors">{m.title}</h3>
+                <div className="text-[#BFFF00] font-black text-7xl md:text-8xl opacity-10 absolute top-4 right-8 transition-all group-hover:opacity-25 group-hover:scale-110">{m.step}</div>
+                <h3 className="text-xl md:text-2xl font-black mb-6 text-white uppercase group-hover:text-[#BFFF00] transition-colors">{m.title}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{m.desc}</p>
               </div>
             ))}
@@ -780,13 +785,13 @@ export default function App() {
         </div>
       </section>
 
-      {/* 8. SERVICIOS (Acordeón exclusivo - Mejoras en color y contraste) */}
-      <section id="servicios" ref={revealSe} className={`reveal py-20 md:py-32 bg-[#131313] z-10 relative ${isVisibleSe ? 'active' : ''}`}>
+      {/* 8. SERVICIOS */}
+      <section id="servicios" ref={revealSe} className={`reveal py-20 md:py-32 bg-[#131313] z-10 relative ${isVisibleSe ? 'active' : ''} w-full max-w-full overflow-hidden`}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(191,255,0,0.03),transparent_40%)] pointer-events-none"></div>
-        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div>
-              <h2 className="text-4xl md:text-[80px] font-black tracking-tighter uppercase mb-12">Lo que <br /><span className="instrument-serif text-[#BFFF00]">activamos.</span></h2>
+              <h2 className="text-4xl md:text-[80px] font-black tracking-tighter uppercase mb-12 leading-none">Lo que <br /><span className="instrument-serif text-[#BFFF00]">activamos.</span></h2>
               <div className="space-y-6">
                 {services.map((s) => (
                   <div key={s.id} className="border-b border-white/10 pb-6 group cursor-pointer" onClick={() => handleToggleService(s.id)}>
@@ -796,7 +801,6 @@ export default function App() {
                         <h4 className={`text-xl md:text-2xl font-black transition-colors ${openService === s.id ? 'text-[#BFFF00]' : 'text-white group-hover:text-[#BFFF00]'}`}>{s.title}</h4>
                       </div>
                       
-                      {/* Bug 3 Solucionado: Removido el wrapper span .material-symbols-outlined para un renderizado nativo y limpio con Lucide */}
                       {openService === s.id ? (
                         <X size={20} className="text-[#BFFF00] shrink-0 animate-spin-once" />
                       ) : (
@@ -844,7 +848,7 @@ export default function App() {
                               e.stopPropagation();
                               scrollToSection('inversion');
                             }} 
-                            className="w-full sm:w-auto bg-[#BFFF00] text-black px-6 py-3.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-transform btn-glow"
+                            className="w-full sm:w-auto bg-[#BFFF00] text-black px-6 py-3.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-transform btn-glow text-center"
                           >
                             Ver Costeo de este servicio →
                           </button>
@@ -857,7 +861,7 @@ export default function App() {
             </div>
 
             {/* MOCKUP INTERACTIVO SIMULADO AL COSTADO */}
-            <div className="relative sticky top-28 bg-zinc-900/50 rounded-3xl border border-white/5 p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-[0_0_50px_rgba(191,255,0,0.03)]">
+            <div className="relative sticky top-28 bg-zinc-900/50 rounded-3xl border border-white/5 p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-[0_0_50px_rgba(191,255,0,0.03)] w-full max-w-full">
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#BFFF00]/5 blur-[100px] pointer-events-none"></div>
               
               <div className="mb-6 flex items-center justify-between">
@@ -868,7 +872,7 @@ export default function App() {
                 <span className="text-[9px] text-zinc-500 font-mono font-semibold">VELUZ_3X_SYS_V4.0</span>
               </div>
 
-              <div className="transition-all duration-500">
+              <div className="transition-all duration-500 w-full max-w-full overflow-hidden">
                 {services.find(s => s.id === openService)?.visual || (
                   <div className="flex flex-col items-center justify-center h-48 border border-dashed border-white/10 rounded-2xl bg-zinc-900/40 p-4">
                     <Sparkles className="text-[#BFFF00] animate-pulse mb-3" size={28} />
@@ -892,9 +896,9 @@ export default function App() {
       </section>
 
       {/* 9. CASE STUDY LMS FINANCE */}
-      <section id="caso-lms" ref={revealLm} className={`reveal py-20 md:py-32 bg-[#BFFF00] text-black overflow-hidden relative ${isVisibleLm ? 'active' : ''}`}>
+      <section id="caso-lms" ref={revealLm} className={`reveal py-20 md:py-32 bg-[#BFFF00] text-black overflow-hidden relative ${isVisibleLm ? 'active' : ''} w-full max-w-full`}>
         <div className="absolute top-0 right-0 w-96 h-96 bg-black/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <span className="text-[10px] font-black border border-black/20 px-4 py-2 rounded-full mb-8 inline-block uppercase tracking-widest">Caso de Éxito: LMS Finance</span>
@@ -912,21 +916,21 @@ export default function App() {
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300 shadow-xl">
-                <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={92} suffix="%" /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">TIEMPO MANUAL</span>
+              <div className="bg-black text-[#BFFF00] p-6 md:p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300 shadow-xl">
+                <span className="text-3xl md:text-6xl font-black mb-2"><StatCounter value={92} suffix="%" /></span>
+                <span className="text-[9px] md:text-[10px] font-black tracking-widest uppercase opacity-65">TIEMPO MANUAL</span>
               </div>
-              <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300 shadow-xl" style={{ transitionDelay: '0.1s' }}>
-                <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={5} suffix="X" /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">FACTURACIÓN</span>
+              <div className="bg-black text-[#BFFF00] p-6 md:p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300 shadow-xl" style={{ transitionDelay: '0.1s' }}>
+                <span className="text-3xl md:text-6xl font-black mb-2"><StatCounter value={5} suffix="X" /></span>
+                <span className="text-[9px] md:text-[10px] font-black tracking-widest uppercase opacity-65">FACTURACIÓN</span>
               </div>
               <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300" style={{ transitionDelay: '0.2s' }}>
-                <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={0} /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">FUGAS DE LEADS</span>
+                <span className="text-3xl md:text-6xl font-black mb-2"><StatCounter value={0} /></span>
+                <span className="text-[9px] md:text-[10px] font-black tracking-widest uppercase opacity-65">FUGAS DE LEADS</span>
               </div>
               <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300" style={{ transitionDelay: '0.3s' }}>
-                <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={30} suffix="D" /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">IMPLANTACIÓN</span>
+                <span className="text-3xl md:text-6xl font-black mb-2"><StatCounter value={30} suffix="D" /></span>
+                <span className="text-[9px] md:text-[10px] font-black tracking-widest uppercase opacity-65">IMPLANTACIÓN</span>
               </div>
             </div>
           </div>
@@ -934,10 +938,10 @@ export default function App() {
       </section>
 
       {/* 10. PRICING SECTION (COSTEOS) */}
-      <section id="inversion" ref={revealIn} className={`reveal py-20 md:py-32 bg-black overflow-hidden relative ${isVisibleIn ? 'active' : ''}`}>
+      <section id="inversion" ref={revealIn} className={`reveal py-20 md:py-32 bg-black overflow-hidden relative ${isVisibleIn ? 'active' : ''} w-full max-w-full`}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(191,255,0,0.03),transparent_40%)] pointer-events-none"></div>
-        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
-          <div className="text-center mb-20">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 relative z-10">
+          <div className="text-center mb-16">
             <span className="text-[#BFFF00] text-xs font-black tracking-widest uppercase block mb-4">Inversión Transparente</span>
             <h2 className="text-4xl md:text-[80px] font-black tracking-tighter mb-6 max-w-4xl mx-auto uppercase">
               Sin letra pequeña. <br />
@@ -946,7 +950,7 @@ export default function App() {
             </h2>
             
             {/* Filtros solicitados */}
-            <div className="flex justify-center gap-4 flex-wrap mt-10">
+            <div className="flex justify-center gap-3 md:gap-4 flex-wrap mt-10">
               <button 
                 className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'all' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white hover:border-[#BFFF00]/35'}`} 
                 onClick={() => setPricingTab('all')}
@@ -968,7 +972,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 transition-all duration-500">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 transition-all duration-500 items-start">
             {pricingPlans
               .filter(plan => pricingTab === 'all' || plan.type === pricingTab)
               .map((plan, idx) => {
@@ -976,7 +980,7 @@ export default function App() {
                 return (
                   <div 
                     key={plan.id} 
-                    className={`p-8 rounded-2xl bg-zinc-950 border pricing-card flex flex-col justify-between h-full card-hover-effect transition-all duration-300 relative ${plan.id === 'presencia-digital' ? 'border-2 border-[#BFFF00] shadow-[0_0_30px_rgba(191,255,0,0.05)]' : 'border-white/5 hover:border-[#BFFF00]/20'}`}
+                    className={`p-6 md:p-8 rounded-2xl bg-zinc-950 border pricing-card flex flex-col justify-between h-full card-hover-effect transition-all duration-300 relative ${plan.id === 'presencia-digital' ? 'border-2 border-[#BFFF00] shadow-[0_0_30px_rgba(191,255,0,0.05)]' : 'border-white/5 hover:border-[#BFFF00]/20'} w-full max-w-full`}
                     style={{ transitionDelay: `${idx * 0.05}s` }}
                   >
                     <div>
@@ -985,13 +989,13 @@ export default function App() {
                         {plan.category}
                       </span>
                       
-                      <h4 className="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">{plan.title}</h4>
+                      <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tight">{plan.title}</h4>
                       
                       {/* Mini descripción compacta por defecto */}
                       <p className="text-slate-400 text-xs leading-relaxed mb-6 font-light">{plan.desc}</p>
                       
                       {/* Caja limpia de precios por defecto */}
-                      <div className="bg-white/5 border border-white/10 p-5 rounded-2xl mb-6 space-y-3">
+                      <div className="bg-white/5 border border-white/10 p-4 md:p-5 rounded-2xl mb-6 space-y-3">
                         <div>
                           <p className="text-[9px] font-black tracking-widest text-slate-500 uppercase">{plan.setupLabel}</p>
                           <span className="text-[#BFFF00] font-black text-2xl block tracking-tight">{plan.setupPrice}</span>
@@ -1056,8 +1060,9 @@ export default function App() {
       </section>
 
       {/* 11. FAQ */}
-      <section id="faq" ref={revealFq} className={`reveal py-20 md:py-32 bg-black z-10 border-t border-white/5 relative ${isVisibleFq ? 'active' : ''}`}>
-        <div className="max-w-3xl mx-auto px-6 relative z-10">
+      {/* Corrección del bug de sintaxis: se eliminó la llave extra que causaba el error de compilación */}
+      <section id="faq" ref={revealFq} className={`reveal py-20 md:py-32 bg-black z-10 border-t border-white/5 relative ${isVisibleFq ? 'active' : ''} w-full max-w-full`}>
+        <div className="max-w-3xl mx-auto px-4 md:px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black uppercase mb-4 text-white">Preguntas Frecuentes</h2>
             <p className="text-slate-500 uppercase text-[10px] font-black tracking-widest">Todo lo que necesitas saber antes de empezar</p>
@@ -1084,9 +1089,9 @@ export default function App() {
       </section>
 
       {/* 12. AGENDAR CALENDLY */}
-      <section id="agendar" className="py-20 md:py-40 bg-black z-10 relative">
+      <section id="agendar" className="py-20 md:py-40 bg-black z-10 relative w-full max-w-full">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#BFFF00]/5 blur-[150px] pointer-events-none rounded-full"></div>
-        <div className="max-w-5xl mx-auto px-6 relative">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 relative">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-4 uppercase">¿Hablamos de <br /><span className="text-[#BFFF00]">negocios?</span></h2>
             <div className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full border border-white/10">
@@ -1094,8 +1099,7 @@ export default function App() {
               Llamada de 30 Minutos
             </div>
           </div>
-          <div className="bg-white rounded-[3rem] overflow-hidden h-[600px] md:h-[800px] shadow-2xl border border-[#BFFF00]/20">
-            {/* ENLACE DE CALENDLY OPTIMIZADO PARA SESIONES DE 30 MINUTOS */}
+          <div className="bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden h-[600px] md:h-[800px] shadow-2xl border border-[#BFFF00]/20">
             <iframe 
               src="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00" 
               width="100%" height="100%" frameBorder="0" title="Calendly"
@@ -1105,9 +1109,9 @@ export default function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-20 bg-black border-t border-white/5 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <img src={logoUrl} alt="Veluz" className="h-14 opacity-60" />
+      <footer className="py-20 bg-black border-t border-white/5 px-6 w-full max-w-full">
+        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+          <img src={logoUrl} alt="Veluz" className="h-10 opacity-60" />
           <div className="flex gap-8 md:gap-16 text-[10px] font-black tracking-[0.3em] uppercase opacity-40">
             <a href="https://wa.me/573125923915" target="_blank" className="hover:text-[#BFFF00] transition-colors">WhatsApp</a>
             <a href="#" className="hover:text-[#BFFF00] transition-colors">Aviso Legal</a>
