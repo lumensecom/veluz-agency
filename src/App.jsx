@@ -15,7 +15,7 @@ import {
   Star,
   Menu,
   X,
-  Plus, // Añadido para los acordeones
+  Plus, 
   Target,
   Rocket,
   ShieldCheck,
@@ -95,14 +95,14 @@ export default function App() {
   const [theme, setTheme] = useState('dark');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openService, setOpenService] = useState(null); // Modificado de 'ia' a null para que todos inicien cerrados
+  const [openService, setOpenService] = useState(null); // Todos cerrados por defecto
   const [openFaq, setOpenFaq] = useState(null);
   const [showFloatingBtn, setShowFloatingBtn] = useState(false);
   const [showTopBar, setShowTopBar] = useState(true);
   const [pricingTab, setPricingTab] = useState('all'); // 'all', 'marketing', 'automatizaciones-ia'
-  const [expandedPlans, setExpandedPlans] = useState({}); // Control de subpestañas desplegables para precios
+  const [expandedPlans, setExpandedPlans] = useState({}); 
   const heroRef = useRef(null);
-  const heroCanvasRef = useRef(null); // Canvas dedicado para el Hero
+  const heroCanvasRef = useRef(null); 
 
   const logoUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778462963/ChatGPT_Image_May_10_2026_08_28_28_PM_mqoqmv.png";
   const faviconUrl = "https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png";
@@ -132,9 +132,9 @@ export default function App() {
       before: "Leads fríos que mueren en tu bandeja de entrada porque tardas horas o días en responder.",
       after: "Agente IA responde de forma personalizada en menos de 10 segundos, califica el presupuesto y agenda la cita.",
       visual: (
-        <div className="w-full bg-zinc-900 rounded-2xl border border-white/10 overflow-hidden text-left font-mono text-xs">
+        <div className="w-full bg-zinc-950 rounded-2xl border border-[#BFFF00]/20 overflow-hidden text-left font-mono text-xs shadow-[0_0_30px_rgba(191,255,0,0.05)]">
           {/* Header de WhatsApp simulado */}
-          <div className="bg-zinc-800 p-3 border-b border-white/5 flex items-center justify-between">
+          <div className="bg-zinc-900 p-3 border-b border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
               <span className="font-bold text-white text-[11px] font-sans">Agente IA Veluz (Activo)</span>
@@ -143,7 +143,7 @@ export default function App() {
           </div>
           {/* Cuerpo del chat simulado */}
           <div className="p-4 space-y-3 max-h-56 overflow-y-auto">
-            <div className="bg-zinc-850 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] border border-white/5">
+            <div className="bg-zinc-800 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] border border-white/5">
               <p className="text-zinc-400 text-[10px] mb-1 font-sans">Cliente (09:41 AM)</p>
               <p className="text-white font-sans text-xs">Hola, me interesa agendar una consulta médica especializada para el jueves. ¿Tienen cupos?</p>
             </div>
@@ -151,7 +151,7 @@ export default function App() {
               <p className="text-[#BFFF00] text-[10px] mb-1 text-right font-sans">Veluz Agent IA (09:41 AM)</p>
               <p className="text-white font-sans text-xs">¡Hola! Claro que sí, tenemos espacios disponibles para el jueves con el Dr. Silva. Para agendarte con éxito, ¿buscas cita de primera vez o control?</p>
             </div>
-            <div className="bg-zinc-850 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] border border-white/5 animate-pulse">
+            <div className="bg-zinc-800 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] border border-white/5 animate-pulse">
               <p className="text-zinc-400 text-[10px] mb-1 font-sans">Cliente (Escribiendo...)</p>
               <div className="flex gap-1 py-1">
                 <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce"></span>
@@ -176,7 +176,7 @@ export default function App() {
       before: "Dependes de pauta publicitaria costosa y clics inflados que dejan de llegar cuando apagas tu tarjeta de crédito.",
       after: "Eres citado orgánicamente como referente por IAs y buscadores, captando clientes calificados sin costo de pauta.",
       visual: (
-        <div className="w-full bg-zinc-950 rounded-2xl border border-white/10 p-4 text-left font-sans">
+        <div className="w-full bg-zinc-950 rounded-2xl border border-[#BFFF00]/20 p-4 text-left font-sans shadow-[0_0_30px_rgba(191,255,0,0.05)]">
           <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2 text-[10px] text-zinc-500 uppercase tracking-widest font-mono">
             <Search size={12} className="text-[#BFFF00]" /> Simulación de Motor de Respuesta (GEO)
           </div>
@@ -214,23 +214,23 @@ export default function App() {
       before: "Tu equipo pierde el 40% del día copiando datos entre Excel, WhatsApp, facturas y correos manuales.",
       after: "Un lead se registra, se crea en el CRM, se genera su factura y se notifica al equipo de forma inmediata y automática.",
       visual: (
-        <div className="w-full bg-zinc-900 rounded-2xl border border-white/10 p-4 text-left font-mono text-[10px]">
+        <div className="w-full bg-zinc-950 rounded-2xl border border-[#BFFF00]/20 p-4 text-left font-mono text-[10px] shadow-[0_0_30px_rgba(191,255,0,0.05)]">
           <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2 text-zinc-500">
             <span>DIAGRAMA DE FLUJO VELUZ-3X</span>
             <span className="text-[#BFFF00] animate-pulse">ACTIVO</span>
           </div>
           <div className="space-y-3 relative">
-            <div className="flex items-center gap-3 bg-zinc-950 p-2 rounded-xl border border-white/5">
+            <div className="flex items-center gap-3 bg-zinc-900 p-2 rounded-xl border border-white/5">
               <div className="w-5 h-5 bg-[#BFFF00]/10 border border-[#BFFF00]/20 rounded flex items-center justify-center text-[#BFFF00] font-bold">1</div>
               <span className="text-white font-sans font-medium">Registro de Lead Orgánico</span>
             </div>
             <div className="h-4 w-px bg-[#BFFF00]/40 ml-4"></div>
-            <div className="flex items-center gap-3 bg-zinc-950 p-2 rounded-xl border border-[#BFFF00]/30 shadow-[0_0_15px_rgba(191,255,0,0.05)]">
+            <div className="flex items-center gap-3 bg-zinc-900 p-2 rounded-xl border border-[#BFFF00]/30 shadow-[0_0_15px_rgba(191,255,0,0.05)]">
               <div className="w-5 h-5 bg-[#BFFF00] rounded flex items-center justify-center text-black font-black">2</div>
               <span className="text-white font-sans font-medium">Asignación automática a CRM</span>
             </div>
             <div className="h-4 w-px bg-[#BFFF00]/40 ml-4"></div>
-            <div className="flex items-center gap-3 bg-zinc-950 p-2 rounded-xl border border-white/5">
+            <div className="flex items-center gap-3 bg-zinc-900 p-2 rounded-xl border border-white/5">
               <div className="w-5 h-5 bg-[#BFFF00]/10 border border-[#BFFF00]/20 rounded flex items-center justify-center text-[#BFFF00] font-bold">3</div>
               <span className="text-white font-sans font-medium">WhatsApp IA + Factura Generada</span>
             </div>
@@ -382,7 +382,6 @@ export default function App() {
         const baseOpacity = 0.04 + Math.sin(factor * Math.PI) * 0.22;
         
         ctx.lineWidth = 1.8 - (factor * 0.9);
-        // Color lima Veluz con desvanecimiento de profundidad
         ctx.strokeStyle = `rgba(191, 255, 0, ${baseOpacity})`;
 
         ctx.beginPath();
@@ -451,8 +450,7 @@ export default function App() {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if(element) {
-        // Optimización de offsets para evitar que la barra superior tape el inicio de la sección
-        const offset = window.innerWidth < 768 ? (showTopBar ? 110 : 70) : (showTopBar ? 130 : 90);
+        const offset = window.innerWidth < 768 ? (showTopBar ? 90 : 50) : (showTopBar ? 110 : 70);
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = element.getBoundingClientRect().top;
         const offsetPosition = elementRect - bodyRect - offset;
@@ -471,6 +469,11 @@ export default function App() {
       ...prev,
       [id]: !prev[id]
     }));
+  };
+
+  // Lógica de acordeón exclusivo: cierra el anterior al abrir el nuevo, o cierra si se pulsa sobre el mismo
+  const handleToggleService = (id) => {
+    setOpenService(prev => prev === id ? null : id);
   };
 
   // Referencias para las animaciones del scroll
@@ -493,7 +496,6 @@ export default function App() {
         .shadow-lima-glow { box-shadow: 0 10px 40px -10px rgba(191, 255, 0, 0.4); }
         .hover-lima-glow:hover { box-shadow: 0 15px 50px -5px rgba(191, 255, 0, 0.6); transform: translateY(-4px); }
         
-        /* Navbar con z-index alto pero menor que el menú móvil */
         .glass-nav { backdrop-filter: blur(10px); background: rgba(19, 19, 19, 0.85); transition: all 0.3s ease; }
         .pulse-dot { animation: pulse 2s infinite; }
         @keyframes pulse {
@@ -539,7 +541,6 @@ export default function App() {
         }
         .accordion-inner { overflow: hidden; }
 
-        /* Subpestaña de precios colapsable */
         .subtab-content {
             display: grid;
             grid-template-rows: 0fr;
@@ -553,7 +554,6 @@ export default function App() {
             margin-bottom: 0.5rem;
         }
 
-        /* Estilo Premium de Noise + Glow en el fondo del Hero */
         .hero-noise { 
           background: #000; 
           position: relative; 
@@ -570,10 +570,10 @@ export default function App() {
         }
       `}</style>
 
-      {/* 1. TOP BAR / URGENCY BAR */}
-      <div className="fixed top-0 w-full bg-[#BFFF00] text-black z-[100] py-2.5 px-6 flex items-center justify-center shadow-md select-none transition-all duration-300" id="urgency-bar">
-        <div className="text-center text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase flex items-center justify-center gap-2">
-          <AlertCircle size={14} className="animate-pulse" />
+      {/* 1. TOP BAR / URGENCY BAR (Delgada, copy simplificado, sin X) */}
+      <div className="fixed top-0 w-full bg-[#BFFF00] text-black z-[100] py-2 px-6 flex items-center justify-center shadow-md select-none transition-all duration-300" id="urgency-bar">
+        <div className="text-center text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase flex items-center justify-center gap-1 sm:gap-2">
+          <AlertCircle size={14} className="animate-pulse shrink-0" />
           <span>Cupos limitados por mes</span>
           <span className="w-1.5 h-1.5 rounded-full bg-black opacity-30"></span>
           <span>Mayo casi completo</span>
@@ -582,7 +582,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* 2. NAVBAR (Ajustado el z-index de la navegación a z-[80] para que no tape el menú de hamburguesa móvil) */}
+      {/* 2. NAVBAR (z-index de la navegación a z-[80] para que no tape el menú de hamburguesa móvil) */}
       <nav className={`fixed w-full z-[80] transition-all duration-300 ${isScrolled ? 'top-0 py-2' : `${showTopBar ? 'top-10' : 'top-4'} py-3`} glass-nav border-b border-white/10`} id="main-nav">
         <div className="max-w-[1440px] mx-auto px-6 md:px-8 flex justify-between items-center">
           <div className="flex items-center cursor-pointer group" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
@@ -600,16 +600,15 @@ export default function App() {
           <button onClick={() => scrollToSection('agendar')} className="bg-[#BFFF00] text-black px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest btn-glow hover-lima-glow active:scale-95 transition-all">
             Diagnóstico
           </button>
-          {/* El trigger móvil con z-index alto para no ser obstaculizado por la barra de urgencia */}
           <button onClick={() => setMobileMenuOpen(true)} className="md:hidden text-[#BFFF00] p-2 relative z-[90]"><Menu size={28} /></button>
         </div>
       </nav>
 
-      {/* 3. MOBILE MENU (Con z-index superior z-[120] para superponerse perfectamente sobre la barra de urgencia y el navbar sin glitches táctiles) */}
+      {/* 3. MOBILE MENU (z-index superior z-[120]) */}
       <div className={`fixed inset-0 z-[120] bg-black transition-transform duration-500 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-6 flex flex-col h-full">
           <div className="flex justify-between items-center mb-16">
-            <img src={logoUrl} alt="Veluz" className="h-12" />
+            <img src={logoUrl} alt="Veluz" className="h-10" />
             <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-white/5 rounded-full text-[#BFFF00]"><X size={24} /></button>
           </div>
           <div className="flex flex-col gap-10">
@@ -621,15 +620,12 @@ export default function App() {
       </div>
 
       {/* 4. HERO SECTION */}
-      {/* Ajustado el padding superior dinámico (pt-44 md:pt-52) para garantizar un espacio holgado y que ningún elemento del inicio del hero sea tapado por la top bar o el navbar */}
-      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-44 md:pt-52 pb-16 overflow-hidden hero-noise animate-fade-in" ref={heroRef}>
+      {/* Ajustado el padding superior para garantizar un espacio holgado */}
+      <section className="reveal active relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-36 md:pt-44 pb-16 overflow-hidden hero-noise animate-fade-in" ref={heroRef}>
         {/* Fondo interactivo de alta fidelidad exclusivo para el Hero */}
         <div className="absolute inset-0 z-0">
-          {/* Canvas de Metal Líquido Animado */}
           <canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-60" />
-          {/* Glow central premium de contraste */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[250px] sm:h-[350px] bg-[radial-gradient(ellipse,rgba(191,255,0,0.12)_0%,rgba(191,255,0,0.02)_50%,transparent_70%)] blur-2xl pointer-events-none" />
-          {/* Línea de luz de base */}
           <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[rgba(191,255,0,0.3)] to-transparent pointer-events-none" />
         </div>
 
@@ -685,17 +681,19 @@ export default function App() {
       </section>
 
       {/* 5. TARGET AUDIENCE / FOR WHO */}
-      <section ref={revealPr} className={`reveal py-20 md:py-32 bg-[#0e0e0e] border-y border-white/5 ${isVisiblePr ? 'active' : ''}`}>
-        <div className="max-w-[1440px] mx-auto px-6">
+      {/* Bug 2 Solucionado: max-w-[1440px] para control de ancho */}
+      <section ref={revealPr} className={`reveal py-20 md:py-32 bg-[#0e0e0e] border-y border-white/5 relative ${isVisiblePr ? 'active' : ''}`}>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#BFFF00]/5 to-transparent pointer-events-none opacity-40"></div>
+        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
           <p className="text-[#BFFF00] text-xs font-black tracking-widest uppercase text-center mb-4">La Autoselección Consciente</p>
           <p className="text-zinc-400 text-sm md:text-base text-center max-w-xl mx-auto mb-12">Si te identificas con alguno de estos perfiles, el diagnóstico gratuito de Veluz es exactamente lo que necesitas hoy.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {targetAudience.map((item, i) => (
-              <div key={i} className="p-12 rounded-2xl bg-zinc-900 border border-white/5 group card-hover-effect">
-                <div className="w-12 h-12 bg-[#BFFF00]/10 rounded-xl flex items-center justify-center text-[#BFFF00] mb-6 group-hover:scale-110 transition-transform">
+              <div key={i} className="p-12 rounded-2xl bg-zinc-900 border border-white/5 group card-hover-effect hover:border-[#BFFF00]/30">
+                <div className="w-12 h-12 bg-[#BFFF00]/10 rounded-xl flex items-center justify-center text-[#BFFF00] mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(191,255,0,0.1)]">
                   {item.icon}
                 </div>
-                <h3 className="text-2xl font-black uppercase text-white mb-4">{item.title}</h3>
+                <h3 className="text-2xl font-black uppercase text-white mb-4 group-hover:text-[#BFFF00] transition-colors">{item.title}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -703,8 +701,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. EL PROBLEMA (Fondo Blanco de Alto Impacto / Neuromarketing) */}
-      <section id="problema" className="py-20 md:py-32 bg-white text-black overflow-hidden">
+      {/* 6. EL PROBLEMA */}
+      <section id="problema" className="py-20 md:py-32 bg-white text-black overflow-hidden relative">
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="reveal active flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
             <h2 className="text-4xl md:text-[80px] font-black tracking-tighter leading-tight text-black max-w-2xl">
@@ -760,7 +758,8 @@ export default function App() {
 
       {/* 7. METODO VELUZ-3X */}
       <section id="metodo" ref={revealMe} className={`reveal py-20 md:py-32 bg-black z-10 relative overflow-hidden ${isVisibleMe ? 'active' : ''}`}>
-        <div className="max-w-[1440px] mx-auto px-6 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#BFFF00]/5 via-transparent to-transparent opacity-20 pointer-events-none"></div>
+        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
           <div className="text-center mb-24">
             <span className="text-[#BFFF00] text-xs font-black tracking-widest uppercase block mb-4">Nuestra Ingeniería</span>
             <h2 className="text-4xl md:text-[80px] font-black tracking-tighter uppercase text-white">Método Veluz-3X</h2>
@@ -771,9 +770,9 @@ export default function App() {
               { step: "02", title: "Diseño", desc: "Construimos la infraestructura digital a medida: CRM, IA, Funnels y Automatizaciones." },
               { step: "03", title: "Escalado", desc: "Encendemos la máquina. Optimizamos en tiempo real para maximizar el ROI de cada peso invertido." }
             ].map((m, i) => (
-              <div key={i} className="relative p-12 bg-zinc-950 border border-white/5 rounded-3xl h-full card-hover-effect group">
+              <div key={i} className="relative p-12 bg-zinc-950 border border-white/5 rounded-3xl h-full card-hover-effect group hover:border-[#BFFF00]/20">
                 <div className="text-[#BFFF00] font-black text-8xl opacity-10 absolute top-4 right-8 transition-all group-hover:opacity-25 group-hover:scale-110">{m.step}</div>
-                <h3 className="text-2xl font-black mb-6 text-white uppercase">{m.title}</h3>
+                <h3 className="text-2xl font-black mb-6 text-white uppercase group-hover:text-[#BFFF00] transition-colors">{m.title}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{m.desc}</p>
               </div>
             ))}
@@ -781,21 +780,23 @@ export default function App() {
         </div>
       </section>
 
-      {/* 8. SERVICIOS (Acordeón Animado y Enriquecido) */}
-      <section id="servicios" ref={revealSe} className={`reveal py-20 md:py-32 bg-[#131313] z-10 ${isVisibleSe ? 'active' : ''}`}>
-        <div className="max-w-[1440px] mx-auto px-6">
+      {/* 8. SERVICIOS (Acordeón exclusivo - Mejoras en color y contraste) */}
+      <section id="servicios" ref={revealSe} className={`reveal py-20 md:py-32 bg-[#131313] z-10 relative ${isVisibleSe ? 'active' : ''}`}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(191,255,0,0.03),transparent_40%)] pointer-events-none"></div>
+        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div>
               <h2 className="text-4xl md:text-[80px] font-black tracking-tighter uppercase mb-12">Lo que <br /><span className="instrument-serif text-[#BFFF00]">activamos.</span></h2>
               <div className="space-y-6">
-                {services.map((s, idx) => (
-                  <div key={s.id} className="border-b border-white/10 pb-6 group cursor-pointer" onClick={() => setOpenService(s.id)}>
+                {services.map((s) => (
+                  <div key={s.id} className="border-b border-white/10 pb-6 group cursor-pointer" onClick={() => handleToggleService(s.id)}>
                     <div className="flex justify-between items-center mb-4">
                       <div className="flex items-center gap-4 flex-wrap">
                         <span className="bg-[#BFFF00]/10 text-[#BFFF00] px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase">{s.tag}</span>
                         <h4 className={`text-xl md:text-2xl font-black transition-colors ${openService === s.id ? 'text-[#BFFF00]' : 'text-white group-hover:text-[#BFFF00]'}`}>{s.title}</h4>
                       </div>
                       
+                      {/* Bug 3 Solucionado: Removido el wrapper span .material-symbols-outlined para un renderizado nativo y limpio con Lucide */}
                       {openService === s.id ? (
                         <X size={20} className="text-[#BFFF00] shrink-0 animate-spin-once" />
                       ) : (
@@ -807,17 +808,15 @@ export default function App() {
                       <div className="accordion-inner space-y-6">
                         <p className="text-slate-300 text-sm leading-relaxed">{s.desc}</p>
                         
-                        {/* Listado visual de características del servicio */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {s.features.map((f, i) => (
-                            <div key={i} className="flex items-center gap-2.5 text-xs font-bold text-slate-300 bg-white/[0.02] border border-white/5 p-2 rounded-xl">
+                            <div key={i} className="flex items-center gap-2.5 text-xs font-bold text-slate-300 bg-white/[0.02] border border-white/5 p-2 rounded-xl hover:border-[#BFFF00]/20 transition-all duration-300">
                               <CheckCircle2 size={14} className="text-[#BFFF00] shrink-0" />
                               <span>{f}</span>
                             </div>
                           ))}
                         </div>
 
-                        {/* Contraste visual Antes vs Después específico del servicio */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/10 pt-6">
                           <div className="bg-red-500/5 border border-red-500/10 p-4 rounded-2xl">
                             <p className="text-red-400 font-bold text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
@@ -833,7 +832,6 @@ export default function App() {
                           </div>
                         </div>
 
-                        {/* Botón y métricas del servicio */}
                         <div className="bg-black/50 border border-white/10 p-5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
                           <div>
                             <p className="text-[#BFFF00] text-[9px] font-black uppercase tracking-widest mb-1">{s.result}</p>
@@ -846,7 +844,7 @@ export default function App() {
                               e.stopPropagation();
                               scrollToSection('inversion');
                             }} 
-                            className="w-full sm:w-auto bg-[#BFFF00] text-black px-6 py-3.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-transform"
+                            className="w-full sm:w-auto bg-[#BFFF00] text-black px-6 py-3.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-transform btn-glow"
                           >
                             Ver Costeo de este servicio →
                           </button>
@@ -859,7 +857,7 @@ export default function App() {
             </div>
 
             {/* MOCKUP INTERACTIVO SIMULADO AL COSTADO */}
-            <div className="relative sticky top-28 bg-zinc-900/50 rounded-3xl border border-white/5 p-6 md:p-8 flex flex-col justify-between overflow-hidden">
+            <div className="relative sticky top-28 bg-zinc-900/50 rounded-3xl border border-white/5 p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-[0_0_50px_rgba(191,255,0,0.03)]">
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#BFFF00]/5 blur-[100px] pointer-events-none"></div>
               
               <div className="mb-6 flex items-center justify-between">
@@ -870,12 +868,11 @@ export default function App() {
                 <span className="text-[9px] text-zinc-500 font-mono font-semibold">VELUZ_3X_SYS_V4.0</span>
               </div>
 
-              {/* Render dinámico del mockup según la pestaña del acordeón activa */}
               <div className="transition-all duration-500">
                 {services.find(s => s.id === openService)?.visual || (
-                  <div className="flex flex-col items-center justify-center h-48 border border-dashed border-white/10 rounded-2xl bg-zinc-900/40">
+                  <div className="flex flex-col items-center justify-center h-48 border border-dashed border-white/10 rounded-2xl bg-zinc-900/40 p-4">
                     <Sparkles className="text-[#BFFF00] animate-pulse mb-3" size={28} />
-                    <p className="text-zinc-500 text-xs font-sans">Selecciona un servicio a la izquierda para visualizar el sistema activo.</p>
+                    <p className="text-zinc-500 text-xs font-sans text-center">Selecciona un servicio a la izquierda para visualizar el sistema activo.</p>
                   </div>
                 )}
               </div>
@@ -895,40 +892,41 @@ export default function App() {
       </section>
 
       {/* 9. CASE STUDY LMS FINANCE */}
-      <section id="caso-lms" ref={revealLm} className={`reveal py-20 md:py-32 bg-[#BFFF00] text-black overflow-hidden ${isVisibleLm ? 'active' : ''}`}>
-        <div className="max-w-[1440px] mx-auto px-6">
+      <section id="caso-lms" ref={revealLm} className={`reveal py-20 md:py-32 bg-[#BFFF00] text-black overflow-hidden relative ${isVisibleLm ? 'active' : ''}`}>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-black/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <span className="text-[10px] font-black border border-black/20 px-4 py-2 rounded-full mb-8 inline-block uppercase tracking-widest">Caso de Éxito: LMS Finance</span>
-              <h2 className="text-4xl md:text-[80px] font-black tracking-tighter leading-tight mb-8">De procesos rotos a una máquina de escala.</h2>
+              <h2 className="text-4xl md:text-[80px] font-black tracking-tighter leading-tight mb-8 uppercase">De procesos rotos a una máquina de escala.</h2>
               <p className="text-lg md:text-xl font-medium opacity-80 mb-12 italic font-serif">"Veluz no solo instaló software, nos instaló una nueva mentalidad operativa. Hoy crecemos sin miedo al colapso."</p>
-              <div className="flex items-center gap-4 group">
-                <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
+              <div className="flex items-center gap-4 group cursor-pointer" onClick={() => scrollToSection('agendar')}>
+                <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center transition-transform group-hover:scale-110 shadow-lg">
                   <Users className="text-[#BFFF00]" size={24} />
                 </div>
                 <div>
-                  <p className="font-bold text-lg">Andrés G.</p>
+                  <p className="font-bold text-lg group-hover:text-black/70 transition-colors">Andrés G.</p>
                   <p className="text-[10px] font-black tracking-widest uppercase opacity-60">CEO - LMS Finance</p>
                 </div>
               </div>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300">
+              <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300 shadow-xl">
                 <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={92} suffix="%" /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase">TIEMPO MANUAL</span>
+                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">TIEMPO MANUAL</span>
               </div>
-              <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300" style={{ transitionDelay: '0.1s' }}>
+              <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300 shadow-xl" style={{ transitionDelay: '0.1s' }}>
                 <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={5} suffix="X" /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase">FACTURACIÓN</span>
+                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">FACTURACIÓN</span>
               </div>
               <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300" style={{ transitionDelay: '0.2s' }}>
                 <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={0} /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase">FUGAS DE LEADS</span>
+                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">FUGAS DE LEADS</span>
               </div>
               <div className="bg-black text-[#BFFF00] p-8 rounded-2xl text-center flex flex-col justify-center border border-[#BFFF00]/20 hover:scale-105 transition-transform duration-300" style={{ transitionDelay: '0.3s' }}>
                 <span className="text-4xl md:text-6xl font-black mb-2"><StatCounter value={30} suffix="D" /></span>
-                <span className="text-[10px] font-black tracking-widest uppercase">IMPLANTACIÓN</span>
+                <span className="text-[10px] font-black tracking-widest uppercase opacity-65">IMPLANTACIÓN</span>
               </div>
             </div>
           </div>
@@ -936,32 +934,33 @@ export default function App() {
       </section>
 
       {/* 10. PRICING SECTION (COSTEOS) */}
-      <section id="inversion" ref={revealIn} className={`reveal py-20 md:py-32 bg-black overflow-hidden ${isVisibleIn ? 'active' : ''}`}>
-        <div className="max-w-[1440px] mx-auto px-6">
+      <section id="inversion" ref={revealIn} className={`reveal py-20 md:py-32 bg-black overflow-hidden relative ${isVisibleIn ? 'active' : ''}`}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(191,255,0,0.03),transparent_40%)] pointer-events-none"></div>
+        <div className="max-w-[1440px] mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
             <span className="text-[#BFFF00] text-xs font-black tracking-widest uppercase block mb-4">Inversión Transparente</span>
-            <h2 className="text-4xl md:text-[80px] font-black tracking-tighter mb-6 max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-[80px] font-black tracking-tighter mb-6 max-w-4xl mx-auto uppercase">
               Sin letra pequeña. <br />
               <span className="text-[#BFFF00] italic font-serif normal-case">El sitio es tuyo.</span> <br />
               El bot trabaja mientras duermes.
             </h2>
             
-            {/* Nuevas categorías solicitadas */}
+            {/* Filtros solicitados */}
             <div className="flex justify-center gap-4 flex-wrap mt-10">
               <button 
-                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'all' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
+                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'all' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white hover:border-[#BFFF00]/35'}`} 
                 onClick={() => setPricingTab('all')}
               >
-                Todas
+                Todos
               </button>
               <button 
-                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'marketing' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
+                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'marketing' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white hover:border-[#BFFF00]/35'}`} 
                 onClick={() => setPricingTab('marketing')}
               >
                 Marketing
               </button>
               <button 
-                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'automatizaciones-ia' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white'}`} 
+                className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${pricingTab === 'automatizaciones-ia' ? 'bg-[#BFFF00] text-black border-[#BFFF00] shadow-[0_0_20px_rgba(191,255,0,0.3)]' : 'bg-zinc-900 text-slate-400 border-white/10 hover:text-white hover:border-[#BFFF00]/35'}`} 
                 onClick={() => setPricingTab('automatizaciones-ia')}
               >
                 Automatizaciones con IA
@@ -977,7 +976,7 @@ export default function App() {
                 return (
                   <div 
                     key={plan.id} 
-                    className={`p-8 rounded-2xl bg-zinc-950 border pricing-card flex flex-col justify-between h-full card-hover-effect transition-all duration-300 ${plan.id === 'presencia-digital' ? 'border-2 border-[#BFFF00]' : 'border-white/5'}`}
+                    className={`p-8 rounded-2xl bg-zinc-950 border pricing-card flex flex-col justify-between h-full card-hover-effect transition-all duration-300 relative ${plan.id === 'presencia-digital' ? 'border-2 border-[#BFFF00] shadow-[0_0_30px_rgba(191,255,0,0.05)]' : 'border-white/5 hover:border-[#BFFF00]/20'}`}
                     style={{ transitionDelay: `${idx * 0.05}s` }}
                   >
                     <div>
@@ -989,7 +988,7 @@ export default function App() {
                       <h4 className="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">{plan.title}</h4>
                       
                       {/* Mini descripción compacta por defecto */}
-                      <p className="text-slate-400 text-xs leading-relaxed mb-6">{plan.desc}</p>
+                      <p className="text-slate-400 text-xs leading-relaxed mb-6 font-light">{plan.desc}</p>
                       
                       {/* Caja limpia de precios por defecto */}
                       <div className="bg-white/5 border border-white/10 p-5 rounded-2xl mb-6 space-y-3">
@@ -1008,10 +1007,10 @@ export default function App() {
                         </div>
                       </div>
 
-                      {/* Botón interactivo para desplegar subpestaña (Ver detalles) */}
+                      {/* Botón interactivo para desplegar subpestaña */}
                       <button 
                         onClick={() => togglePlanExpansion(plan.id)}
-                        className="w-full flex items-center justify-between py-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors border-b border-white/5 pb-3 mb-4 group"
+                        className="w-full flex items-center justify-between py-2 text-xs font-semibold text-slate-300 hover:text-[#BFFF00] transition-colors border-b border-white/5 pb-3 mb-4 group"
                       >
                         <span className="flex items-center gap-1.5">
                           <Plus size={12} className={`text-[#BFFF00] transition-transform duration-300 ${isExpanded ? 'rotate-45' : ''}`} />
@@ -1026,13 +1025,13 @@ export default function App() {
                           {/* Pastillas del servicio */}
                           <div className="flex flex-wrap gap-1.5">
                             {plan.pills.map((pill, i) => (
-                              <span key={i} className="text-[8px] font-black uppercase tracking-widest bg-white/[0.03] border border-white/5 text-slate-300 px-2 py-1 rounded-md">
+                              <span key={i} className="text-[9px] font-black uppercase tracking-widest bg-white/[0.03] border border-white/5 text-slate-300 px-2.5 py-1 rounded-lg">
                                 {pill}
                               </span>
                             ))}
                           </div>
                           
-                          {/* Caja del Pitch / Neuromarketing */}
+                          {/* Caja del Pitch */}
                           <div className="bg-[#BFFF00]/5 border-l-2 border-[#BFFF00] p-3.5 rounded-r-xl text-[10px] text-slate-300 leading-relaxed italic">
                             "{plan.pitch}"
                           </div>
@@ -1057,15 +1056,15 @@ export default function App() {
       </section>
 
       {/* 11. FAQ */}
-      <section id="faq" ref={revealFq} className={`reveal py-20 md:py-32 bg-black z-10 border-t border-white/5 ${isVisibleFq ? 'active' : ''}`}>
-        <div className="max-w-3xl mx-auto px-6">
+      <section id="faq" ref={revealFq} className={`reveal py-20 md:py-32 bg-black z-10 border-t border-white/5 relative ${isVisibleFq ? 'active' : ''}`}>
+        <div className="max-w-3xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black uppercase mb-4 text-white">Preguntas Frecuentes</h2>
             <p className="text-slate-500 uppercase text-[10px] font-black tracking-widest">Todo lo que necesitas saber antes de empezar</p>
           </div>
           <div className="space-y-4">
             {faqs.map((faq, i) => (
-              <div key={i} className="border border-white/10 rounded-2xl overflow-hidden bg-white/[0.02]">
+              <div key={i} className="border border-white/10 rounded-2xl overflow-hidden bg-white/[0.02] hover:border-[#BFFF00]/20 transition-colors">
                 <button 
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full p-6 text-left flex justify-between items-center group focus:outline-none"
@@ -1076,7 +1075,7 @@ export default function App() {
                   </div>
                 </button>
                 <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <p className="p-6 pt-0 text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+                  <p className="p-6 pt-0 text-slate-400 text-sm leading-relaxed font-light">{faq.a}</p>
                 </div>
               </div>
             ))}
@@ -1092,12 +1091,13 @@ export default function App() {
             <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-4 uppercase">¿Hablamos de <br /><span className="text-[#BFFF00]">negocios?</span></h2>
             <div className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full border border-white/10">
               <div className="w-2 h-2 bg-[#BFFF00] rounded-full animate-pulse"></div>
-              Llamada de 15 Minutos
+              Llamada de 30 Minutos
             </div>
           </div>
           <div className="bg-white rounded-[3rem] overflow-hidden h-[600px] md:h-[800px] shadow-2xl border border-[#BFFF00]/20">
+            {/* ENLACE DE CALENDLY OPTIMIZADO PARA SESIONES DE 30 MINUTOS */}
             <iframe 
-              src="https://calendly.com/veluz-agency/15min?hide_landing_page_details=1&primary_color=bfff00" 
+              src="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00" 
               width="100%" height="100%" frameBorder="0" title="Calendly"
             ></iframe>
           </div>
