@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  Zap, Sparkles, CheckCircle2, ChevronDown, Calendar,
+  Zap, CheckCircle2, ChevronDown, Calendar,
   BrainCircuit, Megaphone, AlertTriangle, Star, Menu, X, Plus,
-  ShieldCheck, Search, Users, TrendingUp, CheckCircle,
-  XCircle, AlertCircle, ArrowRight
+  Users, CheckCircle, XCircle, ArrowRight, ExternalLink
 } from 'lucide-react';
 
 /* ─── HOOKS ─────────────────────────────────────────────────────────────── */
@@ -42,21 +41,19 @@ const useReveal = (delay = 0) => {
   return [ref, vis];
 };
 
-const Stat = ({ val, suffix = '', prefix = '' }) => {
+const Stat = ({ val, suffix = '' }) => {
   const [n, r] = useCountUp(val);
-  return <span ref={r}>{prefix}{n}{suffix}</span>;
+  return <span ref={r}>{n}{suffix}</span>;
 };
 
-/* ─── GLOW CARD (mouse-tracking spotlight) ──────────────────────────────── */
+/* ─── GLOW CARD ──────────────────────────────────────────────────────────── */
 function GlowCard({ children, className = '', amber = false }) {
   const ref = useRef(null);
   const onMove = useCallback((e) => {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    ref.current.style.setProperty('--mx', `${x}%`);
-    ref.current.style.setProperty('--my', `${y}%`);
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    ref.current.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+    ref.current.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`);
   }, []);
   return (
     <div ref={ref} onMouseMove={onMove} className={`glow-card ${amber ? 'amber' : ''} ${className}`}>
@@ -72,63 +69,170 @@ const WaIcon = () => (
   </svg>
 );
 
-/* ─── MAIN ──────────────────────────────────────────────────────────────── */
+/* ─── DATA ───────────────────────────────────────────────────────────────── */
+const services = [
+  {
+    id: 'ia', tag: 'INTELIGENCIA & RESPUESTA', title: 'Agentes IA Nativa',
+    icon: <BrainCircuit size={20} />,
+    desc: 'Entrenamos cerebros digitales con el conocimiento de tu empresa. Agentes con razonamiento real que venden, califican leads y agendan citas 24/7.',
+    features: ['Venta conversacional WhatsApp 24/7','Calificación automática de leads','Agendamiento autónomo en Calendly','Conexión directa a tu CRM'],
+    before: 'Leads que mueren en tu bandeja porque tardas horas en responder.',
+    after: 'Agente IA responde en < 10 segundos, califica presupuesto y agenda la cita.',
+  },
+  {
+    id: 'geo', tag: 'VISIBILIDAD & AUTORIDAD', title: 'Contenido Orgánico & GEO',
+    icon: <Megaphone size={20} />,
+    desc: 'Cero dólares en anuncios. Posicionamiento omnicanal para liderar Google Y ser citado por ChatGPT, Claude y Gemini.',
+    features: ['GEO — Generative Engine Optimization','Posicionamiento SEO local #1','Contenido de alta retención viral','Copys persuasivos orientados al ROI'],
+    before: 'Dependes de pauta cara que se apaga cuando dejas de pagar.',
+    after: 'Eres citado como referente por IAs y buscadores sin costo de pauta.',
+  },
+  {
+    id: 'auto', tag: 'PROCESOS & PRODUCTIVIDAD', title: 'Automatización de Procesos',
+    icon: <Zap size={20} />,
+    desc: 'Conectamos todo tu software. CRM, pagos, bases de datos y comunicaciones trabajando en sintonía sin intervención humana.',
+    features: ['Flujos automatizados Make / Zapier','Sincronización de CRM','Alertas y webhooks en tiempo real','Métricas centralizadas automáticas'],
+    before: 'Tu equipo pierde el 40% del día copiando datos entre Excel, WhatsApp y correos.',
+    after: 'Un lead entra, se crea en CRM, se genera factura y se notifica al equipo solo.',
+  },
+];
+
+const faqs = [
+  { q: '¿Tengo que pagar anuncios (Ads)?', a: 'No. Nuestro enfoque es 100% orgánico. Construimos infraestructura que genera autoridad y atrae clientes sin depender de pauta pagada.' },
+  { q: '¿Cuánto tarda la implementación?', a: 'Un sistema de IA o automatización estándar tarda entre 10 y 15 días en estar totalmente operativo y entrenado con los datos de tu negocio.' },
+  { q: '¿Necesito conocimientos técnicos?', a: 'Cero. Nosotros gestionamos toda la arquitectura técnica. Tú solo recibes los leads calificados directamente en tu WhatsApp o CRM.' },
+  { q: '¿Cómo sé que funcionará para mí?', a: 'Por eso ofrecemos un diagnóstico gratuito. Solo aceptamos clientes donde la tecnología pueda generar un ROI claro en los primeros 60 días.' },
+  { q: '¿Qué pasa si el bot comete un error?', a: 'Tenemos protocolos de escalamiento humano. Si el agente no puede resolver una consulta, escala inmediatamente al equipo responsable sin que el cliente lo note.' },
+];
+
+const plans = [
+  { id: 'web', type: 'marketing', cat: 'Activo digital', title: 'Página Web Profesional',
+    desc: 'Landing page de alta conversión, optimizada para móvil, con botón WhatsApp y Google Maps. El sitio te pertenece para siempre.',
+    setup: '$500.000 – $600.000 COP', setupLabel: 'Pago único · El sitio es tuyo',
+    rec: '~$50.000 COP / año', recLabel: 'Renovación de dominio',
+    pills: ['Diseño a medida','Mobile first','Botón WhatsApp','Entrega 7 días'], featured: false },
+  { id: 'chatbot', type: 'ia', cat: 'Servicio activo', title: 'Chatbot WhatsApp con IA',
+    desc: 'Agente inteligente entrenado con tu negocio. Responde, califica y agenda solo las 24 horas.',
+    setup: '$650.000 COP', setupLabel: 'Setup e instalación',
+    rec: '$100.000 COP / mes', recLabel: 'Operación y soporte continuo',
+    pills: ['Respuesta < 30s','Calificación leads','Agendamiento solo','Reporte mensual'], featured: false },
+  { id: 'pack', type: 'marketing', cat: 'Pack completo', title: 'Pack Presencia Digital',
+    desc: 'Web + Google Maps optimizado + 1 red social gestionada + 5 piezas de contenido mensual.',
+    setup: '$1.000.000 COP', setupLabel: 'Setup completo · Mes 1',
+    rec: '$50.000 – $100.000 COP / mes', recLabel: 'Gestión de contenido',
+    pills: ['Web o rediseño','Google Maps #1','1 red gestionada','5 piezas/mes','SEO local'], featured: true },
+  { id: 'flows', type: 'ia', cat: 'Sistemas a medida', title: 'Automatizaciones Custom',
+    desc: 'Conexión integral de tus apps. CRM, pagos, bases de datos y comunicaciones autónomas.',
+    setup: 'Desde $800.000 COP', setupLabel: 'Según complejidad del flujo',
+    rec: 'Sin costo mensual obligatorio', recLabel: 'Soporte opcional',
+    pills: ['Webhooks & APIs','Flujos Make/Zapier','Conexión CRM','Cero error humano'], featured: false },
+];
+
+const testimonials = [
+  {
+    name: 'Andrés G.',
+    role: 'CEO',
+    company: 'LMS Finance',
+    industry: 'Automatización · Finanzas DIAN',
+    url: 'https://lms-finance.vercel.app/',
+    quote: 'Veluz automatizó nuestros procesos financieros para la DIAN desde cero. Lo que antes tomaba días de trabajo manual, hoy sucede en minutos sin que nadie toque nada. Fue un cambio radical.',
+    metric: '-92%',
+    metricLabel: 'tiempo operativo',
+  },
+  {
+    name: 'Ana Molano',
+    role: 'Fundadora',
+    company: 'Ana Molano Peluquería',
+    industry: 'Belleza · Presencia Digital',
+    url: 'https://www.anamolanopeluqueria.com/',
+    quote: 'Antes solo me conseguían por voz a voz. Hoy Google me encuentra, tengo mi web profesional y el contenido que Veluz crea habla exactamente de mi estilo. Los cupos se llenan solos.',
+    metric: '+3×',
+    metricLabel: 'visibilidad orgánica',
+  },
+  {
+    name: 'Equipo Origen',
+    role: 'Fundadores',
+    company: 'Soy Origen',
+    industry: 'Restaurante · Pedidos en Línea',
+    url: 'https://www.soyorigen.co/',
+    quote: 'El sistema que Veluz creó cambió todo. Nuestros clientes piden en línea, el equipo recibe la orden al instante y ya no perdemos pedidos por WhatsApp desordenado. La operación voló.',
+    metric: '+60%',
+    metricLabel: 'pedidos digitales',
+  },
+];
+
+const integrations = [
+  { name: 'Make', c: '#9b51e0' },
+  { name: 'Zapier', c: '#ff4a00' },
+  { name: 'WhatsApp', c: '#25d366' },
+  { name: 'Google', c: '#4285f4' },
+  { name: 'Meta Ads', c: '#0866ff' },
+  { name: 'Calendly', c: '#006bff' },
+  { name: 'Stripe', c: '#6772e5' },
+  { name: 'Notion', c: '#fff' },
+  { name: 'n8n', c: '#ea4b71' },
+  { name: 'Sheets', c: '#0f9d58' },
+];
+
+const words = ['con IA.', 'en automático.', 'sin límites.', 'sin anuncios.'];
+const logo = 'https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   APP
+════════════════════════════════════════════════════════════════════════════ */
 export default function App() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [openService, setOpenService] = useState(null);
-  const [openFaq, setOpenFaq] = useState(null);
-  const [pricingTab, setPricingTab] = useState('all');
+  const [scrolled, setScrolled]         = useState(false);
+  const [mobileOpen, setMobileOpen]     = useState(false);
+  const [openService, setOpenService]   = useState(null);
+  const [openFaq, setOpenFaq]           = useState(null);
+  const [pricingTab, setPricingTab]     = useState('all');
   const [expandedPlan, setExpandedPlan] = useState({});
-  const [wordIdx, setWordIdx] = useState(0);
-  const [showFloat, setShowFloat] = useState(false);
+  const [wordIdx, setWordIdx]           = useState(0);
+  const [showFloat, setShowFloat]       = useState(false);
+  const [urgencyOff, setUrgencyOff]     = useState(false);
 
-  const logo = 'https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png';
-  const words = ['con IA.', 'en automático.', 'sin límites.', 'sin anuncios.'];
-
-  /* rotating words */
   useEffect(() => {
     const t = setInterval(() => setWordIdx(i => (i + 1) % words.length), 2800);
     return () => clearInterval(t);
   }, []);
 
-  /* scroll state */
   useEffect(() => {
     const fn = () => { setScrolled(window.scrollY > 30); setShowFloat(window.scrollY > 700); };
     window.addEventListener('scroll', fn, { passive: true });
     return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  /* floating cards parallax */
+  /* floating cards parallax — desktop only */
   useEffect(() => {
+    if (window.innerWidth < 900) return;
     const cards = document.querySelectorAll('.float-card');
-    const hero = document.getElementById('hero-section');
+    const hero  = document.getElementById('hero-section');
     if (!hero) return;
     const onMove = (e) => {
       const rect = hero.getBoundingClientRect();
-      const cx = (e.clientX - rect.left) / rect.width - 0.5;
-      const cy = (e.clientY - rect.top) / rect.height - 0.5;
+      const cx = (e.clientX - rect.left) / rect.width  - 0.5;
+      const cy = (e.clientY - rect.top)  / rect.height - 0.5;
       cards.forEach(c => {
-        const depth = parseFloat(c.dataset.depth || 1);
-        c.style.setProperty('--px', `${cx * depth * 22}px`);
-        c.style.setProperty('--py', `${cy * depth * 14}px`);
+        const d = parseFloat(c.dataset.depth || 1);
+        c.style.setProperty('--px', `${cx * d * 22}px`);
+        c.style.setProperty('--py', `${cy * d * 14}px`);
       });
     };
     hero.addEventListener('mousemove', onMove);
     return () => hero.removeEventListener('mousemove', onMove);
   }, []);
 
-  /* acq-flow step animation */
+  /* acq-flow */
   useEffect(() => {
     const steps = document.querySelectorAll('.acq-step');
-    const fill = document.getElementById('acq-fill');
+    const fill  = document.getElementById('acq-fill');
     if (!steps.length) return;
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           const idx = parseInt(e.target.dataset.step);
           e.target.classList.add('lit');
-          if (fill) fill.style.width = `${((idx - 1) / (steps.length - 1)) * 84}%`;
+          if (fill) fill.style.width = `${((idx-1)/(steps.length-1))*84}%`;
         }
       });
     }, { threshold: 0.4 });
@@ -143,68 +247,9 @@ export default function App() {
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
   };
 
-  /* ── DATA ────────────────────────────────────────────────────────────── */
-  const services = [
-    {
-      id: 'ia', tag: 'INTELIGENCIA & RESPUESTA', title: 'Agentes IA Nativa',
-      icon: <BrainCircuit size={20} />,
-      desc: 'Entrenamos cerebros digitales con el conocimiento de tu empresa. Agentes con razonamiento real que venden, califican leads y agendan citas 24/7.',
-      features: ['Venta conversacional WhatsApp 24/7', 'Calificación automática de leads', 'Agendamiento autónomo en Calendly', 'Conexión directa a tu CRM'],
-      before: 'Leads que mueren en tu bandeja porque tardas horas en responder.',
-      after: 'Agente IA responde en < 10 segundos, califica presupuesto y agenda la cita.',
-    },
-    {
-      id: 'geo', tag: 'VISIBILIDAD & AUTORIDAD', title: 'Contenido Orgánico & GEO',
-      icon: <Megaphone size={20} />,
-      desc: 'Cero dólares en anuncios. Posicionamiento omnicanal para liderar Google Y ser citado por ChatGPT, Claude y Gemini.',
-      features: ['GEO — Generative Engine Optimization', 'Posicionamiento SEO local #1', 'Contenido de alta retención viral', 'Copys persuasivos orientados al ROI'],
-      before: 'Dependes de pauta cara que se apaga cuando dejas de pagar.',
-      after: 'Eres citado como referente por IAs y buscadores sin costo de pauta.',
-    },
-    {
-      id: 'auto', tag: 'PROCESOS & PRODUCTIVIDAD', title: 'Automatización de Procesos',
-      icon: <Zap size={20} />,
-      desc: 'Conectamos todo tu software. CRM, pagos, bases de datos y comunicaciones trabajando en sintonía sin intervención humana.',
-      features: ['Flujos automatizados Make / Zapier', 'Sincronización de CRM', 'Alertas y webhooks en tiempo real', 'Métricas centralizadas automáticas'],
-      before: 'Tu equipo pierde el 40% del día copiando datos entre Excel, WhatsApp y correos.',
-      after: 'Un lead entra, se crea en CRM, se genera factura y se notifica al equipo solo.',
-    },
-  ];
-
-  const faqs = [
-    { q: '¿Tengo que pagar anuncios (Ads)?', a: 'No. Nuestro enfoque es 100% orgánico. Construimos infraestructura que genera autoridad y atrae clientes sin depender de pauta pagada.' },
-    { q: '¿Cuánto tarda la implementación?', a: 'Un sistema de IA o automatización estándar tarda entre 10 y 15 días en estar totalmente operativo y entrenado con los datos de tu negocio.' },
-    { q: '¿Necesito conocimientos técnicos?', a: 'Cero. Nosotros gestionamos toda la arquitectura técnica. Tú solo recibes los leads calificados directamente en tu WhatsApp o CRM.' },
-    { q: '¿Cómo sé que funcionará para mí?', a: 'Por eso ofrecemos un diagnóstico gratuito. Solo aceptamos clientes donde la tecnología pueda generar un ROI claro en los primeros 60 días.' },
-    { q: '¿Qué pasa si el bot comete un error?', a: 'Tenemos protocolos de escalamiento humano. Si el agente no puede resolver una consulta, escala inmediatamente al equipo responsable sin que el cliente lo note.' },
-  ];
-
-  const plans = [
-    { id: 'web', type: 'marketing', cat: 'Activo digital', title: 'Página Web Profesional',
-      desc: 'Landing page de alta conversión, optimizada para móvil, con botón WhatsApp y Google Maps. El sitio te pertenece para siempre.',
-      setup: '$500.000 – $600.000 COP', setupLabel: 'Pago único · El sitio es tuyo',
-      rec: '~$50.000 COP / año', recLabel: 'Renovación de dominio (pago directo al proveedor)',
-      pills: ['Diseño a medida', 'Mobile first', 'Botón WhatsApp', 'Entrega 7 días'], featured: false },
-    { id: 'chatbot', type: 'ia', cat: 'Servicio activo', title: 'Chatbot WhatsApp con IA',
-      desc: 'Agente inteligente entrenado con tu negocio. Responde, califica y agenda solo las 24 horas.',
-      setup: '$650.000 COP', setupLabel: 'Setup, instalación y entrenamiento inicial',
-      rec: '$100.000 COP / mes', recLabel: 'Operación, actualizaciones y soporte continuo',
-      pills: ['Respuesta < 30s', 'Calificación leads', 'Agendamiento solo', 'Reporte mensual'], featured: false },
-    { id: 'pack', type: 'marketing', cat: 'Pack completo', title: 'Pack Presencia Digital',
-      desc: 'Web + Google Maps optimizado + 1 red social gestionada + 5 piezas de contenido mensual.',
-      setup: '$1.000.000 COP', setupLabel: 'Setup completo · Mes 1',
-      rec: '$50.000 – $100.000 COP / mes', recLabel: 'Gestión de contenido (según volumen)',
-      pills: ['Web o rediseño', 'Google Maps #1', '1 red gestionada', '5 piezas/mes', 'SEO local'], featured: true },
-    { id: 'flows', type: 'ia', cat: 'Sistemas a medida', title: 'Automatizaciones Custom',
-      desc: 'Conexión integral de tus apps. CRM, pagos, bases de datos y comunicaciones autónomas.',
-      setup: 'Desde $800.000 COP', setupLabel: 'Según complejidad del flujo técnico',
-      rec: 'Sin costo mensual obligatorio', recLabel: 'Soporte & Mantenimiento opcional',
-      pills: ['Webhooks & APIs', 'Flujos Make/Zapier', 'Conexión CRM', 'Cero error humano'], featured: false },
-  ];
-
   const [r1,v1]=useReveal(); const [r2,v2]=useReveal(50); const [r3,v3]=useReveal(100);
   const [r4,v4]=useReveal(); const [r5,v5]=useReveal(); const [r6,v6]=useReveal();
-  const [r7,v7]=useReveal(); const [r8,v8]=useReveal();
+  const [r7,v7]=useReveal(); const [r8,v8]=useReveal(); const [r9,v9]=useReveal();
 
   return (
     <div className="veluz-root">
@@ -215,10 +260,12 @@ export default function App() {
         body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#030710;color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
         h1,h2,h3,h4{letter-spacing:-0.02em;text-wrap:balance;}
         p{text-wrap:pretty;}
+        img{max-width:100%;}
         .veluz-root{position:relative;}
 
         /* ── Grid bg ── */
         .grid-bg{background-image:linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);background-size:64px 64px;}
+        .grid-bg-light{background-image:linear-gradient(rgba(0,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:40px 40px;}
 
         /* ── Mesh hero bg ── */
         .mesh-bg{background:
@@ -226,146 +273,200 @@ export default function App() {
           radial-gradient(ellipse 45% 40% at 80% 5%,rgba(191,255,0,0.16) 0%,transparent 50%),
           radial-gradient(ellipse 70% 60% at 50% 100%,rgba(191,255,0,0.04) 0%,transparent 60%);}
 
-        /* ── Section glow top ── */
+        /* ── Section glow ── */
         .section-glow{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(191,255,0,0.10) 0%,transparent 60%);}
 
-        /* ── Gradient text ── */
-        .gradient-text{background:linear-gradient(180deg,#FFFFFF 0%,rgba(191,255,0,0.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-
-        /* ── Serif italic accent ── */
+        /* ── Typographic helpers ── */
         .serif-accent{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;color:#BFFF00;letter-spacing:-0.01em;}
-
-        /* ── Mono label ── */
+        .serif-dark{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;color:#3d7a00;letter-spacing:-0.01em;}
         .mono-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(191,255,0,0.8);}
+        .mono-dark{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(0,100,0,0.65);}
 
         /* ── Noise overlay ── */
-        .veluz-root::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");opacity:0.022;pointer-events:none;z-index:0;mix-blend-mode:overlay;}
+        .veluz-root::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");opacity:0.018;pointer-events:none;z-index:0;mix-blend-mode:overlay;}
 
         /* ── Reveal ── */
-        .reveal{opacity:0;transform:translateY(22px);transition:opacity 600ms cubic-bezier(0.16,1,0.3,1),transform 600ms cubic-bezier(0.16,1,0.3,1);}
+        .reveal{opacity:0;transform:translateY(20px);transition:opacity 560ms cubic-bezier(0.16,1,0.3,1),transform 560ms cubic-bezier(0.16,1,0.3,1);}
         .reveal.visible{opacity:1;transform:translateY(0);}
         .reveal-1{transition-delay:60ms;} .reveal-2{transition-delay:120ms;} .reveal-3{transition-delay:180ms;} .reveal-4{transition-delay:240ms;}
 
-        /* ── Lift card ── */
-        .lift{transition:transform 220ms cubic-bezier(0.16,1,0.3,1),border-color 220ms ease,box-shadow 220ms ease;}
-        .lift:hover{transform:translateY(-4px);border-color:rgba(191,255,0,0.3)!important;box-shadow:0 16px 40px -12px rgba(191,255,0,0.15);}
+        /* ── Lift ── */
+        .lift{transition:transform 220ms cubic-bezier(0.16,1,0.3,1),box-shadow 220ms ease;}
+        .lift:hover{transform:translateY(-4px);box-shadow:0 20px 40px -12px rgba(0,0,0,0.2);}
 
-        /* ── Glow card ── */
-        .glow-card{position:relative;background:linear-gradient(160deg,rgba(15,28,12,0.6),rgba(8,18,6,0.35));border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:40px 32px;overflow:hidden;transition:border-color 400ms ease,transform 350ms cubic-bezier(0.16,1,0.3,1);}
+        /* ── Glow card (dark) ── */
+        .glow-card{position:relative;background:linear-gradient(160deg,rgba(15,28,12,0.6),rgba(8,18,6,0.35));border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:40px 28px;overflow:hidden;transition:border-color 400ms ease,transform 350ms cubic-bezier(0.16,1,0.3,1);}
         .glow-card::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(191,255,0,0.16),rgba(191,255,0,0.05) 30%,transparent 60%);opacity:0;transition:opacity 300ms ease;z-index:0;}
         .glow-card::after{content:'';position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),rgba(191,255,0,0.45),transparent 70%);opacity:0;transition:opacity 300ms ease;z-index:0;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;}
         .glow-card:hover{border-color:rgba(255,255,255,0.12);transform:translateY(-3px);}
-        .glow-card:hover::before{opacity:1;}
-        .glow-card:hover::after{opacity:1;}
+        .glow-card:hover::before,.glow-card:hover::after{opacity:1;}
         .glow-card>*{position:relative;z-index:1;}
         .glow-card.amber::before{background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(255,210,0,0.14),rgba(255,210,0,0.04) 30%,transparent 60%);}
         .glow-card.amber::after{background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),rgba(255,210,0,0.45),transparent 70%);}
 
         /* ── CTA glow button ── */
-        .cta-glow{position:relative;cursor:pointer;transition:transform 150ms cubic-bezier(0.16,1,0.3,1);}
-        .cta-glow::after{content:'';position:absolute;inset:-2px;border-radius:inherit;background:linear-gradient(45deg,#BFFF00,#a0e000,#BFFF00);z-index:-1;opacity:0.45;filter:blur(14px);transition:opacity 200ms ease;}
-        .cta-glow:hover::after{opacity:0.85;}
+        .cta-glow{position:relative;cursor:pointer;transition:transform 150ms ease;}
+        .cta-glow::after{content:'';position:absolute;inset:-2px;border-radius:inherit;background:linear-gradient(45deg,#BFFF00,#a0e000,#BFFF00);z-index:-1;opacity:0.4;filter:blur(14px);transition:opacity 200ms ease;}
+        .cta-glow:hover::after{opacity:0.8;}
         .cta-glow:active{transform:scale(0.98);}
 
-        /* ── Comets ── */
-        .comets{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;}
-        .comet{position:absolute;width:130px;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(191,255,0,0.45) 60%,rgba(255,255,255,0.9) 100%);transform:rotate(-30deg);opacity:0;filter:blur(0.3px);animation:cometFly linear infinite;}
-        .comet::after{content:'';position:absolute;right:0;top:-1.5px;width:4px;height:4px;background:rgba(255,255,255,0.95);border-radius:50%;box-shadow:0 0 8px rgba(191,255,0,0.8),0 0 16px rgba(191,255,0,0.4);}
-        .comet:nth-child(1){top:7%;left:95%;animation-duration:5s;animation-delay:0s;}
-        .comet:nth-child(2){top:22%;left:92%;animation-duration:7s;animation-delay:4.5s;}
-        .comet:nth-child(3){top:11%;left:72%;animation-duration:6s;animation-delay:9s;}
-        .comet:nth-child(4){top:38%;left:96%;animation-duration:8s;animation-delay:14s;}
-        .comet:nth-child(5){top:58%;left:87%;animation-duration:6.5s;animation-delay:20s;}
-        .comet:nth-child(6){top:4%;left:62%;animation-duration:7.5s;animation-delay:25s;}
-        @keyframes cometFly{0%{transform:rotate(-30deg) translateX(0);opacity:0;}8%{opacity:0.8;}85%{opacity:0.8;}100%{transform:rotate(-30deg) translateX(-1100px);opacity:0;}}
+        /* ── Comets (desktop only) ── */
+        @media(min-width:768px){
+          .comets{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;}
+          .comet{position:absolute;width:130px;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(191,255,0,0.45) 60%,rgba(255,255,255,0.9) 100%);transform:rotate(-30deg);opacity:0;filter:blur(0.3px);animation:cometFly linear infinite;}
+          .comet::after{content:'';position:absolute;right:0;top:-1.5px;width:4px;height:4px;background:rgba(255,255,255,0.95);border-radius:50%;box-shadow:0 0 8px rgba(191,255,0,0.8),0 0 16px rgba(191,255,0,0.4);}
+          .comet:nth-child(1){top:7%;left:95%;animation-duration:5s;animation-delay:0s;}
+          .comet:nth-child(2){top:22%;left:92%;animation-duration:7s;animation-delay:4.5s;}
+          .comet:nth-child(3){top:11%;left:72%;animation-duration:6s;animation-delay:9s;}
+          .comet:nth-child(4){top:38%;left:96%;animation-duration:8s;animation-delay:14s;}
+          .comet:nth-child(5){top:58%;left:87%;animation-duration:6.5s;animation-delay:20s;}
+          @keyframes cometFly{0%{transform:rotate(-30deg) translateX(0);opacity:0;}8%{opacity:0.8;}85%{opacity:0.8;}100%{transform:rotate(-30deg) translateX(-1100px);opacity:0;}}
+        }
+        @media(max-width:767px){.comets{display:none;}}
 
-        /* ── Floating hero cards ── */
+        /* ── Floating hero cards (desktop only) ── */
         .float-layer{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden;}
-        @media(max-width:900px){.float-layer{display:none;}}
+        @media(max-width:1023px){.float-layer{display:none;}}
         .float-card{position:absolute;pointer-events:auto;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:linear-gradient(135deg,rgba(6,18,4,0.72),rgba(6,18,4,0.45));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;box-shadow:0 12px 40px -8px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05);transition:transform 700ms cubic-bezier(0.16,1,0.3,1);transform:translate(var(--px,0px),var(--py,0px)) rotate(var(--rot,0deg));will-change:transform;}
-        .float-card:hover{box-shadow:0 16px 50px -8px rgba(191,255,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1);}
-        .float-card .fc-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(191,255,0,0.75);margin-bottom:6px;}
-        .float-card .fc-val{font-family:'Instrument Serif',serif;font-style:italic;font-size:28px;line-height:1;color:#fff;margin-bottom:4px;}
-        .float-card .fc-sub{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.35;}
         .float-card.lime-border{border-color:rgba(191,255,0,0.28);}
         .float-card.gold-border{border-color:rgba(255,210,0,0.28);}
-        .fc-chat-bubble{background:rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.82);line-height:1.4;}
-        .fc-chat-bubble+.fc-chat-bubble{margin-top:6px;background:rgba(191,255,0,0.12);}
+        .float-card .fc-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(191,255,0,0.75);margin-bottom:6px;}
+        .float-card .fc-val{font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;line-height:1;color:#fff;margin-bottom:4px;}
+        .float-card .fc-sub{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.35;}
         .fc-chat-name{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.45);margin-bottom:8px;}
         .fc-chat-name::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;}
+        .fc-chat-bubble{background:rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px;font-size:11.5px;color:rgba(255,255,255,0.82);line-height:1.4;}
+        .fc-chat-bubble+.fc-chat-bubble{margin-top:6px;background:rgba(191,255,0,0.12);}
 
-        /* ── VSL / Video section ── */
-        .vsl-wrap{position:relative;max-width:820px;margin:0 auto;}
-        .vsl-corner{position:absolute;width:24px;height:24px;}
-        .vsl-corner.tl{top:-8px;left:-8px;border-top:2px solid rgba(191,255,0,0.65);border-left:2px solid rgba(191,255,0,0.65);}
-        .vsl-corner.tr{top:-8px;right:-8px;border-top:2px solid rgba(191,255,0,0.65);border-right:2px solid rgba(191,255,0,0.65);}
-        .vsl-corner.bl{bottom:-8px;left:-8px;border-bottom:2px solid rgba(191,255,0,0.65);border-left:2px solid rgba(191,255,0,0.65);}
-        .vsl-corner.br{bottom:-8px;right:-8px;border-bottom:2px solid rgba(191,255,0,0.65);border-right:2px solid rgba(191,255,0,0.65);}
-        @keyframes floatVSL{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
-        .vsl-float{animation:floatVSL 7s ease-in-out infinite;}
+        /* ── VSL video ── */
+        .vsl-wrap{position:relative;max-width:780px;margin:0 auto;}
+        .vsl-corner{position:absolute;width:22px;height:22px;}
+        .vsl-corner.tl{top:-7px;left:-7px;border-top:2px solid rgba(191,255,0,0.65);border-left:2px solid rgba(191,255,0,0.65);}
+        .vsl-corner.tr{top:-7px;right:-7px;border-top:2px solid rgba(191,255,0,0.65);border-right:2px solid rgba(191,255,0,0.65);}
+        .vsl-corner.bl{bottom:-7px;left:-7px;border-bottom:2px solid rgba(191,255,0,0.65);border-left:2px solid rgba(191,255,0,0.65);}
+        .vsl-corner.br{bottom:-7px;right:-7px;border-bottom:2px solid rgba(191,255,0,0.65);border-right:2px solid rgba(191,255,0,0.65);}
+        @keyframes floatVSL{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+        @media(min-width:640px){.vsl-float{animation:floatVSL 7s ease-in-out infinite;}}
 
-        /* ── acq-flow (Método steps) ── */
+        /* ── acq-flow ── */
         .acq-flow{position:relative;padding:44px 0 16px;}
-        .acq-line{position:absolute;top:62px;left:8%;right:8%;height:2px;background:rgba(255,255,255,0.05);border-radius:1px;z-index:0;}
-        .acq-line-fill{position:absolute;top:62px;left:8%;height:2px;width:0%;background:linear-gradient(90deg,#BFFF00 0%,rgba(191,255,0,0.5) 100%);border-radius:1px;box-shadow:0 0 12px rgba(191,255,0,0.5);transition:width 900ms cubic-bezier(0.16,1,0.3,1);z-index:1;}
+        .acq-line{position:absolute;top:62px;left:8%;right:8%;height:2px;background:rgba(255,255,255,0.05);border-radius:1px;}
+        .acq-line-fill{position:absolute;top:62px;left:8%;height:2px;width:0%;background:linear-gradient(90deg,#BFFF00 0%,rgba(191,255,0,0.5) 100%);border-radius:1px;box-shadow:0 0 12px rgba(191,255,0,0.5);transition:width 900ms cubic-bezier(0.16,1,0.3,1);}
         .acq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative;z-index:2;}
-        .acq-step{position:relative;padding:62px 18px 24px;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.06);border-radius:16px;text-align:center;opacity:0.3;transition:opacity 700ms cubic-bezier(0.16,1,0.3,1),transform 700ms cubic-bezier(0.16,1,0.3,1),border-color 500ms ease,background 500ms ease,box-shadow 500ms ease;}
+        .acq-step{position:relative;padding:62px 16px 22px;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.06);border-radius:16px;text-align:center;opacity:0.3;transition:opacity 700ms cubic-bezier(0.16,1,0.3,1),transform 700ms cubic-bezier(0.16,1,0.3,1),border-color 500ms ease,background 500ms ease,box-shadow 500ms ease;}
         .acq-step.lit{opacity:1;transform:translateY(-5px);border-color:rgba(191,255,0,0.3);background:rgba(191,255,0,0.03);box-shadow:0 8px 32px -8px rgba(191,255,0,0.15);}
-        .acq-num{position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-50%);width:58px;height:58px;border-radius:50%;background:#030710;border:2px solid rgba(191,255,0,0.2);font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:rgba(255,255,255,0.35);display:flex;align-items:center;justify-content:center;transition:all 600ms cubic-bezier(0.16,1,0.3,1);z-index:3;}
-        .acq-step.lit .acq-num{background:linear-gradient(135deg,#BFFF00,#8fcc00);border-color:#BFFF00;color:#000;box-shadow:0 0 24px rgba(191,255,0,0.55),0 0 48px rgba(191,255,0,0.25);}
-        .acq-step .acq-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;transition:color 500ms ease;}
+        .acq-num{position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-50%);width:56px;height:56px;border-radius:50%;background:#030710;border:2px solid rgba(191,255,0,0.2);font-family:'Instrument Serif',serif;font-style:italic;font-size:20px;color:rgba(255,255,255,0.35);display:flex;align-items:center;justify-content:center;transition:all 600ms cubic-bezier(0.16,1,0.3,1);z-index:3;}
+        .acq-step.lit .acq-num{background:linear-gradient(135deg,#BFFF00,#8fcc00);border-color:#BFFF00;color:#000;box-shadow:0 0 24px rgba(191,255,0,0.55);}
+        .acq-step .acq-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:7px;transition:color 500ms;}
         .acq-step.lit .acq-label{color:rgba(191,255,0,0.8);}
-        .acq-step h3{font-size:17px;font-weight:600;letter-spacing:-0.01em;margin:0 0 8px;line-height:1.2;}
+        .acq-step h3{font-size:16px;font-weight:600;letter-spacing:-0.01em;margin:0 0 7px;line-height:1.25;}
         .acq-step p{font-size:13px;line-height:1.55;color:rgba(255,255,255,0.45);margin:0;}
         .acq-step.lit p{color:rgba(255,255,255,0.7);}
-        @media(max-width:640px){.acq-grid{grid-template-columns:1fr;gap:36px 0;}.acq-step{opacity:0.92;padding:62px 20px 24px;}.acq-line,.acq-line-fill{display:none;}}
+        @media(max-width:640px){
+          .acq-grid{grid-template-columns:1fr;gap:40px 0;}
+          .acq-step{opacity:0.92;padding:62px 18px 22px;}
+          .acq-line,.acq-line-fill{display:none;}
+        }
 
-        /* ── Marquee ticker ── */
+        /* ── Marquee ── */
         @keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
-        .ticker-inner{display:flex;width:max-content;animation:ticker 30s linear infinite;}
+        .ticker-inner{display:flex;width:max-content;animation:ticker 28s linear infinite;}
         .ticker-mask{mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);}
 
-        /* ── FAQ accordion ── */
-        .faq-item{border:1px solid rgba(255,255,255,0.07);border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.015);transition:border-color 250ms ease;}
-        .faq-item:hover{border-color:rgba(191,255,0,0.2);}
-        .faq-item.open{border-color:rgba(191,255,0,0.25);}
+        /* ── Testimonial cards (light section) ── */
+        .test-card{background:#fff;border:1px solid rgba(0,0,0,0.07);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;gap:20px;box-shadow:0 4px 24px -8px rgba(0,80,0,0.08),0 1px 0 rgba(0,0,0,0.04);transition:transform 240ms cubic-bezier(0.16,1,0.3,1),box-shadow 240ms ease;}
+        .test-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px -12px rgba(0,80,0,0.14),0 1px 0 rgba(0,0,0,0.04);}
+        .test-card .test-stars{display:flex;gap:3px;color:#BFFF00;}
+        .test-card .test-quote{font-size:15px;line-height:1.68;color:#1a2a0e;font-style:italic;flex:1;}
+        .test-card .test-metric{font-family:'Instrument Serif',serif;font-style:italic;font-size:42px;line-height:1;color:#3d7a00;}
+        .test-card .test-metric-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(0,80,0,0.55);margin-top:2px;}
+        .test-card .test-name{font-weight:700;font-size:14px;color:#0a1a05;}
+        .test-card .test-role{font-size:12px;color:rgba(10,26,5,0.5);margin-top:1px;}
+        .test-card .test-co{font-size:11px;color:#3d7a00;text-decoration:none;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px;border-bottom:1px solid rgba(61,122,0,0.25);padding-bottom:1px;transition:border-color 200ms,color 200ms;}
+        .test-card .test-co:hover{color:#2d5c00;border-color:rgba(45,92,0,0.5);}
+        .test-card .test-industry{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,80,0,0.45);padding:3px 8px;background:rgba(191,255,0,0.12);border-radius:20px;display:inline-block;}
 
         /* ── Service card ── */
-        .svc-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:32px;transition:all 300ms cubic-bezier(0.16,1,0.3,1);cursor:pointer;}
+        .svc-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:28px;transition:all 300ms cubic-bezier(0.16,1,0.3,1);cursor:pointer;}
         .svc-card:hover,.svc-card.open{border-color:rgba(191,255,0,0.25);background:rgba(191,255,0,0.02);}
 
         /* ── Pricing ── */
-        .plan-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:28px;display:flex;flex-direction:column;transition:all 300ms ease;}
-        .plan-card.featured{border:1px solid rgba(191,255,0,0.35);background:rgba(191,255,0,0.02);box-shadow:0 0 40px -15px rgba(191,255,0,0.12);}
+        .plan-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:26px;display:flex;flex-direction:column;transition:all 300ms ease;}
+        .plan-card.featured{border:1px solid rgba(191,255,0,0.35);background:rgba(191,255,0,0.025);box-shadow:0 0 40px -15px rgba(191,255,0,0.12);}
         .plan-card:hover:not(.featured){border-color:rgba(191,255,0,0.2);}
 
+        /* ── FAQ ── */
+        .faq-item{border:1px solid rgba(0,0,0,0.07);border-radius:14px;overflow:hidden;background:#fff;transition:border-color 250ms ease,box-shadow 250ms ease;}
+        .faq-item:hover{border-color:rgba(61,122,0,0.25);box-shadow:0 4px 16px -4px rgba(0,80,0,0.08);}
+        .faq-item.open{border-color:rgba(61,122,0,0.3);}
+
         /* ── Mobile menu ── */
-        .mobile-menu{position:fixed;inset:0;z-index:200;background:#030710;transform:translateX(100%);transition:transform 480ms cubic-bezier(0.77,0,0.175,1);}
+        .mobile-menu{position:fixed;inset:0;z-index:200;background:#030710;transform:translateX(100%);transition:transform 420ms cubic-bezier(0.77,0,0.175,1);}
         .mobile-menu.open{transform:translateX(0);}
 
-        /* ── Hero overlay gradient ── */
+        /* ── Hero overlay ── */
         .hero-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 50%,transparent 0%,rgba(3,7,16,0.4) 60%,rgba(3,7,16,0.95) 100%),linear-gradient(180deg,rgba(3,7,16,0.25) 0%,transparent 30%,transparent 65%,rgba(3,7,16,1) 100%);}
+
+        /* ── Urgency bar ── */
+        .urgency-bar{background:linear-gradient(90deg,rgba(191,255,0,0.12) 0%,rgba(191,255,0,0.08) 100%);border-bottom:1px solid rgba(191,255,0,0.2);}
+
+        /* ── Integration badges ── */
+        .int-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;white-space:nowrap;transition:all 200ms ease;}
+        .int-badge:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);}
 
         /* ── Scrollbar ── */
         ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(191,255,0,0.25);border-radius:2px;}
 
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+        @keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+        .slide-down{animation:slideDown 300ms cubic-bezier(0.16,1,0.3,1) forwards;}
 
+        /* ── Mobile touch improvements ── */
+        @media(max-width:640px){
+          .cta-glow::after{display:none;}
+          .glow-card::before,.glow-card::after{display:none;}
+          .test-card:hover,.lift:hover{transform:none;}
+        }
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}.reveal{opacity:1;transform:none;}}
       `}</style>
 
-      {/* ── MOBILE MENU ─────────────────────────────────────────────────── */}
+      {/* ── URGENCY BAR ───────────────────────────────────────────────── */}
+      {!urgencyOff && (
+        <div className="urgency-bar relative z-[101] px-4 py-2 slide-down">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 flex-1 min-w-0">
+              <span className="w-2 h-2 bg-[#BFFF00] rounded-full shrink-0" style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.5s ease-in-out infinite'}} />
+              <p className="text-xs text-zinc-300 truncate">
+                <span className="hidden sm:inline">Solo </span>
+                <strong className="text-[#BFFF00]">3 diagnósticos gratuitos</strong>
+                <span className="hidden sm:inline"> disponibles esta semana</span>
+                <span className="sm:hidden"> disponibles</span>
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button onClick={() => goto('agendar')} className="text-xs font-semibold text-black bg-[#BFFF00] px-3 py-1 rounded-full hover:bg-[#d4ff40] transition-colors hidden sm:block">
+                Reservar cupo →
+              </button>
+              <button onClick={() => setUrgencyOff(true)} className="text-zinc-500 hover:text-white transition-colors p-1">
+                <X size={13} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── MOBILE MENU ──────────────────────────────────────────────── */}
       <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
-        <div className="flex flex-col h-full p-8">
-          <div className="flex justify-between items-center mb-16">
-            <img src={logo} alt="Veluz" className="h-10 object-contain" />
+        <div className="flex flex-col h-full p-7">
+          <div className="flex justify-between items-center mb-14">
+            <img src={logo} alt="Veluz" className="h-9 object-contain" />
             <button onClick={() => setMobileOpen(false)} className="p-2 border border-white/10 rounded-xl text-white">
-              <X size={20} />
+              <X size={18} />
             </button>
           </div>
-          <nav className="flex flex-col gap-8">
-            {[['metodo','Método'],['servicios','Servicios'],['caso-lms','Resultados'],['inversion','Inversión'],['faq','FAQ'],['agendar','Agendar']].map(([id,l]) => (
-              <button key={id} onClick={() => goto(id)} className="text-3xl font-bold text-left tracking-tight text-zinc-300 hover:text-white transition-colors">{l}</button>
+          <nav className="flex flex-col gap-7">
+            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ'],['agendar','Agendar']].map(([id,l]) => (
+              <button key={id} onClick={() => goto(id)} className="text-2xl font-bold text-left tracking-tight text-zinc-300 hover:text-white transition-colors">{l}</button>
             ))}
           </nav>
           <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer"
@@ -378,18 +479,18 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           NAV
       ════════════════════════════════════════════════════════════════════ */}
-      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${scrolled ? 'bg-[#030710]/85 backdrop-blur-xl border-b border-white/[0.06] py-3' : 'bg-transparent py-5'}`}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
-          <img src={logo} alt="Veluz" className="h-10 w-auto object-contain cursor-pointer" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
-          <div className="hidden md:flex items-center gap-10 text-sm font-medium text-zinc-400">
-            {[['metodo','Método'],['servicios','Servicios'],['caso-lms','Resultados'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
+      <nav className={`fixed left-0 w-full z-[100] transition-all duration-300 ${urgencyOff ? 'top-0' : 'top-[34px]'} ${scrolled ? 'bg-[#030710]/90 backdrop-blur-xl border-b border-white/[0.06] py-3' : 'bg-transparent py-4'}`}>
+        <div className="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between">
+          <img src={logo} alt="Veluz" className="h-9 w-auto object-contain cursor-pointer" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
               <button key={id} onClick={() => goto(id)} className="hover:text-white transition-colors">{l}</button>
             ))}
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => goto('agendar')}
-              className="hidden md:inline-flex items-center gap-2 cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors">
-              Diagnóstico gratis <ArrowRight size={14} />
+              className="hidden md:inline-flex items-center gap-2 cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-sm px-5 py-2.5 rounded-lg transition-colors">
+              Diagnóstico gratis <ArrowRight size={13} />
             </button>
             <button onClick={() => setMobileOpen(true)} className="md:hidden p-2.5 border border-white/10 rounded-xl text-white">
               <Menu size={18} />
@@ -401,113 +502,102 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           HERO
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="hero-section" className="relative overflow-hidden min-h-screen flex items-center grid-bg">
+      <section id="hero-section" className="relative overflow-hidden min-h-screen flex items-center grid-bg" style={{paddingTop: urgencyOff ? '0' : '34px'}}>
         <div className="absolute inset-0 mesh-bg z-0" />
-
-        {/* Cometas */}
         <div className="comets" aria-hidden="true">
-          {[...Array(6)].map((_,i) => <span key={i} className="comet" />)}
+          {[...Array(5)].map((_,i) => <span key={i} className="comet" />)}
         </div>
-
         <div className="hero-overlay" />
 
         {/* Floating Cards */}
         <div className="float-layer" aria-hidden="true">
-          <div className="float-card lime-border" data-depth="0.5" style={{top:'15%',left:'3%','--rot':'-3deg',width:'200px'}}>
+          <div className="float-card lime-border" data-depth="0.5" style={{top:'14%',left:'2%','--rot':'-3deg',width:'195px'}}>
             <div className="fc-label">Negocios escalados</div>
             <div className="fc-val">20+</div>
             <div className="fc-sub">Colombia · LATAM</div>
           </div>
-          <div className="float-card lime-border" data-depth="1.4" style={{top:'9%',right:'4%','--rot':'4deg',width:'185px'}}>
+          <div className="float-card lime-border" data-depth="1.4" style={{top:'8%',right:'3%','--rot':'4deg',width:'180px'}}>
             <div className="fc-label">Autonomía IA</div>
             <div className="fc-val">99%</div>
-            <div className="fc-sub">atención sin agente humano</div>
+            <div className="fc-sub">sin agente humano</div>
           </div>
-          <div className="float-card gold-border" data-depth="2.2" style={{top:'50%',right:'2%','--rot':'-4deg',width:'205px'}}>
-            <div className="fc-label">Implementación promedio</div>
+          <div className="float-card gold-border" data-depth="2.2" style={{top:'48%',right:'1.5%','--rot':'-4deg',width:'200px'}}>
+            <div className="fc-label">Implementación</div>
             <div className="fc-val">15d</div>
             <div className="fc-sub">De cero a sistema activo</div>
           </div>
-          <div className="float-card" data-depth="1.8" style={{bottom:'12%',left:'5%','--rot':'3deg',width:'230px'}}>
-            <div className="fc-chat-name">Agente IA Veluz · respondiendo</div>
-            <div className="fc-chat-bubble">Hola, quiero agendar consulta para el jueves. ¿Tienen cupos?</div>
-            <div className="fc-chat-bubble">¡Hola! Claro, tenemos cupos disponibles. ¿Es primera vez o control?</div>
+          <div className="float-card" data-depth="1.8" style={{bottom:'14%',left:'4%','--rot':'3deg',width:'225px'}}>
+            <div className="fc-chat-name">Agente IA Veluz</div>
+            <div className="fc-chat-bubble">Hola, quiero agendar para el jueves ¿tienen cupos?</div>
+            <div className="fc-chat-bubble">¡Hola! Claro, ¿primera vez o control?</div>
           </div>
-          <div className="float-card lime-border" data-depth="0.9" style={{bottom:'16%',right:'7%','--rot':'5deg',width:'175px'}}>
+          <div className="float-card lime-border" data-depth="0.9" style={{bottom:'18%',right:'6%','--rot':'5deg',width:'168px'}}>
             <div className="fc-label">Ads necesarios</div>
             <div className="fc-val">0</div>
-            <div className="fc-sub">Crecimiento 100% orgánico</div>
+            <div className="fc-sub">100% orgánico</div>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="relative z-20 max-w-5xl mx-auto px-6 lg:px-8 py-28 lg:py-36 text-center w-full">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.05] border border-white/10 mb-10">
+        {/* Hero content */}
+        <div className="relative z-20 max-w-4xl mx-auto px-5 lg:px-8 py-24 lg:py-32 text-center w-full">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-8">
             <div className="flex gap-0.5 text-[#BFFF00]">
               {[...Array(5)].map((_,i) => <Star key={i} size={10} fill="currentColor" stroke="none" />)}
             </div>
-            <span className="mono-label" style={{letterSpacing:'0.22em'}}>+20 negocios con resultados reales</span>
+            <span className="mono-label" style={{letterSpacing:'0.2em',fontSize:'9px'}}>+20 negocios con resultados reales</span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl lg:text-[82px] font-bold tracking-tight leading-[1.02] mb-8 max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[78px] font-bold tracking-tight leading-[1.04] mb-6">
             <span className="block text-white">Digitalizamos tu negocio</span>
-            <span className="block" style={{minHeight:'1.1em',position:'relative'}}>
+            <span className="block overflow-hidden" style={{minHeight:'1.15em',position:'relative'}}>
               {words.map((w, i) => (
                 <span key={w} className="serif-accent" style={{
                   position: i === 0 ? 'relative' : 'absolute',
-                  left: 0, right: 0, top: 0,
-                  opacity: wordIdx === i ? 1 : 0,
-                  transform: wordIdx === i ? 'translateY(0)' : wordIdx > i ? 'translateY(-120%)' : 'translateY(120%)',
-                  transition: 'opacity 500ms ease, transform 700ms cubic-bezier(0.34,1.4,0.64,1)',
-                  display: 'block',
-                }}>
-                  {w}
-                </span>
+                  left:0,right:0,top:0,display:'block',
+                  opacity: wordIdx===i ? 1 : 0,
+                  transform: wordIdx===i ? 'translateY(0)' : wordIdx>i ? 'translateY(-110%)' : 'translateY(110%)',
+                  transition:'opacity 450ms ease,transform 650ms cubic-bezier(0.34,1.4,0.64,1)',
+                }}>{w}</span>
               ))}
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-zinc-300 leading-relaxed max-w-2xl mx-auto mb-12 font-light">
+          <p className="text-base sm:text-lg md:text-xl text-zinc-300 leading-relaxed max-w-xl mx-auto mb-10 font-light">
             Convertimos operaciones manuales en <strong className="text-white font-semibold">máquinas de eficiencia autónoma</strong> que cierran ventas sin que estés presente.
           </p>
 
-          {/* ── VSL VIDEO ─────────────────────────────────────────────── */}
-          <div className="vsl-wrap mb-12 vsl-float">
-            <div className="vsl-corner tl" /><div className="vsl-corner tr" />
-            <div className="vsl-corner bl" /><div className="vsl-corner br" />
+          {/* VSL VIDEO */}
+          <div className="vsl-wrap mb-10 vsl-float px-2 sm:px-0">
+            <div className="vsl-corner tl"/><div className="vsl-corner tr"/>
+            <div className="vsl-corner bl"/><div className="vsl-corner br"/>
             <div className="relative aspect-video rounded-xl overflow-hidden bg-[#06100a] border border-white/10"
-              style={{boxShadow:'0 0 80px -10px rgba(191,255,0,0.35)'}}>
+              style={{boxShadow:'0 0 60px -10px rgba(191,255,0,0.3)'}}>
               {/*
-                ▼ REEMPLAZA ESTE BLOQUE CON TU VIDEO ▼
-                Ejemplo con Loom:
-                <iframe
-                  src="https://www.loom.com/embed/TU_VIDEO_ID"
-                  className="absolute inset-0 w-full h-full"
-                  frameBorder="0"
-                  allowFullScreen
-                />
+                REEMPLAZA CON TU VIDEO:
+                <iframe src="https://www.loom.com/embed/TU_VIDEO_ID"
+                  className="absolute inset-0 w-full h-full" frameBorder="0" allowFullScreen />
               */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/30 flex items-center justify-center cursor-pointer hover:bg-[#BFFF00]/20 transition-colors"
-                  onClick={() => goto('agendar')}>
-                  <svg viewBox="0 0 24 24" className="w-7 h-7 fill-[#BFFF00] ml-1"><polygon points="5,3 19,12 5,21"/></svg>
-                </div>
-                <div className="text-center">
-                  <p className="mono-label mb-1">Video explicativo</p>
-                  <p className="text-zinc-500 text-sm">Reemplaza este bloque con tu iframe de Loom o YouTube en el código</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <button onClick={() => goto('agendar')}
+                  className="w-14 h-14 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/30 flex items-center justify-center hover:bg-[#BFFF00]/20 transition-colors">
+                  <svg viewBox="0 0 24 24" className="w-6 h-6 fill-[#BFFF00] ml-1"><polygon points="5,3 19,12 5,21"/></svg>
+                </button>
+                <div>
+                  <p className="mono-label mb-1" style={{fontSize:'9px'}}>Video explicativo</p>
+                  <p className="text-zinc-600 text-xs">Pega tu iframe de Loom aquí en el código</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button onClick={() => goto('agendar')}
-              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-base px-8 py-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2 min-h-[50px]">
-              Agendar diagnóstico gratis <ArrowRight size={16} />
+              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-base px-7 py-3.5 rounded-lg transition-colors inline-flex items-center justify-center gap-2">
+              Agendar diagnóstico gratis <ArrowRight size={15} />
             </button>
             <a href="https://wa.me/573125923915?text=Hola%20Veluz,%20quiero%20informaci%C3%B3n"
               target="_blank" rel="noopener noreferrer"
-              className="bg-white/[0.05] hover:bg-white/[0.1] backdrop-blur-md border border-white/15 text-white font-medium text-base px-8 py-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2 min-h-[50px]">
+              className="bg-white/[0.06] hover:bg-white/[0.11] border border-white/15 text-white font-medium text-base px-7 py-3.5 rounded-lg transition-colors inline-flex items-center justify-center gap-2">
               <WaIcon /> Hablar por WhatsApp
             </a>
           </div>
@@ -517,42 +607,42 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           STATS · glow cards
       ════════════════════════════════════════════════════════════════════ */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 section-glow pointer-events-none" />
-        <div className="relative max-w-6xl mx-auto px-6 lg:px-8">
-          <div ref={r1} className={`reveal text-center mb-14 ${v1?'visible':''}`}>
-            <p className="mono-label mb-3">— Tracción</p>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+        <div className="relative max-w-5xl mx-auto px-5 lg:px-8">
+          <div ref={r1} className={`reveal text-center mb-12 ${v1?'visible':''}`}>
+            <p className="mono-label mb-3" style={{fontSize:'9px'}}>— Tracción</p>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
               <span className="text-white">Lo que el sistema viene </span>
               <span className="serif-accent">generando.</span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               {v:20,s:'+',l:'Negocios escalados'},
               {v:15,s:'d',l:'Implementación promedio'},
               {v:0,s:'',l:'Ads necesarios',amber:true},
             ].map(({v,s,l,amber},i)=>(
               <GlowCard key={l} amber={amber} className={`text-center reveal reveal-${i+1} ${v1?'visible':''}`}>
-                <div className="text-6xl md:text-7xl text-white mb-4 tabular-nums"
+                <div className="text-5xl md:text-6xl text-white mb-3 tabular-nums"
                   style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic'}}>
                   <Stat val={v} suffix={s} />
                 </div>
-                <p className="mono-label" style={{letterSpacing:'0.22em'}}>{l}</p>
+                <p className="mono-label" style={{letterSpacing:'0.2em',fontSize:'9px'}}>{l}</p>
               </GlowCard>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── TICKER ────────────────────────────────────────────────────── */}
+      {/* ── TICKER ───────────────────────────────────────────────────── */}
       <div className="border-y border-white/[0.05] py-3 overflow-hidden ticker-mask">
         <div className="ticker-inner">
           {[...Array(2)].map((_,i)=>(
             <div key={i} className="flex items-center">
               {['IA Nativa','Agendamiento Autónomo','0 Ads','GEO Optimization','WhatsApp 24/7','Automatización Total','Make & Zapier','CRM Integrado','SEO Local'].map(t=>(
-                <span key={t} className="mono-label px-10 flex items-center gap-4" style={{opacity:0.45}}>
-                  <span className="w-1 h-1 bg-[#BFFF00]/60 rounded-full" />{t}
+                <span key={t} className="mono-label px-8 flex items-center gap-3" style={{opacity:0.4,fontSize:'9px'}}>
+                  <span className="w-1 h-1 bg-[#BFFF00]/60 rounded-full"/>{t}
                 </span>
               ))}
             </div>
@@ -561,41 +651,39 @@ export default function App() {
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════
-          EL PROBLEMA
+          EL PROBLEMA  ·  SECCIÓN BLANCA
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="problema" className="relative py-24 lg:py-32">
-        <div className="absolute inset-0 section-glow pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div ref={r2} className={`reveal text-center mb-16 ${v2?'visible':''}`}>
-            <p className="mono-label mb-4">— El problema</p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight max-w-3xl mx-auto">
-              <span className="text-white">Operar manual es </span>
-              <span className="serif-accent">quemar dinero.</span>
+      <section id="problema" className="relative py-20 lg:py-28 grid-bg-light" style={{background:'#f5faf0'}}>
+        <div className="max-w-5xl mx-auto px-5 lg:px-8">
+          <div ref={r2} className={`reveal text-center mb-14 ${v2?'visible':''}`}>
+            <p className="mono-dark mb-3">— El problema</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-[#0a1a05]">
+              Operar manual es <span className="serif-dark">quemar dinero.</span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            <div className={`reveal reveal-1 lift bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl p-8 ${v2?'visible':''}`}>
-              <div className="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-6">
-                <AlertTriangle size={20} className="text-red-400" />
+          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+            <div className={`reveal reveal-1 lift bg-white border border-red-100 rounded-2xl p-7 shadow-sm ${v2?'visible':''}`}>
+              <div className="w-10 h-10 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center mb-5">
+                <AlertTriangle size={18} className="text-red-500" />
               </div>
-              <div className="mono-label mb-3" style={{color:'rgba(239,68,68,0.8)'}}>— Sin Veluz</div>
-              <ul className="space-y-4">
-                {['Procesos lentos dependientes de personas.','Leads fríos que nunca vuelven.','Invisible ante Google y motores de IA.'].map(t=>(
-                  <li key={t} className="flex gap-3 text-zinc-400 text-sm leading-relaxed">
-                    <XCircle size={16} className="text-red-500 shrink-0 mt-0.5" />{t}
+              <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-red-400 mb-3">— Sin Veluz</div>
+              <ul className="space-y-3.5">
+                {['Procesos lentos dependientes de personas.','Leads fríos que nunca vuelven.','Invisible ante Google y los motores de IA.'].map(t=>(
+                  <li key={t} className="flex gap-2.5 text-zinc-500 text-sm leading-relaxed">
+                    <XCircle size={15} className="text-red-400 shrink-0 mt-0.5"/>{t}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className={`reveal reveal-2 lift bg-gradient-to-b from-[#BFFF00]/[0.05] to-transparent border border-[#BFFF00]/20 rounded-2xl p-8 ${v2?'visible':''}`}>
-              <div className="w-11 h-11 rounded-xl bg-[#BFFF00]/10 border border-[#BFFF00]/25 flex items-center justify-center mb-6">
-                <CheckCircle2 size={20} className="text-[#BFFF00]" />
+            <div className={`reveal reveal-2 lift bg-white border border-[#BFFF00]/30 rounded-2xl p-7 shadow-sm ${v2?'visible':''}`}>
+              <div className="w-10 h-10 rounded-xl bg-[#f0fce8] border border-[#BFFF00]/40 flex items-center justify-center mb-5">
+                <CheckCircle2 size={18} className="text-[#3d7a00]" />
               </div>
-              <div className="mono-label mb-3">— Efecto Veluz</div>
-              <ul className="space-y-4">
+              <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-[#3d7a00] mb-3">— Efecto Veluz</div>
+              <ul className="space-y-3.5">
                 {['Operaciones autónomas 24/7 con agentes IA.','Conversión de leads en menos de 30 segundos.','Crecimiento orgánico predecible sin pauta.'].map(t=>(
-                  <li key={t} className="flex gap-3 text-zinc-300 text-sm font-medium leading-relaxed">
-                    <CheckCircle size={16} className="text-[#BFFF00] shrink-0 mt-0.5" />{t}
+                  <li key={t} className="flex gap-2.5 text-[#1a2a0e] text-sm font-medium leading-relaxed">
+                    <CheckCircle size={15} className="text-[#3d7a00] shrink-0 mt-0.5"/>{t}
                   </li>
                 ))}
               </ul>
@@ -607,27 +695,25 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           MÉTODO VELUZ-3X · acq-flow
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="metodo" className="relative py-24 lg:py-32 border-y border-white/[0.05]" style={{background:'rgba(6,16,4,0.4)'}}>
+      <section id="metodo" className="relative py-20 lg:py-28 border-y border-white/[0.05]" style={{background:'rgba(6,16,4,0.4)'}}>
         <div className="absolute inset-0 section-glow pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-6 lg:px-8">
-          <div ref={r3} className={`reveal text-center mb-20 ${v3?'visible':''}`}>
-            <p className="mono-label mb-5">— Nuestra ingeniería</p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight mb-6">
-              <span className="text-white">Método Veluz-3X.</span>{' '}
+        <div className="max-w-4xl mx-auto px-5 lg:px-8">
+          <div ref={r3} className={`reveal text-center mb-16 ${v3?'visible':''}`}>
+            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Nuestra ingeniería</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-4">
+              <span className="text-white">Método Veluz-3X. </span>
               <span className="serif-accent">Tres etapas.</span>
             </h2>
-            <p className="text-lg text-zinc-400 max-w-xl mx-auto font-light">
-              Un sistema probado para digitalizar negocios con IA. Sin cajas negras — claridad absoluta en cada paso.
-            </p>
+            <p className="text-base text-zinc-400 max-w-md mx-auto font-light">Un sistema probado para digitalizar con IA. Claridad absoluta en cada paso.</p>
           </div>
           <div className="acq-flow">
-            <div className="acq-line" aria-hidden="true" />
-            <div className="acq-line-fill" id="acq-fill" aria-hidden="true" />
+            <div className="acq-line" aria-hidden="true"/>
+            <div className="acq-line-fill" id="acq-fill" aria-hidden="true"/>
             <div className="acq-grid">
               {[
-                {n:'01',tag:'Diagnóstico',t:'Auditoría de tu negocio',d:'Mapeamos tus fugas de tiempo y dinero. No asumimos, medimos con datos reales. 25 minutos gratis.'},
-                {n:'02',tag:'Arquitectura',t:'Infraestructura a medida',d:'Construimos tu ecosistema: IA, CRM, Funnels y Automatizaciones sincronizadas. Tú apruebas cada paso.'},
-                {n:'03',tag:'Ignición',t:'Sistema activo y escalando',d:'Encendemos la máquina. Optimizamos en tiempo real para maximizar el ROI de cada peso invertido.'},
+                {n:'01',tag:'Diagnóstico',t:'Auditoría de tu negocio',d:'Mapeamos tus fugas de tiempo y dinero. 25 minutos sin costo.'},
+                {n:'02',tag:'Arquitectura',t:'Infraestructura a medida',d:'Construimos tu ecosistema de IA, CRM y automatizaciones. Tú apruebas todo.'},
+                {n:'03',tag:'Ignición',t:'Sistema activo y escalando',d:'Encendemos la máquina y optimizamos en tiempo real para maximizar el ROI.'},
               ].map(({n,tag,t,d},i)=>(
                 <article key={n} className="acq-step" data-step={i+1}>
                   <div className="acq-num">{n}</div>
@@ -642,60 +728,78 @@ export default function App() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          SERVICIOS · lift + accordion
+          INTEGRACIONES
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="servicios" className="relative py-24 lg:py-32">
+      <section className="relative py-14 border-b border-white/[0.05]">
+        <div className="max-w-5xl mx-auto px-5 lg:px-8 text-center">
+          <p className="mono-label mb-6" style={{fontSize:'9px',opacity:0.45}}>— Se conecta con las herramientas que ya usas</p>
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {integrations.map(({name,c}) => (
+              <div key={name} className="int-badge">
+                <span className="w-2 h-2 rounded-full shrink-0" style={{background:c,boxShadow:`0 0 6px ${c}60`}}/>
+                <span className="text-zinc-400 text-xs font-medium">{name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          SERVICIOS
+      ════════════════════════════════════════════════════════════════════ */}
+      <section id="servicios" className="relative py-20 lg:py-28">
         <div className="absolute inset-0 section-glow pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div ref={r4} className={`reveal text-center mb-16 ${v4?'visible':''}`}>
-            <p className="mono-label mb-5">— Lo que activamos</p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4">
+        <div className="max-w-5xl mx-auto px-5 lg:px-8">
+          <div ref={r4} className={`reveal text-center mb-12 ${v4?'visible':''}`}>
+            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Lo que activamos</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight">
               <span className="text-white">Tres pilares. </span>
               <span className="serif-accent">Un ecosistema.</span>
             </h2>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {services.map((s, i) => (
-              <div key={s.id} className={`svc-card ${openService===s.id?'open':''} reveal reveal-${i+1} ${v4?'visible':''}`}
+              <div key={s.id}
+                className={`svc-card ${openService===s.id?'open':''} reveal reveal-${i+1} ${v4?'visible':''}`}
                 onClick={() => setOpenService(prev => prev===s.id ? null : s.id)}>
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-5 flex-wrap">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all ${openService===s.id ? 'bg-[#BFFF00] text-black shadow-[0_0_20px_rgba(191,255,0,0.4)]' : 'bg-[#BFFF00]/10 text-[#BFFF00]'}`}>
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${openService===s.id ? 'bg-[#BFFF00] text-black' : 'bg-[#BFFF00]/10 text-[#BFFF00]'}`}>
                       {s.icon}
                     </div>
                     <div>
-                      <p className="mono-label mb-0.5">{s.tag}</p>
-                      <h3 className={`text-xl md:text-2xl font-semibold tracking-tight transition-colors ${openService===s.id?'text-[#BFFF00]':'text-white'}`}>{s.title}</h3>
+                      <p className="mono-label mb-0.5" style={{fontSize:'8.5px'}}>{s.tag}</p>
+                      <h3 className={`text-lg md:text-xl font-semibold tracking-tight transition-colors ${openService===s.id?'text-[#BFFF00]':'text-white'}`}>{s.title}</h3>
                     </div>
                   </div>
-                  <div className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all ${openService===s.id?'border-[#BFFF00]/50 text-[#BFFF00]':'border-white/15 text-zinc-500'}`}>
-                    {openService===s.id ? <X size={14}/> : <Plus size={14}/>}
+                  <div className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all ${openService===s.id?'border-[#BFFF00]/50 text-[#BFFF00]':'border-white/15 text-zinc-500'}`}>
+                    {openService===s.id ? <X size={12}/> : <Plus size={12}/>}
                   </div>
                 </div>
                 {openService===s.id && (
-                  <div className="mt-6">
-                    <p className="text-zinc-300 leading-relaxed mb-6 text-[15px] font-light">"{s.desc}"</p>
-                    <div className="grid sm:grid-cols-2 gap-3 mb-6">
+                  <div className="mt-5">
+                    <p className="text-zinc-300 leading-relaxed mb-5 text-sm font-light">"{s.desc}"</p>
+                    <div className="grid sm:grid-cols-2 gap-2.5 mb-5">
                       {s.features.map(f=>(
-                        <div key={f} className="flex items-center gap-2.5 text-sm text-zinc-300 bg-white/[0.03] border border-white/[0.07] p-3 rounded-xl">
-                          <CheckCircle2 size={13} className="text-[#BFFF00] shrink-0" />{f}
+                        <div key={f} className="flex items-center gap-2 text-sm text-zinc-300 bg-white/[0.03] border border-white/[0.06] p-3 rounded-xl">
+                          <CheckCircle2 size={12} className="text-[#BFFF00] shrink-0"/>{f}
                         </div>
                       ))}
                     </div>
-                    <div className="grid sm:grid-cols-2 gap-4 border-t border-white/[0.07] pt-6">
-                      <div className="bg-red-500/[0.05] border border-red-500/[0.12] p-4 rounded-xl">
-                        <p className="text-red-400 text-[10px] font-mono uppercase tracking-wider mb-2 flex items-center gap-1.5"><XCircle size={11}/>Antes</p>
+                    <div className="grid sm:grid-cols-2 gap-3 border-t border-white/[0.07] pt-5">
+                      <div className="bg-red-500/[0.05] border border-red-500/[0.1] p-4 rounded-xl">
+                        <p className="text-red-400 text-[9px] font-mono uppercase tracking-wider mb-2 flex items-center gap-1"><XCircle size={10}/>Antes</p>
                         <p className="text-zinc-400 text-sm leading-relaxed">{s.before}</p>
                       </div>
-                      <div className="bg-[#BFFF00]/[0.04] border border-[#BFFF00]/[0.12] p-4 rounded-xl">
-                        <p className="text-[#BFFF00] text-[10px] font-mono uppercase tracking-wider mb-2 flex items-center gap-1.5"><CheckCircle2 size={11}/>Después</p>
+                      <div className="bg-[#BFFF00]/[0.04] border border-[#BFFF00]/[0.1] p-4 rounded-xl">
+                        <p className="text-[#BFFF00] text-[9px] font-mono uppercase tracking-wider mb-2 flex items-center gap-1"><CheckCircle2 size={10}/>Después</p>
                         <p className="text-zinc-200 text-sm leading-relaxed font-medium">{s.after}</p>
                       </div>
                     </div>
-                    <div className="mt-5">
+                    <div className="mt-4">
                       <button onClick={e=>{e.stopPropagation();goto('agendar');}}
-                        className="cta-glow bg-[#BFFF00] text-black font-semibold text-sm px-6 py-3 rounded-lg inline-flex items-center gap-2 hover:bg-[#d4ff40] transition-colors">
-                        Implementar este sistema <ArrowRight size={14}/>
+                        className="cta-glow bg-[#BFFF00] text-black font-semibold text-sm px-5 py-2.5 rounded-lg inline-flex items-center gap-2 hover:bg-[#d4ff40] transition-colors">
+                        Implementar este sistema <ArrowRight size={13}/>
                       </button>
                     </div>
                   </div>
@@ -707,50 +811,83 @@ export default function App() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          CASO LMS FINANCE
+          TESTIMONIALES  ·  SECCIÓN BLANCA
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="caso-lms" className="relative py-24 lg:py-32 border-y border-white/[0.05]" style={{background:'rgba(6,16,4,0.35)'}}>
-        <div className="absolute inset-0 section-glow pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div ref={r5} className={`reveal max-w-3xl mx-auto text-center mb-16 ${v5?'visible':''}`}>
-            <p className="mono-label mb-5">— Caso de éxito</p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight mb-6">
-              <span className="text-white">LMS Finance:</span>{' '}
-              <span className="serif-accent">-92% tiempo operativo.</span>
+      <section id="clientes" className="relative py-20 lg:py-28" style={{background:'#f5faf0'}}>
+        <div className="max-w-6xl mx-auto px-5 lg:px-8">
+          <div ref={r5} className={`reveal text-center mb-14 ${v5?'visible':''}`}>
+            <p className="mono-dark mb-3">— Clientes reales</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-[#0a1a05]">
+              Negocios que <span className="serif-dark">ya funcionan.</span>
             </h2>
-            <p className="text-lg text-zinc-400 font-light">
-              <strong className="text-white font-medium">Primera semana</strong> con el sistema Veluz-3X — sin equipo de marketing previo, sin anuncios pagados.
-            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {testimonials.map((t,i) => (
+              <div key={t.company} className={`test-card reveal reveal-${i+1} ${v5?'visible':''}`}>
+                <div>
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <div>
+                      <div className="test-industry mb-3">{t.industry}</div>
+                      <div className="flex gap-1 test-stars">
+                        {[...Array(5)].map((_,k)=><Star key={k} size={12} fill="currentColor" stroke="none"/>)}
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div className="test-metric">{t.metric}</div>
+                      <div className="test-metric-label">{t.metricLabel}</div>
+                    </div>
+                  </div>
+                  <p className="test-quote">"{t.quote}"</p>
+                </div>
+                <div className="border-t border-black/[0.06] pt-4 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="test-name">{t.name}</p>
+                    <p className="test-role">{t.role} · {t.company}</p>
+                  </div>
+                  <a href={t.url} target="_blank" rel="noopener noreferrer" className="test-co" onClick={e=>e.stopPropagation()}>
+                    Ver web <ExternalLink size={10}/>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div ref={r6} className={`reveal text-center mt-12 ${v6?'visible':''}`}>
+            <button onClick={() => goto('agendar')}
+              className="cta-glow bg-[#BFFF00] text-black font-semibold text-sm px-7 py-3.5 rounded-lg inline-flex items-center gap-2 hover:bg-[#d4ff40] transition-colors">
+              Quiero resultados como estos <ArrowRight size={14}/>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          MÉTRICAS LMS  (compacto, dentro de la sección oscura)
+      ════════════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 lg:py-24 border-y border-white/[0.05]" style={{background:'rgba(6,16,4,0.45)'}}>
+        <div className="absolute inset-0 section-glow pointer-events-none"/>
+        <div className="max-w-5xl mx-auto px-5 lg:px-8">
+          <div ref={r7} className={`reveal text-center mb-10 ${v7?'visible':''}`}>
+            <p className="mono-label mb-3" style={{fontSize:'9px'}}>— Caso destacado · LMS Finance</p>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+              <span className="text-white">Automatización financiera </span>
+              <span className="serif-accent">para la DIAN.</span>
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              {v:92,s:'%',l:'Tiempo manual reducido',amber:true},
-              {v:5,s:'X',l:'Facturación multiplicada'},
+              {v:92,s:'%',l:'Tiempo reducido',amber:true},
+              {v:5,s:'X',l:'Facturación'},
               {v:0,s:'',l:'Fugas de leads'},
               {v:30,s:'d',l:'Implantación'},
             ].map(({v,s,l,amber},i)=>(
-              <GlowCard key={l} amber={amber} className={`text-center reveal reveal-${i+1} ${v5?'visible':''}`}>
-                <div className="text-5xl md:text-6xl text-white mb-4 tabular-nums"
+              <GlowCard key={l} amber={amber} className={`text-center reveal reveal-${i+1} ${v7?'visible':''}`}>
+                <div className="text-4xl md:text-5xl text-white mb-2 tabular-nums"
                   style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic'}}>
-                  <Stat val={v} suffix={s} />
+                  <Stat val={v} suffix={s}/>
                 </div>
-                <p className="mono-label" style={{letterSpacing:'0.2em',fontSize:'9px'}}>{l}</p>
+                <p className="mono-label" style={{letterSpacing:'0.18em',fontSize:'8.5px'}}>{l}</p>
               </GlowCard>
             ))}
-          </div>
-          <div className="max-w-2xl mx-auto bg-white/[0.025] border border-white/[0.07] rounded-2xl p-8 md:p-10">
-            <p className="text-zinc-300 text-lg leading-relaxed font-light italic mb-6">
-              "Veluz no solo instaló software — nos instaló una nueva mentalidad operativa. Hoy crecemos sin miedo al colapso."
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20 flex items-center justify-center">
-                <Users size={16} className="text-[#BFFF00]" />
-              </div>
-              <div>
-                <p className="font-semibold text-white text-sm">Andrés G.</p>
-                <p className="mono-label mt-0.5" style={{fontSize:'9px',letterSpacing:'0.2em'}}>CEO · LMS Finance</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -758,61 +895,59 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           PRICING
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="inversion" className="relative py-24 lg:py-32">
-        <div className="absolute inset-0 section-glow pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div ref={r6} className={`reveal text-center mb-14 ${v6?'visible':''}`}>
-            <p className="mono-label mb-5">— Inversión transparente</p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-6">
-              <span className="text-white">Sin letra pequeña.</span>{' '}
+      <section id="inversion" className="relative py-20 lg:py-28">
+        <div className="absolute inset-0 section-glow pointer-events-none"/>
+        <div className="max-w-6xl mx-auto px-5 lg:px-8">
+          <div ref={r8} className={`reveal text-center mb-12 ${v8?'visible':''}`}>
+            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Inversión transparente</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-5">
+              <span className="text-white">Sin letra pequeña. </span>
               <span className="serif-accent">Sin sorpresas.</span>
             </h2>
-            <div className="flex justify-center gap-3 flex-wrap mt-8">
+            <div className="flex justify-center gap-2.5 flex-wrap">
               {[['all','Todos'],['marketing','Marketing'],['ia','Automatizaciones IA']].map(([v,l])=>(
                 <button key={v} onClick={()=>setPricingTab(v)}
-                  className={`px-5 py-2 rounded-full text-xs font-medium tracking-wide transition-all border ${pricingTab===v ? 'bg-[#BFFF00] text-black border-[#BFFF00]' : 'border-white/15 text-zinc-400 hover:text-white hover:border-white/30'}`}>
+                  className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all border ${pricingTab===v ? 'bg-[#BFFF00] text-black border-[#BFFF00]' : 'border-white/15 text-zinc-400 hover:text-white hover:border-white/30'}`}>
                   {l}
                 </button>
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
             {plans.filter(p=>pricingTab==='all'||p.type===pricingTab).map((p,i)=>(
-              <div key={p.id} className={`plan-card reveal reveal-${i%4+1} ${v6?'visible':''} ${p.featured?'featured':''}`}>
-                {p.featured && (
-                  <div className="mono-label mb-4 text-black bg-[#BFFF00] px-3 py-1 rounded-full self-start inline-block" style={{fontSize:'9px'}}>Más popular</div>
-                )}
-                <p className="mono-label mb-3" style={{fontSize:'9px'}}>{p.cat}</p>
-                <h4 className="text-lg font-semibold text-white mb-2 tracking-tight">{p.title}</h4>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6 font-light">{p.desc}</p>
-                <div className="bg-white/[0.03] border border-white/[0.08] p-4 rounded-xl mb-5 space-y-3">
+              <div key={p.id} className={`plan-card reveal reveal-${i%4+1} ${v8?'visible':''} ${p.featured?'featured':''}`}>
+                {p.featured && <div className="mono-label mb-3 text-black bg-[#BFFF00] px-3 py-0.5 rounded-full self-start inline-block" style={{fontSize:'8px'}}>Más popular</div>}
+                <p className="mono-label mb-2" style={{fontSize:'8px'}}>{p.cat}</p>
+                <h4 className="text-base font-semibold text-white mb-2 tracking-tight">{p.title}</h4>
+                <p className="text-zinc-400 text-xs leading-relaxed mb-5 font-light">{p.desc}</p>
+                <div className="bg-white/[0.03] border border-white/[0.07] p-3.5 rounded-xl mb-4 space-y-2.5">
                   <div>
-                    <p className="mono-label mb-1" style={{fontSize:'8px'}}>{p.setupLabel}</p>
-                    <span className="text-[#BFFF00] font-bold text-lg tracking-tight">{p.setup}</span>
+                    <p className="mono-label mb-1" style={{fontSize:'7.5px'}}>{p.setupLabel}</p>
+                    <span className="text-[#BFFF00] font-bold text-base tracking-tight">{p.setup}</span>
                   </div>
-                  <div className="border-t border-white/[0.07] pt-3">
-                    <p className="mono-label mb-1" style={{fontSize:'8px'}}>{p.recLabel}</p>
-                    <span className="text-white text-sm">{p.rec}</span>
+                  <div className="border-t border-white/[0.07] pt-2.5">
+                    <p className="mono-label mb-1" style={{fontSize:'7.5px'}}>{p.recLabel}</p>
+                    <span className="text-white text-xs">{p.rec}</span>
                   </div>
                 </div>
                 <button onClick={()=>setExpandedPlan(prev=>({...prev,[p.id]:!prev[p.id]}))}
-                  className="w-full flex items-center justify-between text-xs text-zinc-500 hover:text-[#BFFF00] transition-colors border-b border-white/[0.07] pb-4 mb-4">
-                  <span className="flex items-center gap-1.5">
-                    <Plus size={11} className={`text-[#BFFF00] transition-transform duration-300 ${expandedPlan[p.id]?'rotate-45':''}`} />
-                    {expandedPlan[p.id]?'Ocultar entregables':'Ver entregables'}
+                  className="w-full flex items-center justify-between text-xs text-zinc-500 hover:text-[#BFFF00] transition-colors border-b border-white/[0.07] pb-3.5 mb-3.5">
+                  <span className="flex items-center gap-1">
+                    <Plus size={10} className={`text-[#BFFF00] transition-transform duration-300 ${expandedPlan[p.id]?'rotate-45':''}`}/>
+                    {expandedPlan[p.id]?'Ocultar':'Ver entregables'}
                   </span>
-                  <ChevronDown size={12} className={`transition-transform duration-300 ${expandedPlan[p.id]?'rotate-180':''}`} />
+                  <ChevronDown size={11} className={`transition-transform duration-300 ${expandedPlan[p.id]?'rotate-180':''}`}/>
                 </button>
                 {expandedPlan[p.id] && (
-                  <div className="flex flex-wrap gap-1.5 mb-4">
+                  <div className="flex flex-wrap gap-1.5 mb-3.5">
                     {p.pills.map(pill=>(
-                      <span key={pill} className="mono-label px-2.5 py-1 bg-white/[0.03] border border-white/[0.07] rounded-lg" style={{fontSize:'8px',letterSpacing:'0.15em'}}>{pill}</span>
+                      <span key={pill} className="mono-label px-2 py-0.5 bg-white/[0.03] border border-white/[0.07] rounded-lg" style={{fontSize:'7.5px',letterSpacing:'0.13em'}}>{pill}</span>
                     ))}
                   </div>
                 )}
-                <div className="mt-auto pt-2">
+                <div className="mt-auto">
                   <button onClick={()=>goto('agendar')}
-                    className={`w-full py-3 rounded-lg font-semibold text-xs tracking-wide transition-all ${p.featured ? 'cta-glow bg-[#BFFF00] text-black hover:bg-[#d4ff40]' : 'border border-[#BFFF00]/30 text-[#BFFF00] hover:bg-[#BFFF00]/5'}`}>
+                    className={`w-full py-2.5 rounded-lg font-semibold text-xs transition-all ${p.featured ? 'cta-glow bg-[#BFFF00] text-black hover:bg-[#d4ff40]' : 'border border-[#BFFF00]/30 text-[#BFFF00] hover:bg-[#BFFF00]/5'}`}>
                     Empezar ahora
                   </button>
                 </div>
@@ -823,26 +958,26 @@ export default function App() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          FAQ
+          FAQ  ·  SECCIÓN BLANCA
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="faq" className="relative py-24 border-t border-white/[0.05]">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <div ref={r7} className={`reveal text-center mb-14 ${v7?'visible':''}`}>
-            <p className="mono-label mb-5">— FAQ</p>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white">Preguntas frecuentes</h2>
+      <section id="faq" className="relative py-20" style={{background:'#f5faf0'}}>
+        <div className="max-w-2xl mx-auto px-5 lg:px-8">
+          <div ref={r9} className={`reveal text-center mb-12 ${v9?'visible':''}`}>
+            <p className="mono-dark mb-3">— FAQ</p>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-[#0a1a05]">Preguntas frecuentes</h2>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {faqs.map((faq,i)=>(
-              <div key={i} className={`faq-item ${openFaq===i?'open':''} reveal reveal-${i%4+1} ${v7?'visible':''}`}>
+              <div key={i} className={`faq-item ${openFaq===i?'open':''}`}>
                 <button onClick={()=>setOpenFaq(openFaq===i?null:i)}
-                  className="w-full flex items-center justify-between gap-4 p-6 text-left">
-                  <span className={`font-medium text-sm md:text-base leading-snug transition-colors ${openFaq===i?'text-[#BFFF00]':'text-white'}`}>{faq.q}</span>
-                  <div className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all border ${openFaq===i?'bg-[#BFFF00] text-black border-[#BFFF00]':'border-white/15 text-zinc-500'}`}>
-                    <ChevronDown size={13} className={`transition-transform duration-300 ${openFaq===i?'rotate-180':''}`} />
+                  className="w-full flex items-center justify-between gap-4 p-5 text-left">
+                  <span className={`font-medium text-sm leading-snug transition-colors ${openFaq===i?'text-[#3d7a00]':'text-[#0a1a05]'}`}>{faq.q}</span>
+                  <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all border ${openFaq===i?'bg-[#BFFF00] text-black border-[#BFFF00]':'border-black/15 text-zinc-400'}`}>
+                    <ChevronDown size={12} className={`transition-transform duration-300 ${openFaq===i?'rotate-180':''}`}/>
                   </div>
                 </button>
                 {openFaq===i && (
-                  <p className="px-6 pb-6 text-zinc-400 text-sm leading-relaxed font-light">{faq.a}</p>
+                  <p className="px-5 pb-5 text-zinc-500 text-sm leading-relaxed">{faq.a}</p>
                 )}
               </div>
             ))}
@@ -853,30 +988,28 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           CALENDLY · CTA
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="agendar" className="relative py-24 lg:py-36 overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[500px] bg-[#BFFF00]/[0.06] blur-[140px] rounded-full pointer-events-none" />
-        <div className="relative max-w-5xl mx-auto px-6 lg:px-8">
-          <div ref={r8} className={`reveal text-center mb-12 ${v8?'visible':''}`}>
-            <p className="mono-label mb-5">— Siguiente paso</p>
-            <h2 className="text-4xl md:text-5xl lg:text-[64px] font-semibold tracking-tight mb-6 leading-tight">
+      <section id="agendar" className="relative py-20 lg:py-32 overflow-hidden grid-bg">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[400px] bg-[#BFFF00]/[0.05] blur-[120px] rounded-full pointer-events-none"/>
+        <div className="relative max-w-4xl mx-auto px-5 lg:px-8">
+          <div className="text-center mb-10">
+            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Siguiente paso</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-5 leading-tight">
               <span className="text-white">¿Hablamos de </span>
               <span className="serif-accent">negocios?</span>
             </h2>
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 mb-4">
-              <span className="w-2 h-2 bg-[#BFFF00] rounded-full" style={{boxShadow:'0 0 8px rgba(191,255,0,0.7)',animation:'blink 1.6s ease-in-out infinite'}} />
-              <span className="mono-label" style={{color:'rgba(255,255,255,0.7)',letterSpacing:'0.2em'}}>Llamada 30 min · Sin costo · Sin compromiso</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10">
+              <span className="w-1.5 h-1.5 bg-[#BFFF00] rounded-full" style={{animation:'blink 1.6s ease-in-out infinite'}}/>
+              <span className="mono-label" style={{color:'rgba(255,255,255,0.65)',letterSpacing:'0.18em',fontSize:'9px'}}>Llamada 30 min · Sin costo · Sin compromiso</span>
             </div>
           </div>
           <div className="bg-white rounded-2xl overflow-hidden"
-            style={{height:700,boxShadow:'0 0 80px -20px rgba(191,255,0,0.2)',border:'1px solid rgba(191,255,0,0.15)'}}>
+            style={{height:680,boxShadow:'0 0 60px -20px rgba(191,255,0,0.18),0 0 0 1px rgba(191,255,0,0.12)'}}>
             <iframe
               src="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
-              width="100%" height="100%" frameBorder="0" title="Agendar con Veluz"
-            />
+              width="100%" height="100%" frameBorder="0" title="Agendar con Veluz"/>
           </div>
-          <p className="text-center text-zinc-600 text-xs mt-6 mono-label" style={{letterSpacing:'0.2em'}}>
-            ✓ Sin tarjeta &nbsp;·&nbsp; ✓ Sin contrato &nbsp;·&nbsp; ✓ Sin presión de venta
+          <p className="text-center text-zinc-600 text-[10px] mt-5 mono-label" style={{letterSpacing:'0.2em'}}>
+            ✓ Sin tarjeta &nbsp;·&nbsp; ✓ Sin contrato &nbsp;·&nbsp; ✓ Sin presión
           </p>
         </div>
       </section>
@@ -884,12 +1017,11 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           FOOTER
       ════════════════════════════════════════════════════════════════════ */}
-      <footer className="py-14 border-t border-white/[0.06] px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <img src={logo} alt="Veluz" className="h-9 opacity-50 hover:opacity-80 transition-opacity" />
-          <div className="flex gap-10 mono-label flex-wrap justify-center" style={{opacity:0.3,letterSpacing:'0.28em'}}>
-            <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer"
-              className="hover:opacity-100 hover:text-[#BFFF00] transition-all">WhatsApp</a>
+      <footer className="py-12 border-t border-white/[0.06] px-5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <img src={logo} alt="Veluz" className="h-8 opacity-50 hover:opacity-80 transition-opacity"/>
+          <div className="flex gap-8 mono-label flex-wrap justify-center" style={{opacity:0.3,letterSpacing:'0.24em',fontSize:'9px'}}>
+            <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:text-[#BFFF00] transition-all">WhatsApp</a>
             <button onClick={()=>goto('agendar')} className="hover:opacity-100 hover:text-[#BFFF00] transition-all">Agendar</button>
             <span>© 2026 Veluz Agency</span>
           </div>
@@ -898,10 +1030,10 @@ export default function App() {
 
       {/* ── FLOATING CTA (mobile) ──────────────────────────────────────── */}
       {showFloat && (
-        <div className="fixed bottom-6 right-6 z-[100] md:hidden">
+        <div className="fixed bottom-5 right-5 z-[100] md:hidden">
           <button onClick={()=>goto('agendar')}
-            className="cta-glow bg-[#BFFF00] text-black p-4 rounded-full shadow-2xl active:scale-90 transition-transform flex items-center justify-center border-4 border-[#030710]">
-            <Calendar size={24} strokeWidth={2.5} />
+            className="cta-glow bg-[#BFFF00] text-black p-3.5 rounded-full shadow-2xl active:scale-90 transition-transform flex items-center justify-center border-4 border-[#030710]">
+            <Calendar size={22} strokeWidth={2.5}/>
           </button>
         </div>
       )}
