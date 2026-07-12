@@ -237,7 +237,7 @@ export default function App() {
         @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;900&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap');
         *,*::before,*::after{box-sizing:border-box;}
         html{scroll-behavior:smooth;}
-        body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#040d1a;color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+        body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#061220;color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
         h1,h2,h3,h4{letter-spacing:-0.02em;text-wrap:balance;}
         p{text-wrap:pretty;}
         img{max-width:100%;}
@@ -249,9 +249,9 @@ export default function App() {
 
         /* ── Mesh hero bg · estilo Chispa AI con colores Veluz ── */
         .mesh-bg{background:
-          radial-gradient(ellipse 70% 60% at 8% 0%,rgba(191,255,0,0.48) 0%,transparent 60%),
-          radial-gradient(ellipse 55% 50% at 92% 5%,rgba(140,220,0,0.32) 0%,transparent 55%),
-          radial-gradient(ellipse 50% 45% at 50% 100%,rgba(100,200,0,0.15) 0%,transparent 60%);}
+          radial-gradient(ellipse 80% 70% at 5% 0%,rgba(191,255,0,0.65) 0%,transparent 58%),
+          radial-gradient(ellipse 60% 55% at 95% 4%,rgba(150,230,0,0.45) 0%,transparent 55%),
+          radial-gradient(ellipse 55% 50% at 50% 100%,rgba(100,200,0,0.22) 0%,transparent 60%);}
 
         /* ── Section glow ── */
         .section-glow{background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(191,255,0,0.08) 0%,transparent 60%);}
