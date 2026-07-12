@@ -202,25 +202,6 @@ export default function App() {
     return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  /* floating cards parallax — desktop only */
-  useEffect(() => {
-    if (window.innerWidth < 900) return;
-    const cards = document.querySelectorAll('.float-card');
-    const hero  = document.getElementById('hero-section');
-    if (!hero) return;
-    const onMove = (e) => {
-      const rect = hero.getBoundingClientRect();
-      const cx = (e.clientX - rect.left) / rect.width  - 0.5;
-      const cy = (e.clientY - rect.top)  / rect.height - 0.5;
-      cards.forEach(c => {
-        const d = parseFloat(c.dataset.depth || 1);
-        c.style.setProperty('--px', `${cx * d * 22}px`);
-        c.style.setProperty('--py', `${cy * d * 14}px`);
-      });
-    };
-    hero.addEventListener('mousemove', onMove);
-    return () => hero.removeEventListener('mousemove', onMove);
-  }, []);
 
   /* acq-flow */
   useEffect(() => {
@@ -264,17 +245,17 @@ export default function App() {
         .veluz-root{position:relative;}
 
         /* ── Grid bg ── */
-        .grid-bg{background-image:linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);background-size:64px 64px;}
+        .grid-bg{background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:64px 64px;}
         .grid-bg-light{background-image:linear-gradient(rgba(0,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:40px 40px;}
 
-        /* ── Mesh hero bg ── */
+        /* ── Mesh hero bg · estilo Chispa AI con colores Veluz ── */
         .mesh-bg{background:
-          radial-gradient(ellipse 55% 45% at 20% 0%,rgba(191,255,0,0.28) 0%,transparent 55%),
-          radial-gradient(ellipse 45% 40% at 80% 5%,rgba(191,255,0,0.16) 0%,transparent 50%),
-          radial-gradient(ellipse 70% 60% at 50% 100%,rgba(191,255,0,0.04) 0%,transparent 60%);}
+          radial-gradient(ellipse 50% 42% at 14% 0%,rgba(191,255,0,0.20) 0%,transparent 55%),
+          radial-gradient(ellipse 42% 36% at 86% 6%,rgba(140,230,0,0.11) 0%,transparent 50%),
+          radial-gradient(ellipse 65% 55% at 50% 108%,rgba(80,150,0,0.05) 0%,transparent 60%);}
 
         /* ── Section glow ── */
-        .section-glow{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(191,255,0,0.10) 0%,transparent 60%);}
+        .section-glow{background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(191,255,0,0.08) 0%,transparent 60%);}
 
         /* ── Typographic helpers ── */
         .serif-accent{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;color:#BFFF00;letter-spacing:-0.01em;}
@@ -310,33 +291,6 @@ export default function App() {
         .cta-glow:hover::after{opacity:0.8;}
         .cta-glow:active{transform:scale(0.98);}
 
-        /* ── Comets (desktop only) ── */
-        @media(min-width:768px){
-          .comets{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;}
-          .comet{position:absolute;width:130px;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(191,255,0,0.45) 60%,rgba(255,255,255,0.9) 100%);transform:rotate(-30deg);opacity:0;filter:blur(0.3px);animation:cometFly linear infinite;}
-          .comet::after{content:'';position:absolute;right:0;top:-1.5px;width:4px;height:4px;background:rgba(255,255,255,0.95);border-radius:50%;box-shadow:0 0 8px rgba(191,255,0,0.8),0 0 16px rgba(191,255,0,0.4);}
-          .comet:nth-child(1){top:7%;left:95%;animation-duration:5s;animation-delay:0s;}
-          .comet:nth-child(2){top:22%;left:92%;animation-duration:7s;animation-delay:4.5s;}
-          .comet:nth-child(3){top:11%;left:72%;animation-duration:6s;animation-delay:9s;}
-          .comet:nth-child(4){top:38%;left:96%;animation-duration:8s;animation-delay:14s;}
-          .comet:nth-child(5){top:58%;left:87%;animation-duration:6.5s;animation-delay:20s;}
-          @keyframes cometFly{0%{transform:rotate(-30deg) translateX(0);opacity:0;}8%{opacity:0.8;}85%{opacity:0.8;}100%{transform:rotate(-30deg) translateX(-1100px);opacity:0;}}
-        }
-        @media(max-width:767px){.comets{display:none;}}
-
-        /* ── Floating hero cards (desktop only) ── */
-        .float-layer{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden;}
-        @media(max-width:1023px){.float-layer{display:none;}}
-        .float-card{position:absolute;pointer-events:auto;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:linear-gradient(135deg,rgba(6,18,4,0.72),rgba(6,18,4,0.45));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;box-shadow:0 12px 40px -8px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05);transition:transform 700ms cubic-bezier(0.16,1,0.3,1);transform:translate(var(--px,0px),var(--py,0px)) rotate(var(--rot,0deg));will-change:transform;}
-        .float-card.lime-border{border-color:rgba(191,255,0,0.28);}
-        .float-card.gold-border{border-color:rgba(255,210,0,0.28);}
-        .float-card .fc-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(191,255,0,0.75);margin-bottom:6px;}
-        .float-card .fc-val{font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;line-height:1;color:#fff;margin-bottom:4px;}
-        .float-card .fc-sub{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.35;}
-        .fc-chat-name{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.45);margin-bottom:8px;}
-        .fc-chat-name::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;}
-        .fc-chat-bubble{background:rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px;font-size:11.5px;color:rgba(255,255,255,0.82);line-height:1.4;}
-        .fc-chat-bubble+.fc-chat-bubble{margin-top:6px;background:rgba(191,255,0,0.12);}
 
         /* ── VSL video ── */
         .vsl-wrap{position:relative;max-width:780px;margin:0 auto;}
@@ -535,39 +489,7 @@ export default function App() {
 
       <section id="hero-section" className="relative overflow-hidden min-h-[calc(100vh-72px)] flex items-center grid-bg">
         <div className="absolute inset-0 mesh-bg z-0" />
-        <div className="comets" aria-hidden="true">
-          {[...Array(5)].map((_,i) => <span key={i} className="comet" />)}
-        </div>
         <div className="hero-overlay" />
-
-        {/* Floating Cards */}
-        <div className="float-layer" aria-hidden="true">
-          <div className="float-card lime-border" data-depth="0.5" style={{top:'14%',left:'2%','--rot':'-3deg',width:'195px'}}>
-            <div className="fc-label">Negocios escalados</div>
-            <div className="fc-val">20+</div>
-            <div className="fc-sub">Colombia · LATAM</div>
-          </div>
-          <div className="float-card lime-border" data-depth="1.4" style={{top:'8%',right:'3%','--rot':'4deg',width:'180px'}}>
-            <div className="fc-label">Autonomía IA</div>
-            <div className="fc-val">99%</div>
-            <div className="fc-sub">sin agente humano</div>
-          </div>
-          <div className="float-card gold-border" data-depth="2.2" style={{top:'48%',right:'1.5%','--rot':'-4deg',width:'200px'}}>
-            <div className="fc-label">Implementación</div>
-            <div className="fc-val">15d</div>
-            <div className="fc-sub">De cero a sistema activo</div>
-          </div>
-          <div className="float-card" data-depth="1.8" style={{bottom:'14%',left:'4%','--rot':'3deg',width:'225px'}}>
-            <div className="fc-chat-name">Agente IA Veluz</div>
-            <div className="fc-chat-bubble">Hola, quiero agendar para el jueves ¿tienen cupos?</div>
-            <div className="fc-chat-bubble">¡Hola! Claro, ¿primera vez o control?</div>
-          </div>
-          <div className="float-card lime-border" data-depth="0.9" style={{bottom:'18%',right:'6%','--rot':'5deg',width:'168px'}}>
-            <div className="fc-label">Ads necesarios</div>
-            <div className="fc-val">0</div>
-            <div className="fc-sub">100% orgánico</div>
-          </div>
-        </div>
 
         {/* Hero content */}
         <div className="relative z-20 max-w-4xl mx-auto px-5 lg:px-8 py-24 lg:py-32 text-center w-full">
@@ -1017,29 +939,62 @@ export default function App() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          CALENDLY · CTA
+          CTA FINAL · agendar
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="agendar" className="relative py-20 lg:py-32 overflow-hidden grid-bg">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[400px] bg-[#BFFF00]/[0.05] blur-[120px] rounded-full pointer-events-none"/>
-        <div className="relative max-w-4xl mx-auto px-5 lg:px-8">
-          <div className="text-center mb-10">
-            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Siguiente paso</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-5 leading-tight">
-              <span className="text-white">¿Hablamos de </span>
-              <span className="serif-accent">negocios?</span>
-            </h2>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10">
-              <span className="w-1.5 h-1.5 bg-[#BFFF00] rounded-full" style={{animation:'blink 1.6s ease-in-out infinite'}}/>
-              <span className="mono-label" style={{color:'rgba(255,255,255,0.65)',letterSpacing:'0.18em',fontSize:'9px'}}>Llamada 30 min · Sin costo · Sin compromiso</span>
-            </div>
+      <section id="agendar" className="relative py-24 lg:py-36 overflow-hidden">
+        {/* Fondo mesh igual que el hero */}
+        <div className="absolute inset-0 grid-bg mesh-bg" />
+        <div className="absolute inset-0 hero-overlay" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#BFFF00]/[0.04] blur-[140px] rounded-full pointer-events-none"/>
+
+        <div className="relative z-10 max-w-3xl mx-auto px-5 lg:px-8 text-center">
+          <p className="mono-label mb-6" style={{fontSize:'9px'}}>— Siguiente paso</p>
+
+          <h2 className="text-4xl md:text-5xl lg:text-[62px] font-bold tracking-tight leading-[1.04] mb-6">
+            <span className="block text-white">¿Hablamos de</span>
+            <span className="serif-accent">negocios?</span>
+          </h2>
+
+          <p className="text-lg text-zinc-300 leading-relaxed max-w-lg mx-auto mb-10 font-light">
+            30 minutos gratuitos. Te mostramos exactamente cómo funcionaría el sistema en tu negocio y qué resultados son realistas para tu caso.
+          </p>
+
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.05] border border-white/10 mb-10">
+            <span className="w-1.5 h-1.5 bg-[#BFFF00] rounded-full shrink-0"
+              style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.6s ease-in-out infinite'}}/>
+            <span className="mono-label" style={{color:'rgba(255,255,255,0.6)',letterSpacing:'0.18em',fontSize:'9px'}}>
+              Llamada 30 min · Sin costo · Sin compromiso
+            </span>
           </div>
-          <div className="bg-white rounded-2xl overflow-hidden"
-            style={{height:680,boxShadow:'0 0 60px -20px rgba(191,255,0,0.18),0 0 0 1px rgba(191,255,0,0.12)'}}>
-            <iframe
-              src="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
-              width="100%" height="100%" frameBorder="0" title="Agendar con Veluz"/>
+
+          {/* Checklist */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center text-sm text-zinc-400 mb-12">
+            {['Sin presión de venta — si no encaja, te lo decimos.','Diagnóstico real de tu operación.','Propuesta concreta con cifras.'].map(t=>(
+              <div key={t} className="flex items-start gap-2 text-left">
+                <CheckCircle2 size={14} className="text-[#BFFF00] shrink-0 mt-0.5"/>
+                <span>{t}</span>
+              </div>
+            ))}
           </div>
-          <p className="text-center text-zinc-600 text-[10px] mt-5 mono-label" style={{letterSpacing:'0.2em'}}>
+
+          {/* Botones CTA */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
+              target="_blank" rel="noopener noreferrer"
+              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-bold text-lg px-10 py-5 rounded-xl inline-flex items-center justify-center gap-2.5 transition-colors">
+              <Calendar size={20} strokeWidth={2.5} />
+              Agendar diagnóstico gratis
+            </a>
+            <a
+              href="https://wa.me/573125923915?text=Hola%20Veluz%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20gratuito"
+              target="_blank" rel="noopener noreferrer"
+              className="bg-white/[0.06] hover:bg-white/[0.11] border border-white/15 text-white font-medium text-base px-8 py-5 rounded-xl inline-flex items-center justify-center gap-2.5 transition-colors">
+              <WaIcon /> WhatsApp directo
+            </a>
+          </div>
+
+          <p className="mono-label mt-10" style={{opacity:0.3,letterSpacing:'0.22em',fontSize:'9px'}}>
             ✓ Sin tarjeta &nbsp;·&nbsp; ✓ Sin contrato &nbsp;·&nbsp; ✓ Sin presión
           </p>
         </div>
@@ -1053,7 +1008,7 @@ export default function App() {
           <img src={logo} alt="Veluz" className="h-10 w-auto max-w-[160px] object-contain opacity-50 hover:opacity-80 transition-opacity"/>
           <div className="flex gap-8 mono-label flex-wrap justify-center" style={{opacity:0.3,letterSpacing:'0.24em',fontSize:'9px'}}>
             <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:text-[#BFFF00] transition-all">WhatsApp</a>
-            <button onClick={()=>goto('agendar')} className="hover:opacity-100 hover:text-[#BFFF00] transition-all">Agendar</button>
+            <a href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:text-[#BFFF00] transition-all">Agendar</a>
             <span>© 2026 Veluz Agency</span>
           </div>
         </div>
@@ -1062,10 +1017,11 @@ export default function App() {
       {/* ── FLOATING CTA (mobile) ──────────────────────────────────────── */}
       {showFloat && (
         <div className="fixed bottom-5 right-5 z-[100] md:hidden">
-          <button onClick={()=>goto('agendar')}
-            className="cta-glow bg-[#BFFF00] text-black p-3.5 rounded-full shadow-2xl active:scale-90 transition-transform flex items-center justify-center border-4 border-[#030710]">
-            <Calendar size={22} strokeWidth={2.5}/>
-          </button>
+          <a href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
+            target="_blank" rel="noopener noreferrer"
+            className="cta-glow bg-[#BFFF00] text-black p-4 rounded-full shadow-2xl active:scale-90 transition-transform flex items-center justify-center border-4 border-[#030710]">
+            <Calendar size={20} strokeWidth={2.5}/>
+          </a>
         </div>
       )}
     </div>
