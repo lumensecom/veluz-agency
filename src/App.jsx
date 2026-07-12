@@ -449,7 +449,7 @@ export default function App() {
         <div className="hero-overlay" />
 
         {/* Hero content */}
-        <div className="relative z-20 max-w-4xl mx-auto px-5 lg:px-8 py-24 lg:py-32 text-center w-full">
+        <div className="relative z-20 max-w-4xl mx-auto px-5 lg:px-8 py-12 lg:py-16 text-center w-full">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-8">
             <div className="flex gap-0.5 text-[#BFFF00]">
               {[...Array(5)].map((_,i) => <Star key={i} size={10} fill="currentColor" stroke="none" />)}
@@ -477,7 +477,7 @@ export default function App() {
           </p>
 
           {/* VSL VIDEO */}
-          <div className="vsl-wrap mb-10 vsl-float px-2 sm:px-0">
+          <div className="vsl-wrap mb-16 vsl-float px-2 sm:px-0">
             <div className="vsl-corner tl"/><div className="vsl-corner tr"/>
             <div className="vsl-corner bl"/><div className="vsl-corner br"/>
             <div className="relative aspect-video rounded-xl overflow-hidden bg-[#06100a] border border-white/10"
