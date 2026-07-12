@@ -175,7 +175,7 @@ const integrations = [
 ];
 
 const words = ['con IA.', 'en automático.', 'sin límites.', 'sin anuncios.'];
-const logo = 'https://res.cloudinary.com/dfj0ckm10/image/upload/q_auto/f_auto/v1778464000/ChatGPT_Image_May_10_2026_08_45_58_PM_fo32bz.png';
+const logo = 'https://res.cloudinary.com/ydxi3lng/image/upload/q_auto/f_auto/v1783814504/Remove_black_background_from_image_202607111430-removebg-preview_kxhi8m.png';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    APP
