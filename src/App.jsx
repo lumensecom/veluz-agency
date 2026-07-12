@@ -424,7 +424,7 @@ export default function App() {
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            <a href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
+            <a href="https://calendly.com/veluz-acquisition/30min?hide_landing_page_details=1&primary_color=bfff00"
               target="_blank" rel="noopener noreferrer"
               className="hidden md:inline-flex cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-sm px-6 py-3 rounded-lg transition-colors items-center gap-2">
               Agenda tu llamada →
@@ -937,7 +937,7 @@ export default function App() {
           {/* Botones CTA */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
+              href="https://calendly.com/veluz-acquisition/30min?hide_landing_page_details=1&primary_color=bfff00"
               target="_blank" rel="noopener noreferrer"
               className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-bold text-lg px-10 py-5 rounded-xl inline-flex items-center justify-center gap-2.5 transition-colors">
               <Calendar size={20} strokeWidth={2.5} />
@@ -965,7 +965,7 @@ export default function App() {
           <img src={logo} alt="Veluz" className="h-10 w-auto max-w-[160px] object-contain opacity-50 hover:opacity-80 transition-opacity"/>
           <div className="flex gap-8 mono-label flex-wrap justify-center" style={{opacity:0.3,letterSpacing:'0.24em',fontSize:'9px'}}>
             <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:text-[#BFFF00] transition-all">WhatsApp</a>
-            <a href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:text-[#BFFF00] transition-all">Agendar</a>
+            <a href="https://calendly.com/veluz-acquisition/30min?hide_landing_page_details=1&primary_color=bfff00" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:text-[#BFFF00] transition-all">Agendar</a>
             <span>© 2026 Veluz Agency</span>
           </div>
         </div>
@@ -974,7 +974,7 @@ export default function App() {
       {/* ── FLOATING CTA (mobile) ──────────────────────────────────────── */}
       {showFloat && (
         <div className="fixed bottom-5 right-5 z-[100] md:hidden">
-          <a href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
+          <a href="https://calendly.com/veluz-acquisition/30min?hide_landing_page_details=1&primary_color=bfff00"
             target="_blank" rel="noopener noreferrer"
             className="cta-glow bg-[#BFFF00] text-black p-4 rounded-full shadow-2xl active:scale-90 transition-transform flex items-center justify-center border-4 border-[#030710]">
             <Calendar size={20} strokeWidth={2.5}/>
