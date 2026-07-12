@@ -416,7 +416,7 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-[100] bg-[#030710]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-[88px] flex items-center justify-between">
           <img src={logo} alt="Veluz"
-            className="h-[62px] w-auto max-w-[240px] object-contain cursor-pointer"
+            className="h-[80px] w-auto max-w-[300px] object-contain cursor-pointer"
             onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
             {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
