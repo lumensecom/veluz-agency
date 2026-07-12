@@ -189,7 +189,6 @@ export default function App() {
   const [expandedPlan, setExpandedPlan] = useState({});
   const [wordIdx, setWordIdx]           = useState(0);
   const [showFloat, setShowFloat]       = useState(false);
-  const [urgencyOff, setUrgencyOff]     = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setWordIdx(i => (i + 1) % words.length), 2800);
@@ -250,9 +249,9 @@ export default function App() {
 
         /* ── Mesh hero bg · estilo Chispa AI con colores Veluz ── */
         .mesh-bg{background:
-          radial-gradient(ellipse 50% 42% at 14% 0%,rgba(191,255,0,0.20) 0%,transparent 55%),
-          radial-gradient(ellipse 42% 36% at 86% 6%,rgba(140,230,0,0.11) 0%,transparent 50%),
-          radial-gradient(ellipse 65% 55% at 50% 108%,rgba(80,150,0,0.05) 0%,transparent 60%);}
+          radial-gradient(ellipse 55% 48% at 12% 0%,rgba(191,255,0,0.30) 0%,transparent 55%),
+          radial-gradient(ellipse 46% 40% at 88% 5%,rgba(150,230,0,0.18) 0%,transparent 50%),
+          radial-gradient(ellipse 65% 55% at 50% 108%,rgba(80,150,0,0.07) 0%,transparent 60%);}
 
         /* ── Section glow ── */
         .section-glow{background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(191,255,0,0.08) 0%,transparent 60%);}
@@ -361,9 +360,6 @@ export default function App() {
         /* ── Hero overlay ── */
         .hero-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 50%,transparent 0%,rgba(3,7,16,0.4) 60%,rgba(3,7,16,0.95) 100%),linear-gradient(180deg,rgba(3,7,16,0.25) 0%,transparent 30%,transparent 65%,rgba(3,7,16,1) 100%);}
 
-        /* ── Urgency bar ── */
-        .urgency-bar{background:linear-gradient(90deg,rgba(191,255,0,0.12) 0%,rgba(191,255,0,0.08) 100%);border-bottom:1px solid rgba(191,255,0,0.2);}
-
         /* ── Integration badges ── */
         .int-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;white-space:nowrap;transition:all 200ms ease;}
         .int-badge:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);}
@@ -372,8 +368,6 @@ export default function App() {
         ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(191,255,0,0.25);border-radius:2px;}
 
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-        @keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
-        .slide-down{animation:slideDown 300ms cubic-bezier(0.16,1,0.3,1) forwards;}
 
         /* ── Mobile touch improvements ── */
         @media(max-width:640px){
@@ -418,76 +412,39 @@ export default function App() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          HEADER FIJO (urgency bar + nav apilados)
-      ════════════════════════════════════════════════════════════════════ */}
-      <header className="fixed top-0 left-0 right-0 z-[100]">
-        {/* Urgency bar */}
-        {!urgencyOff && (
-          <div className="urgency-bar px-4 py-[9px] slide-down">
-            <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                <span className="w-2 h-2 bg-[#BFFF00] rounded-full shrink-0"
-                  style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.5s ease-in-out infinite'}} />
-                <p className="text-xs text-zinc-300 truncate">
-                  <span className="hidden sm:inline">Solo </span>
-                  <strong className="text-[#BFFF00]">3 diagnósticos gratuitos</strong>
-                  <span className="hidden sm:inline"> disponibles esta semana</span>
-                  <span className="sm:hidden"> disponibles</span>
-                </p>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <button onClick={() => goto('agendar')}
-                  className="text-xs font-semibold text-black bg-[#BFFF00] px-3 py-1 rounded-full hover:bg-[#d4ff40] transition-colors hidden sm:block">
-                  Reservar cupo →
-                </button>
-                <button onClick={() => setUrgencyOff(true)}
-                  className="text-zinc-500 hover:text-white transition-colors p-1">
-                  <X size={13} />
-                </button>
-              </div>
-            </div>
+      {/* ══ NAV · estilo Chispa AI ══ */}
+      <header className="fixed top-0 left-0 right-0 z-[100] bg-[#030710]/80 backdrop-blur-xl border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-[88px] flex items-center justify-between">
+          <img src={logo} alt="Veluz"
+            className="h-[62px] w-auto max-w-[240px] object-contain cursor-pointer"
+            onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
+              <button key={id} onClick={() => goto(id)} className="hover:text-white transition-colors">{l}</button>
+            ))}
+          </nav>
+          <div className="flex items-center gap-3">
+            <a href="https://calendly.com/veluz-agency/30min?hide_landing_page_details=1&primary_color=bfff00"
+              target="_blank" rel="noopener noreferrer"
+              className="hidden md:inline-flex cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-sm px-6 py-3 rounded-lg transition-colors items-center gap-2">
+              Agenda tu llamada →
+            </a>
+            <button onClick={() => setMobileOpen(true)} aria-label="Abrir menú"
+              className="md:hidden flex flex-col gap-[5px] p-3 rounded-xl border border-white/10 hover:border-white/25 hover:bg-white/[0.04] transition-all active:scale-95">
+              <span className="w-[18px] h-[1.5px] bg-white rounded-full block" />
+              <span className="w-[14px] h-[1.5px] bg-zinc-400 rounded-full block" />
+              <span className="w-[18px] h-[1.5px] bg-white rounded-full block" />
+            </button>
           </div>
-        )}
-
-        {/* Nav — siempre con fondo, como Chispa AI */}
-        <nav className={`bg-[#030710]/92 backdrop-blur-xl border-b border-white/[0.07] transition-all duration-300 ${scrolled ? 'shadow-[0_4px_32px_-8px_rgba(0,0,0,0.6)]' : ''}`}>
-          <div className="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-[72px]">
-            <img src={logo} alt="Veluz"
-              className="h-[52px] w-auto max-w-[210px] object-contain cursor-pointer"
-              onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
-            <div className="hidden md:flex items-center gap-7 text-sm font-medium text-zinc-400">
-              {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
-                <button key={id} onClick={() => goto(id)}
-                  className="hover:text-white transition-colors py-1">{l}</button>
-              ))}
-            </div>
-            <div className="flex items-center gap-3">
-              <button onClick={() => goto('agendar')}
-                className="hidden md:inline-flex items-center gap-2 cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-sm px-5 py-2.5 rounded-lg transition-colors">
-                Diagnóstico gratis <ArrowRight size={13} />
-              </button>
-              {/* Hamburger — visible solo en móvil */}
-              <button
-                onClick={() => setMobileOpen(true)}
-                aria-label="Abrir menú"
-                className="md:hidden flex flex-col gap-[5px] p-3 rounded-xl border border-white/10 hover:border-white/25 hover:bg-white/[0.04] transition-all active:scale-95">
-                <span className="w-[18px] h-[1.5px] bg-white rounded-full block" />
-                <span className="w-[14px] h-[1.5px] bg-zinc-400 rounded-full block" />
-                <span className="w-[18px] h-[1.5px] bg-white rounded-full block" />
-              </button>
-            </div>
-          </div>
-        </nav>
+        </div>
       </header>
 
       {/* ══════════════════════════════════════════════════════════════════
           HERO
       ════════════════════════════════════════════════════════════════════ */}
-      {/* spacer para que el contenido no quede debajo del header fijo */}
-      <div style={{height: urgencyOff ? '72px' : '108px'}} aria-hidden="true" />
+      <div style={{height:'88px'}} aria-hidden="true" />
 
-      <section id="hero-section" className="relative overflow-hidden min-h-[calc(100vh-72px)] flex items-center grid-bg">
+      <section id="hero-section" className="relative overflow-hidden min-h-[calc(100vh-88px)] flex items-center grid-bg">
         <div className="absolute inset-0 mesh-bg z-0" />
         <div className="hero-overlay" />
 
