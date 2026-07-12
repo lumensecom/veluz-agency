@@ -430,79 +430,110 @@ export default function App() {
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}.reveal{opacity:1;transform:none;}}
       `}</style>
 
-      {/* ── URGENCY BAR ───────────────────────────────────────────────── */}
-      {!urgencyOff && (
-        <div className="urgency-bar relative z-[101] px-4 py-2 slide-down">
-          <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 flex-1 min-w-0">
-              <span className="w-2 h-2 bg-[#BFFF00] rounded-full shrink-0" style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.5s ease-in-out infinite'}} />
-              <p className="text-xs text-zinc-300 truncate">
-                <span className="hidden sm:inline">Solo </span>
-                <strong className="text-[#BFFF00]">3 diagnósticos gratuitos</strong>
-                <span className="hidden sm:inline"> disponibles esta semana</span>
-                <span className="sm:hidden"> disponibles</span>
-              </p>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <button onClick={() => goto('agendar')} className="text-xs font-semibold text-black bg-[#BFFF00] px-3 py-1 rounded-full hover:bg-[#d4ff40] transition-colors hidden sm:block">
-                Reservar cupo →
-              </button>
-              <button onClick={() => setUrgencyOff(true)} className="text-zinc-500 hover:text-white transition-colors p-1">
-                <X size={13} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* ── MOBILE MENU ──────────────────────────────────────────────── */}
       <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
-        <div className="flex flex-col h-full p-7">
-          <div className="flex justify-between items-center mb-14">
-            <img src={logo} alt="Veluz" className="h-9 object-contain" />
-            <button onClick={() => setMobileOpen(false)} className="p-2 border border-white/10 rounded-xl text-white">
+        <div className="flex flex-col h-full">
+          {/* Mobile menu header */}
+          <div className="flex justify-between items-center px-6 py-5 border-b border-white/[0.07]">
+            <img src={logo} alt="Veluz" className="h-[48px] w-auto max-w-[180px] object-contain" />
+            <button onClick={() => setMobileOpen(false)}
+              className="w-10 h-10 flex items-center justify-center border border-white/10 rounded-xl text-zinc-400 hover:text-white hover:border-white/25 transition-all active:scale-95">
               <X size={18} />
             </button>
           </div>
-          <nav className="flex flex-col gap-7">
-            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ'],['agendar','Agendar']].map(([id,l]) => (
-              <button key={id} onClick={() => goto(id)} className="text-2xl font-bold text-left tracking-tight text-zinc-300 hover:text-white transition-colors">{l}</button>
+          {/* Nav links */}
+          <nav className="flex flex-col gap-1 px-4 pt-6 flex-1">
+            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
+              <button key={id} onClick={() => goto(id)}
+                className="text-lg font-semibold text-left tracking-tight text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all px-4 py-3.5 rounded-xl active:scale-[0.98]">
+                {l}
+              </button>
             ))}
           </nav>
-          <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer"
-            className="mt-auto flex items-center gap-3 text-zinc-500 hover:text-white transition-colors text-sm">
-            <WaIcon /> +57 312 592 3915
-          </a>
+          {/* Bottom CTA */}
+          <div className="px-4 pb-10 pt-4 space-y-3 border-t border-white/[0.07] mt-4">
+            <button onClick={() => goto('agendar')}
+              className="w-full cta-glow bg-[#BFFF00] text-black font-bold text-base py-4 rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+              Agendar diagnóstico gratis <ArrowRight size={15} />
+            </button>
+            <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2.5 text-zinc-400 hover:text-white text-sm py-3 border border-white/10 rounded-xl hover:border-white/20 transition-all">
+              <WaIcon /> WhatsApp · +57 312 592 3915
+            </a>
+          </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════
-          NAV
+          HEADER FIJO (urgency bar + nav apilados)
       ════════════════════════════════════════════════════════════════════ */}
-      <nav className={`fixed left-0 w-full z-[100] transition-all duration-300 ${urgencyOff ? 'top-0' : 'top-[34px]'} ${scrolled ? 'bg-[#030710]/90 backdrop-blur-xl border-b border-white/[0.06] py-3' : 'bg-transparent py-4'}`}>
-        <div className="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between">
-          <img src={logo} alt="Veluz" className="h-9 w-auto object-contain cursor-pointer" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
-              <button key={id} onClick={() => goto(id)} className="hover:text-white transition-colors">{l}</button>
-            ))}
+      <header className="fixed top-0 left-0 right-0 z-[100]">
+        {/* Urgency bar */}
+        {!urgencyOff && (
+          <div className="urgency-bar px-4 py-[9px] slide-down">
+            <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                <span className="w-2 h-2 bg-[#BFFF00] rounded-full shrink-0"
+                  style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.5s ease-in-out infinite'}} />
+                <p className="text-xs text-zinc-300 truncate">
+                  <span className="hidden sm:inline">Solo </span>
+                  <strong className="text-[#BFFF00]">3 diagnósticos gratuitos</strong>
+                  <span className="hidden sm:inline"> disponibles esta semana</span>
+                  <span className="sm:hidden"> disponibles</span>
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button onClick={() => goto('agendar')}
+                  className="text-xs font-semibold text-black bg-[#BFFF00] px-3 py-1 rounded-full hover:bg-[#d4ff40] transition-colors hidden sm:block">
+                  Reservar cupo →
+                </button>
+                <button onClick={() => setUrgencyOff(true)}
+                  className="text-zinc-500 hover:text-white transition-colors p-1">
+                  <X size={13} />
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button onClick={() => goto('agendar')}
-              className="hidden md:inline-flex items-center gap-2 cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-sm px-5 py-2.5 rounded-lg transition-colors">
-              Diagnóstico gratis <ArrowRight size={13} />
-            </button>
-            <button onClick={() => setMobileOpen(true)} className="md:hidden p-2.5 border border-white/10 rounded-xl text-white">
-              <Menu size={18} />
-            </button>
+        )}
+
+        {/* Nav — siempre con fondo, como Chispa AI */}
+        <nav className={`bg-[#030710]/92 backdrop-blur-xl border-b border-white/[0.07] transition-all duration-300 ${scrolled ? 'shadow-[0_4px_32px_-8px_rgba(0,0,0,0.6)]' : ''}`}>
+          <div className="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-[72px]">
+            <img src={logo} alt="Veluz"
+              className="h-[52px] w-auto max-w-[210px] object-contain cursor-pointer"
+              onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
+            <div className="hidden md:flex items-center gap-7 text-sm font-medium text-zinc-400">
+              {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
+                <button key={id} onClick={() => goto(id)}
+                  className="hover:text-white transition-colors py-1">{l}</button>
+              ))}
+            </div>
+            <div className="flex items-center gap-3">
+              <button onClick={() => goto('agendar')}
+                className="hidden md:inline-flex items-center gap-2 cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-sm px-5 py-2.5 rounded-lg transition-colors">
+                Diagnóstico gratis <ArrowRight size={13} />
+              </button>
+              {/* Hamburger — visible solo en móvil */}
+              <button
+                onClick={() => setMobileOpen(true)}
+                aria-label="Abrir menú"
+                className="md:hidden flex flex-col gap-[5px] p-3 rounded-xl border border-white/10 hover:border-white/25 hover:bg-white/[0.04] transition-all active:scale-95">
+                <span className="w-[18px] h-[1.5px] bg-white rounded-full block" />
+                <span className="w-[14px] h-[1.5px] bg-zinc-400 rounded-full block" />
+                <span className="w-[18px] h-[1.5px] bg-white rounded-full block" />
+              </button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
       {/* ══════════════════════════════════════════════════════════════════
           HERO
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="hero-section" className="relative overflow-hidden min-h-screen flex items-center grid-bg" style={{paddingTop: urgencyOff ? '0' : '34px'}}>
+      {/* spacer para que el contenido no quede debajo del header fijo */}
+      <div style={{height: urgencyOff ? '72px' : '108px'}} aria-hidden="true" />
+
+      <section id="hero-section" className="relative overflow-hidden min-h-[calc(100vh-72px)] flex items-center grid-bg">
         <div className="absolute inset-0 mesh-bg z-0" />
         <div className="comets" aria-hidden="true">
           {[...Array(5)].map((_,i) => <span key={i} className="comet" />)}
@@ -1019,7 +1050,7 @@ export default function App() {
       ════════════════════════════════════════════════════════════════════ */}
       <footer className="py-12 border-t border-white/[0.06] px-5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <img src={logo} alt="Veluz" className="h-8 opacity-50 hover:opacity-80 transition-opacity"/>
+          <img src={logo} alt="Veluz" className="h-10 w-auto max-w-[160px] object-contain opacity-50 hover:opacity-80 transition-opacity"/>
           <div className="flex gap-8 mono-label flex-wrap justify-center" style={{opacity:0.3,letterSpacing:'0.24em',fontSize:'9px'}}>
             <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 hover:text-[#BFFF00] transition-all">WhatsApp</a>
             <button onClick={()=>goto('agendar')} className="hover:opacity-100 hover:text-[#BFFF00] transition-all">Agendar</button>
