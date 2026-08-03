@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Zap, CheckCircle2, ChevronDown, Calendar,
-  BrainCircuit, Megaphone, AlertTriangle, Star, Menu, X,
+  BrainCircuit, Megaphone, AlertTriangle, Star, Menu, X, Plus,
   Users, CheckCircle, XCircle, ArrowRight, ExternalLink
 } from 'lucide-react';
 
