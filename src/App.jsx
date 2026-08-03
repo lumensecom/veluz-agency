@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Zap, CheckCircle2, ChevronDown, Calendar,
-  BrainCircuit, Megaphone, AlertTriangle, Star, Menu, X, Plus,
+  BrainCircuit, Megaphone, AlertTriangle, Star, Menu, X,
   Users, CheckCircle, XCircle, ArrowRight, ExternalLink
 } from 'lucide-react';
 
@@ -185,8 +185,6 @@ export default function App() {
   const [mobileOpen, setMobileOpen]     = useState(false);
   const [openService, setOpenService]   = useState(null);
   const [openFaq, setOpenFaq]           = useState(null);
-  const [pricingTab, setPricingTab]     = useState('all');
-  const [expandedPlan, setExpandedPlan] = useState({});
   const [wordIdx, setWordIdx]           = useState(0);
   const [showFloat, setShowFloat]       = useState(false);
 
@@ -229,7 +227,7 @@ export default function App() {
 
   const [r1,v1]=useReveal(); const [r2,v2]=useReveal(50); const [r3,v3]=useReveal(100);
   const [r4,v4]=useReveal(); const [r5,v5]=useReveal(); const [r6,v6]=useReveal();
-  const [r7,v7]=useReveal(); const [r8,v8]=useReveal(); const [r9,v9]=useReveal();
+  const [r7,v7]=useReveal(); const [r9,v9]=useReveal();
 
   return (
     <div className="veluz-root">
@@ -247,11 +245,11 @@ export default function App() {
         .grid-bg{background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:64px 64px;}
         .grid-bg-light{background-image:linear-gradient(rgba(0,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:40px 40px;}
 
-        /* ── Mesh hero bg · estilo Chispa AI con colores Veluz ── */
+        /* ── Mesh hero bg · proporciones Chispa AI, colores Veluz ── */
         .mesh-bg{background:
-          radial-gradient(ellipse 80% 70% at 5% 0%,rgba(191,255,0,0.65) 0%,transparent 58%),
-          radial-gradient(ellipse 60% 55% at 95% 4%,rgba(150,230,0,0.45) 0%,transparent 55%),
-          radial-gradient(ellipse 55% 50% at 50% 100%,rgba(100,200,0,0.22) 0%,transparent 60%);}
+          radial-gradient(ellipse 55% 45% at 16% 0%,rgba(191,255,0,0.52) 0%,transparent 56%),
+          radial-gradient(ellipse 45% 38% at 84% 7%,rgba(150,230,0,0.36) 0%,transparent 52%),
+          radial-gradient(ellipse 60% 50% at 50% 100%,rgba(80,150,0,0.08) 0%,transparent 60%);}
 
         /* ── Section glow ── */
         .section-glow{background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(191,255,0,0.08) 0%,transparent 60%);}
@@ -343,11 +341,6 @@ export default function App() {
         .svc-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:28px;transition:all 300ms cubic-bezier(0.16,1,0.3,1);cursor:pointer;}
         .svc-card:hover,.svc-card.open{border-color:rgba(191,255,0,0.25);background:rgba(191,255,0,0.02);}
 
-        /* ── Pricing ── */
-        .plan-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:26px;display:flex;flex-direction:column;transition:all 300ms ease;}
-        .plan-card.featured{border:1px solid rgba(191,255,0,0.35);background:rgba(191,255,0,0.025);box-shadow:0 0 40px -15px rgba(191,255,0,0.12);}
-        .plan-card:hover:not(.featured){border-color:rgba(191,255,0,0.2);}
-
         /* ── FAQ ── */
         .faq-item{border:1px solid rgba(0,0,0,0.07);border-radius:14px;overflow:hidden;background:#fff;transition:border-color 250ms ease,box-shadow 250ms ease;}
         .faq-item:hover{border-color:rgba(61,122,0,0.25);box-shadow:0 4px 16px -4px rgba(0,80,0,0.08);}
@@ -391,7 +384,7 @@ export default function App() {
           </div>
           {/* Nav links */}
           <nav className="flex flex-col gap-1 px-4 pt-6 flex-1">
-            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
+            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['faq','FAQ']].map(([id,l]) => (
               <button key={id} onClick={() => goto(id)}
                 className="text-lg font-semibold text-left tracking-tight text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all px-4 py-3.5 rounded-xl active:scale-[0.98]">
                 {l}
@@ -419,7 +412,7 @@ export default function App() {
             className="h-[80px] w-auto max-w-[300px] object-contain cursor-pointer"
             onClick={() => window.scrollTo({top:0,behavior:'smooth'})} />
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['inversion','Inversión'],['faq','FAQ']].map(([id,l]) => (
+            {[['metodo','Método'],['servicios','Servicios'],['clientes','Clientes'],['faq','FAQ']].map(([id,l]) => (
               <button key={id} onClick={() => goto(id)} className="hover:text-white transition-colors">{l}</button>
             ))}
           </nav>
@@ -797,71 +790,6 @@ export default function App() {
                 </div>
                 <p className="mono-label" style={{letterSpacing:'0.18em',fontSize:'8.5px'}}>{l}</p>
               </GlowCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          PRICING
-      ════════════════════════════════════════════════════════════════════ */}
-      <section id="inversion" className="relative py-20 lg:py-28">
-        <div className="absolute inset-0 section-glow pointer-events-none"/>
-        <div className="max-w-6xl mx-auto px-5 lg:px-8">
-          <div ref={r8} className={`reveal text-center mb-12 ${v8?'visible':''}`}>
-            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Inversión transparente</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-5">
-              <span className="text-white">Sin letra pequeña. </span>
-              <span className="serif-accent">Sin sorpresas.</span>
-            </h2>
-            <div className="flex justify-center gap-2.5 flex-wrap">
-              {[['all','Todos'],['marketing','Marketing'],['ia','Automatizaciones IA']].map(([v,l])=>(
-                <button key={v} onClick={()=>setPricingTab(v)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all border ${pricingTab===v ? 'bg-[#BFFF00] text-black border-[#BFFF00]' : 'border-white/15 text-zinc-400 hover:text-white hover:border-white/30'}`}>
-                  {l}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
-            {plans.filter(p=>pricingTab==='all'||p.type===pricingTab).map((p,i)=>(
-              <div key={p.id} className={`plan-card reveal reveal-${i%4+1} ${v8?'visible':''} ${p.featured?'featured':''}`}>
-                {p.featured && <div className="mono-label mb-3 text-black bg-[#BFFF00] px-3 py-0.5 rounded-full self-start inline-block" style={{fontSize:'8px'}}>Más popular</div>}
-                <p className="mono-label mb-2" style={{fontSize:'8px'}}>{p.cat}</p>
-                <h4 className="text-base font-semibold text-white mb-2 tracking-tight">{p.title}</h4>
-                <p className="text-zinc-400 text-xs leading-relaxed mb-5 font-light">{p.desc}</p>
-                <div className="bg-white/[0.03] border border-white/[0.07] p-3.5 rounded-xl mb-4 space-y-2.5">
-                  <div>
-                    <p className="mono-label mb-1" style={{fontSize:'7.5px'}}>{p.setupLabel}</p>
-                    <span className="text-[#BFFF00] font-bold text-base tracking-tight">{p.setup}</span>
-                  </div>
-                  <div className="border-t border-white/[0.07] pt-2.5">
-                    <p className="mono-label mb-1" style={{fontSize:'7.5px'}}>{p.recLabel}</p>
-                    <span className="text-white text-xs">{p.rec}</span>
-                  </div>
-                </div>
-                <button onClick={()=>setExpandedPlan(prev=>({...prev,[p.id]:!prev[p.id]}))}
-                  className="w-full flex items-center justify-between text-xs text-zinc-500 hover:text-[#BFFF00] transition-colors border-b border-white/[0.07] pb-3.5 mb-3.5">
-                  <span className="flex items-center gap-1">
-                    <Plus size={10} className={`text-[#BFFF00] transition-transform duration-300 ${expandedPlan[p.id]?'rotate-45':''}`}/>
-                    {expandedPlan[p.id]?'Ocultar':'Ver entregables'}
-                  </span>
-                  <ChevronDown size={11} className={`transition-transform duration-300 ${expandedPlan[p.id]?'rotate-180':''}`}/>
-                </button>
-                {expandedPlan[p.id] && (
-                  <div className="flex flex-wrap gap-1.5 mb-3.5">
-                    {p.pills.map(pill=>(
-                      <span key={pill} className="mono-label px-2 py-0.5 bg-white/[0.03] border border-white/[0.07] rounded-lg" style={{fontSize:'7.5px',letterSpacing:'0.13em'}}>{pill}</span>
-                    ))}
-                  </div>
-                )}
-                <div className="mt-auto">
-                  <button onClick={()=>goto('agendar')}
-                    className={`w-full py-2.5 rounded-lg font-semibold text-xs transition-all ${p.featured ? 'cta-glow bg-[#BFFF00] text-black hover:bg-[#d4ff40]' : 'border border-[#BFFF00]/30 text-[#BFFF00] hover:bg-[#BFFF00]/5'}`}>
-                    Empezar ahora
-                  </button>
-                </div>
-              </div>
             ))}
           </div>
         </div>
