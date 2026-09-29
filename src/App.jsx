@@ -442,89 +442,128 @@ export default function App() {
         <div className="hero-overlay" />
 
         {/* Hero content */}
-        <div className="relative z-20 max-w-4xl mx-auto px-5 lg:px-8 py-12 lg:py-16 text-center w-full">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-8">
+        <div className="relative z-20 max-w-3xl mx-auto px-5 lg:px-8 py-16 lg:py-24 text-center w-full">
+
+          {/* Badge de prueba social */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-7">
             <div className="flex gap-0.5 text-[#BFFF00]">
               {[...Array(5)].map((_,i) => <Star key={i} size={10} fill="currentColor" stroke="none" />)}
             </div>
-            <span className="mono-label" style={{letterSpacing:'0.2em',fontSize:'9px'}}>+20 negocios con resultados reales</span>
+            <span className="mono-label" style={{letterSpacing:'0.18em',fontSize:'9px'}}>+20 negocios escalados en Colombia</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[78px] font-bold tracking-tight leading-[1.04] mb-6">
-            <span className="block text-white">Digitalizamos tu negocio</span>
-            <span className="block overflow-hidden" style={{minHeight:'1.15em',position:'relative'}}>
-              {words.map((w, i) => (
-                <span key={w} className="serif-accent" style={{
-                  position: i === 0 ? 'relative' : 'absolute',
-                  left:0,right:0,top:0,display:'block',
-                  opacity: wordIdx===i ? 1 : 0,
-                  transform: wordIdx===i ? 'translateY(0)' : wordIdx>i ? 'translateY(-110%)' : 'translateY(110%)',
-                  transition:'opacity 450ms ease,transform 650ms cubic-bezier(0.34,1.4,0.64,1)',
-                }}>{w}</span>
-              ))}
-            </span>
+          {/* H1 — promesa específica */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold tracking-tight leading-[1.06] mb-6">
+            <span className="block text-white">Tu negocio merece crecer</span>
+            <span className="serif-accent">sin depender de ti.</span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-zinc-300 leading-relaxed max-w-xl mx-auto mb-10 font-light">
-            Convertimos operaciones manuales en <strong className="text-white font-semibold">máquinas de eficiencia autónoma</strong> que cierran ventas sin que estés presente.
+          {/* Subheadline — claro y concreto */}
+          <p className="text-base sm:text-lg md:text-xl text-zinc-300 leading-relaxed max-w-2xl mx-auto mb-8 font-light">
+            Diseñamos y activamos tu sistema de <strong className="text-white font-semibold">ventas, presencia digital y automatización con IA</strong> para que tu operación trabaje 24/7 sin que estés presente. Sin anuncios. Sin contratar más.
           </p>
 
-          {/* VSL VIDEO */}
-          <div className="vsl-wrap mb-16 vsl-float px-2 sm:px-0">
-            <div className="vsl-corner tl"/><div className="vsl-corner tr"/>
-            <div className="vsl-corner bl"/><div className="vsl-corner br"/>
-            <div className="relative aspect-video rounded-xl overflow-hidden bg-[#06100a] border border-white/10"
-              style={{boxShadow:'0 0 60px -10px rgba(191,255,0,0.3)'}}>
-              {/*
-                REEMPLAZA CON TU VIDEO:
-                <iframe src="https://www.loom.com/embed/TU_VIDEO_ID"
-                  className="absolute inset-0 w-full h-full" frameBorder="0" allowFullScreen />
-              */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <button onClick={() => goto('agendar')}
-                  className="w-14 h-14 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/30 flex items-center justify-center hover:bg-[#BFFF00]/20 transition-colors">
-                  <svg viewBox="0 0 24 24" className="w-6 h-6 fill-[#BFFF00] ml-1"><polygon points="5,3 19,12 5,21"/></svg>
-                </button>
-                <div>
-                  <p className="mono-label mb-1" style={{fontSize:'9px'}}>Video explicativo</p>
-                  <p className="text-zinc-600 text-xs">Pega tu iframe de Loom aquí en el código</p>
-                </div>
-              </div>
-            </div>
+          {/* Micro-trust — 3 garantías rápidas */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-10">
+            {['Implementación en 15 días','0 conocimientos técnicos','ROI claro en 60 días'].map(t => (
+              <span key={t} className="flex items-center gap-1.5 text-xs text-zinc-400">
+                <CheckCircle2 size={12} className="text-[#BFFF00] shrink-0"/>{t}
+              </span>
+            ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button onClick={() => goto('agendar')}
-              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-semibold text-base px-7 py-3.5 rounded-lg transition-colors inline-flex items-center justify-center gap-2">
-              Agendar diagnóstico gratis <ArrowRight size={15} />
-            </button>
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+            <a href="https://calendly.com/veluz-acquisition/30min?hide_landing_page_details=1&primary_color=bfff00"
+              target="_blank" rel="noopener noreferrer"
+              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-bold text-base px-8 py-4 rounded-xl transition-colors inline-flex items-center justify-center gap-2">
+              Agenda tu diagnóstico gratis <ArrowRight size={15} />
+            </a>
             <a href="https://wa.me/573125923915?text=Hola%20Veluz,%20quiero%20informaci%C3%B3n"
               target="_blank" rel="noopener noreferrer"
-              className="bg-white/[0.06] hover:bg-white/[0.11] border border-white/15 text-white font-medium text-base px-7 py-3.5 rounded-lg transition-colors inline-flex items-center justify-center gap-2">
-              <WaIcon /> Hablar por WhatsApp
+              className="bg-white/[0.06] hover:bg-white/[0.11] border border-white/15 text-white font-medium text-base px-7 py-4 rounded-xl transition-colors inline-flex items-center justify-center gap-2">
+              <WaIcon /> WhatsApp directo
             </a>
+          </div>
+
+          {/* Clientes actuales */}
+          <p className="text-zinc-600 text-xs tracking-wide">
+            Trabajando con: <span className="text-zinc-500">LMS Finance · Ana Molano Peluquería · Soy Origen</span>
+          </p>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          I — INTEREST: EL PROBLEMA  ·  SECCIÓN BLANCA
+      ════════════════════════════════════════════════════════════════════ */}
+      <section id="problema" className="relative py-20 lg:py-28 grid-bg-light" style={{background:'#f5faf0'}}>
+        <div className="max-w-5xl mx-auto px-5 lg:px-8">
+          <div ref={r2} className={`reveal text-center mb-14 ${v2?'visible':''}`}>
+            <p className="mono-dark mb-3">— ¿Te identificas?</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-[#0a1a05]">
+              Cada día sin sistema <span className="serif-dark">es dinero que se va.</span>
+            </h2>
+            <p className="text-zinc-500 text-base mt-4 max-w-xl mx-auto font-light">
+              La mayoría de negocios locales pierden clientes no por falta de calidad, sino por falta de infraestructura.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+            <div className={`reveal reveal-1 lift bg-white border border-red-100 rounded-2xl p-7 shadow-sm ${v2?'visible':''}`}>
+              <div className="w-10 h-10 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center mb-5">
+                <AlertTriangle size={18} className="text-red-500" />
+              </div>
+              <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-red-400 mb-3">— Lo que vives hoy</div>
+              <ul className="space-y-3.5">
+                {[
+                  'Respondes manualmente y pierdes leads mientras duermes.',
+                  'No apareces en Google ni en los buscadores de IA.',
+                  'Tu equipo pierde horas en tareas que una IA haría sola.',
+                ].map(t=>(
+                  <li key={t} className="flex gap-2.5 text-zinc-500 text-sm leading-relaxed">
+                    <XCircle size={15} className="text-red-400 shrink-0 mt-0.5"/>{t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className={`reveal reveal-2 lift bg-white border border-[#BFFF00]/30 rounded-2xl p-7 shadow-sm ${v2?'visible':''}`}>
+              <div className="w-10 h-10 rounded-xl bg-[#f0fce8] border border-[#BFFF00]/40 flex items-center justify-center mb-5">
+                <CheckCircle2 size={18} className="text-[#3d7a00]" />
+              </div>
+              <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-[#3d7a00] mb-3">— Lo que pasa con Veluz</div>
+              <ul className="space-y-3.5">
+                {[
+                  'Un agente IA responde en segundos y agenda la cita solo.',
+                  'Aparecer primero en Google y ser citado por ChatGPT.',
+                  'Tus procesos corren solos — tú te concentras en crecer.',
+                ].map(t=>(
+                  <li key={t} className="flex gap-2.5 text-[#1a2a0e] text-sm font-medium leading-relaxed">
+                    <CheckCircle size={15} className="text-[#3d7a00] shrink-0 mt-0.5"/>{t}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          STATS · glow cards
+          STATS · prueba social
       ════════════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 section-glow pointer-events-none" />
         <div className="relative max-w-5xl mx-auto px-5 lg:px-8">
           <div ref={r1} className={`reveal text-center mb-12 ${v1?'visible':''}`}>
-            <p className="mono-label mb-3" style={{fontSize:'9px'}}>— Tracción</p>
+            <p className="mono-label mb-3" style={{fontSize:'9px'}}>— Resultados comprobados</p>
             <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-              <span className="text-white">Lo que el sistema viene </span>
-              <span className="serif-accent">generando.</span>
+              <span className="text-white">Números que </span>
+              <span className="serif-accent">hablan solos.</span>
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               {v:20,s:'+',l:'Negocios escalados'},
-              {v:15,s:'d',l:'Implementación promedio'},
-              {v:0,s:'',l:'Ads necesarios',amber:true},
+              {v:15,s:'d',l:'Tiempo de implementación'},
+              {v:0,s:'',l:'Pesos en publicidad necesarios',amber:true},
             ].map(({v,s,l,amber},i)=>(
               <GlowCard key={l} amber={amber} className={`text-center reveal reveal-${i+1} ${v1?'visible':''}`}>
                 <div className="text-5xl md:text-6xl text-white mb-3 tabular-nums"
@@ -538,63 +577,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── TICKER ───────────────────────────────────────────────────── */}
-      <div className="border-y border-white/[0.05] py-3 overflow-hidden ticker-mask">
-        <div className="ticker-inner">
-          {[...Array(2)].map((_,i)=>(
-            <div key={i} className="flex items-center">
-              {['IA Nativa','Agendamiento Autónomo','0 Ads','GEO Optimization','WhatsApp 24/7','Automatización Total','Make & Zapier','CRM Integrado','SEO Local'].map(t=>(
-                <span key={t} className="mono-label px-8 flex items-center gap-3" style={{opacity:0.4,fontSize:'9px'}}>
-                  <span className="w-1 h-1 bg-[#BFFF00]/60 rounded-full"/>{t}
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          EL PROBLEMA  ·  SECCIÓN BLANCA
-      ════════════════════════════════════════════════════════════════════ */}
-      <section id="problema" className="relative py-20 lg:py-28 grid-bg-light" style={{background:'#f5faf0'}}>
-        <div className="max-w-5xl mx-auto px-5 lg:px-8">
-          <div ref={r2} className={`reveal text-center mb-14 ${v2?'visible':''}`}>
-            <p className="mono-dark mb-3">— El problema</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-[#0a1a05]">
-              Operar manual es <span className="serif-dark">quemar dinero.</span>
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            <div className={`reveal reveal-1 lift bg-white border border-red-100 rounded-2xl p-7 shadow-sm ${v2?'visible':''}`}>
-              <div className="w-10 h-10 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center mb-5">
-                <AlertTriangle size={18} className="text-red-500" />
-              </div>
-              <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-red-400 mb-3">— Sin Veluz</div>
-              <ul className="space-y-3.5">
-                {['Procesos lentos dependientes de personas.','Leads fríos que nunca vuelven.','Invisible ante Google y los motores de IA.'].map(t=>(
-                  <li key={t} className="flex gap-2.5 text-zinc-500 text-sm leading-relaxed">
-                    <XCircle size={15} className="text-red-400 shrink-0 mt-0.5"/>{t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={`reveal reveal-2 lift bg-white border border-[#BFFF00]/30 rounded-2xl p-7 shadow-sm ${v2?'visible':''}`}>
-              <div className="w-10 h-10 rounded-xl bg-[#f0fce8] border border-[#BFFF00]/40 flex items-center justify-center mb-5">
-                <CheckCircle2 size={18} className="text-[#3d7a00]" />
-              </div>
-              <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-[#3d7a00] mb-3">— Efecto Veluz</div>
-              <ul className="space-y-3.5">
-                {['Operaciones autónomas 24/7 con agentes IA.','Conversión de leads en menos de 30 segundos.','Crecimiento orgánico predecible sin pauta.'].map(t=>(
-                  <li key={t} className="flex gap-2.5 text-[#1a2a0e] text-sm font-medium leading-relaxed">
-                    <CheckCircle size={15} className="text-[#3d7a00] shrink-0 mt-0.5"/>{t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ══════════════════════════════════════════════════════════════════
           MÉTODO VELUZ-3X · acq-flow
       ════════════════════════════════════════════════════════════════════ */}
@@ -602,12 +584,12 @@ export default function App() {
         <div className="absolute inset-0 section-glow pointer-events-none" />
         <div className="max-w-4xl mx-auto px-5 lg:px-8">
           <div ref={r3} className={`reveal text-center mb-16 ${v3?'visible':''}`}>
-            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Nuestra ingeniería</p>
+            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— D · Cómo lo hacemos</p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-4">
-              <span className="text-white">Método Veluz-3X. </span>
-              <span className="serif-accent">Tres etapas.</span>
+              <span className="text-white">Tres pasos. </span>
+              <span className="serif-accent">Un sistema completo.</span>
             </h2>
-            <p className="text-base text-zinc-400 max-w-md mx-auto font-light">Un sistema probado para digitalizar con IA. Claridad absoluta en cada paso.</p>
+            <p className="text-base text-zinc-400 max-w-md mx-auto font-light">Sin tecnicismos. Sin sorpresas. Sabes exactamente qué pasa en cada etapa.</p>
           </div>
           <div className="acq-flow">
             <div className="acq-line" aria-hidden="true"/>
@@ -654,11 +636,12 @@ export default function App() {
         <div className="absolute inset-0 section-glow pointer-events-none" />
         <div className="max-w-5xl mx-auto px-5 lg:px-8">
           <div ref={r4} className={`reveal text-center mb-12 ${v4?'visible':''}`}>
-            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Lo que activamos</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight">
-              <span className="text-white">Tres pilares. </span>
-              <span className="serif-accent">Un ecosistema.</span>
+            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Lo que construimos contigo</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-4">
+              <span className="text-white">Elige lo que </span>
+              <span className="serif-accent">tu negocio necesita.</span>
             </h2>
+            <p className="text-base text-zinc-400 max-w-md mx-auto font-light">Cada servicio es un sistema completo. Puedes empezar por uno o activarlos todos.</p>
           </div>
           <div className="space-y-3">
             {services.map((s, i) => (
@@ -719,10 +702,13 @@ export default function App() {
       <section id="clientes" className="relative py-20 lg:py-28" style={{background:'#f5faf0'}}>
         <div className="max-w-6xl mx-auto px-5 lg:px-8">
           <div ref={r5} className={`reveal text-center mb-14 ${v5?'visible':''}`}>
-            <p className="mono-dark mb-3">— Clientes reales</p>
+            <p className="mono-dark mb-3">— Casos reales · Colombia</p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-[#0a1a05]">
-              Negocios que <span className="serif-dark">ya funcionan.</span>
+              Ellos lo hicieron. <span className="serif-dark">Tú puedes también.</span>
             </h2>
+            <p className="text-zinc-500 text-base mt-4 max-w-lg mx-auto font-light">
+              Negocios reales, resultados medibles. Sin promesas vacías.
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t,i) => (
@@ -836,25 +822,25 @@ export default function App() {
           <p className="mono-label mb-6" style={{fontSize:'9px'}}>— Siguiente paso</p>
 
           <h2 className="text-4xl md:text-5xl lg:text-[62px] font-bold tracking-tight leading-[1.04] mb-6">
-            <span className="block text-white">¿Hablamos de</span>
-            <span className="serif-accent">negocios?</span>
+            <span className="block text-white">¿Listo para que tu</span>
+            <span className="serif-accent">negocio trabaje solo?</span>
           </h2>
 
-          <p className="text-lg text-zinc-300 leading-relaxed max-w-lg mx-auto mb-10 font-light">
-            30 minutos gratuitos. Te mostramos exactamente cómo funcionaría el sistema en tu negocio y qué resultados son realistas para tu caso.
+          <p className="text-lg text-zinc-300 leading-relaxed max-w-lg mx-auto mb-8 font-light">
+            Agenda una llamada de 30 minutos sin costo. Te mostramos exactamente cómo quedaría tu sistema, con números reales para tu negocio.
           </p>
 
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.05] border border-white/10 mb-10">
             <span className="w-1.5 h-1.5 bg-[#BFFF00] rounded-full shrink-0"
               style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.6s ease-in-out infinite'}}/>
             <span className="mono-label" style={{color:'rgba(255,255,255,0.6)',letterSpacing:'0.18em',fontSize:'9px'}}>
-              Llamada 30 min · Sin costo · Sin compromiso
+              Llamada 30 min · Sin costo · Sin presión
             </span>
           </div>
 
           {/* Checklist */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center text-sm text-zinc-400 mb-12">
-            {['Sin presión de venta — si no encaja, te lo decimos.','Diagnóstico real de tu operación.','Propuesta concreta con cifras.'].map(t=>(
+            {['Si no encajamos, te lo decimos directo.','Diagnóstico real de tu operación actual.','Propuesta concreta con cifras y tiempos.'].map(t=>(
               <div key={t} className="flex items-start gap-2 text-left">
                 <CheckCircle2 size={14} className="text-[#BFFF00] shrink-0 mt-0.5"/>
                 <span>{t}</span>
