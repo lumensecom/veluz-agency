@@ -363,6 +363,26 @@ export default function App() {
         .int-badge:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.18);transform:translateY(-2px);}
         .int-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;flex-shrink:0;}
 
+        /* ── Dark testimonial cards (AgendaPro-inspired) ── */
+        .test-dark-card{background:linear-gradient(160deg,rgba(12,24,10,0.8),rgba(6,16,4,0.5));border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:28px;display:flex;flex-direction:column;transition:all 280ms cubic-bezier(0.16,1,0.3,1);}
+        .test-dark-card:hover{border-color:rgba(191,255,0,0.28);transform:translateY(-4px);box-shadow:0 24px 52px -14px rgba(191,255,0,0.1);}
+        .test-dark-featured{background:linear-gradient(140deg,rgba(191,255,0,0.06),rgba(6,16,4,0.75));border:1px solid rgba(191,255,0,0.22);border-radius:28px;padding:40px;transition:all 300ms ease;}
+        .test-dark-featured:hover{border-color:rgba(191,255,0,0.42);box-shadow:0 32px 64px -16px rgba(191,255,0,0.15);}
+        .industry-chip-dark{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(191,255,0,0.65);padding:4px 10px;background:rgba(191,255,0,0.08);border:1px solid rgba(191,255,0,0.15);border-radius:100px;display:inline-block;white-space:nowrap;}
+        .test-metric-big{font-family:'Instrument Serif',serif;font-style:italic;line-height:1;color:#BFFF00;}
+
+        /* ── Clients ticker ── */
+        .clients-ticker{border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);padding:16px 0;overflow:hidden;}
+        @keyframes scroll-left{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+        .clients-ticker-inner{display:flex;width:max-content;animation:scroll-left 30s linear infinite;}
+        .clients-ticker-inner:hover{animation-play-state:paused;}
+        .client-name{flex-shrink:0;padding:0 48px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.18);display:flex;align-items:center;gap:48px;}
+        .client-name::after{content:'·';color:rgba(191,255,0,0.3);}
+
+        /* ── Proof float card (hero) ── */
+        @keyframes floatCard{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-8px) rotate(-1deg);}}
+        .proof-float{animation:floatCard 5s ease-in-out infinite;background:rgba(6,14,4,0.85);border:1px solid rgba(191,255,0,0.25);border-radius:16px;padding:14px 18px;backdrop-filter:blur(16px);display:inline-flex;align-items:center;gap:12px;box-shadow:0 16px 48px -12px rgba(0,0,0,0.5);}
+
         /* ── Scrollbar ── */
         ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(191,255,0,0.25);border-radius:2px;}
 
@@ -492,10 +512,27 @@ export default function App() {
             </a>
           </div>
 
-          {/* Clientes actuales */}
-          <p className="text-zinc-600 text-xs tracking-wide">
-            Trabajando con: <span className="text-zinc-500">LMS Finance · Ana Molano Peluquería · Soy Origen</span>
-          </p>
+          {/* Proof chips row */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
+            <div className="proof-float">
+              <div className="w-7 h-7 rounded-full bg-[#BFFF00]/15 flex items-center justify-center shrink-0">
+                <span className="w-2 h-2 bg-[#BFFF00] rounded-full block" style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.6s ease-in-out infinite'}}/>
+              </div>
+              <div>
+                <p className="text-white text-xs font-semibold leading-none mb-0.5">-92% tiempo operativo</p>
+                <p className="mono-label leading-none" style={{fontSize:'8px',opacity:0.5}}>LMS Finance</p>
+              </div>
+            </div>
+            <div className="proof-float" style={{animationDelay:'1.2s'}}>
+              <div className="w-7 h-7 rounded-full bg-[#BFFF00]/15 flex items-center justify-center shrink-0">
+                <span className="w-2 h-2 bg-[#BFFF00] rounded-full block" style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.6s ease-in-out infinite 0.5s'}}/>
+              </div>
+              <div>
+                <p className="text-white text-xs font-semibold leading-none mb-0.5">+60% pedidos digitales</p>
+                <p className="mono-label leading-none" style={{fontSize:'8px',opacity:0.5}}>Soy Origen</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -582,6 +619,19 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* ── MARQUEE · clientes ──────────────────────────────────────── */}
+      <div className="clients-ticker">
+        <div className="ticker-mask">
+          <div className="clients-ticker-inner">
+            {[...Array(4)].flatMap(() =>
+              ['LMS Finance','Ana Molano Peluquería','Soy Origen','Veluz Agency','Studio Wellness','Clínica Norte','Óptica Premium','Centro Fit']
+            ).map((n,i) => (
+              <span key={i} className="client-name">{n}</span>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════════════════
           MÉTODO VELUZ-3X · acq-flow
@@ -709,50 +759,102 @@ export default function App() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          TESTIMONIALES  ·  SECCIÓN BLANCA
+          TESTIMONIALES  ·  DARK — AgendaPro style
       ════════════════════════════════════════════════════════════════════ */}
-      <section id="clientes" className="relative py-20 lg:py-28" style={{background:'#f5faf0'}}>
+      <section id="clientes" className="relative py-24 lg:py-32 overflow-hidden border-y border-white/[0.05]">
+        <div className="absolute inset-0 section-glow pointer-events-none" />
         <div className="max-w-6xl mx-auto px-5 lg:px-8">
-          <div ref={r5} className={`reveal text-center mb-14 ${v5?'visible':''}`}>
-            <p className="mono-dark mb-3">— Casos reales · Colombia</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-[#0a1a05]">
-              Ellos lo hicieron. <span className="serif-dark">Tú puedes también.</span>
+
+          {/* Header */}
+          <div ref={r5} className={`reveal text-center mb-16 ${v5?'visible':''}`}>
+            <p className="mono-label mb-4" style={{fontSize:'9px'}}>— Casos reales · Colombia</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+              <span className="text-white">Negocios reales.</span><br/>
+              <span className="serif-accent">Resultados que se miden.</span>
             </h2>
-            <p className="text-zinc-500 text-base mt-4 max-w-lg mx-auto font-light">
-              Negocios reales, resultados medibles. Sin promesas vacías.
+            <p className="text-zinc-400 text-base mt-5 max-w-md mx-auto font-light">
+              Sin promesas vacías. Solo sistemas implementados y métricas concretas.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t,i) => (
-              <div key={t.company} className={`test-card reveal reveal-${i+1} ${v5?'visible':''}`}>
-                <div>
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <div>
-                      <div className="test-industry mb-3">{t.industry}</div>
-                      <div className="flex gap-1 test-stars">
-                        {[...Array(5)].map((_,k)=><Star key={k} size={12} fill="currentColor" stroke="none"/>)}
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="test-metric">{t.metric}</div>
-                      <div className="test-metric-label">{t.metricLabel}</div>
+
+          {/* Featured testimonial — LMS Finance */}
+          <div className={`reveal mb-5 ${v5?'visible':''}`}>
+            <div className="test-dark-featured">
+              <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-start">
+                {/* Quote side */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-3 mb-6">
+                    <span className="industry-chip-dark">{testimonials[0].industry}</span>
+                    <div className="flex gap-1 text-[#BFFF00]">
+                      {[...Array(5)].map((_,k)=><Star key={k} size={12} fill="currentColor" stroke="none"/>)}
                     </div>
                   </div>
-                  <p className="test-quote">"{t.quote}"</p>
+                  <div style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic',fontSize:'80px',lineHeight:0.8,color:'rgba(191,255,0,0.12)',userSelect:'none'}} aria-hidden="true">"</div>
+                  <p className="text-lg lg:text-xl text-zinc-100 leading-relaxed font-light italic mt-2 mb-7">
+                    {testimonials[0].quote}
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20 flex items-center justify-center text-[#BFFF00] font-bold text-sm shrink-0">
+                      {testimonials[0].name.charAt(0)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-white text-sm">{testimonials[0].name}</p>
+                      <p className="text-zinc-500 text-xs">{testimonials[0].role} · {testimonials[0].company}</p>
+                    </div>
+                    <a href={testimonials[0].url} target="_blank" rel="noopener noreferrer"
+                      className="text-[#BFFF00]/60 hover:text-[#BFFF00] text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 shrink-0 transition-colors">
+                      Ver web <ExternalLink size={10}/>
+                    </a>
+                  </div>
                 </div>
-                <div className="border-t border-black/[0.06] pt-4 flex items-center justify-between gap-3">
-                  <div>
-                    <p className="test-name">{t.name}</p>
-                    <p className="test-role">{t.role} · {t.company}</p>
+                {/* Metric side */}
+                <div className="shrink-0 flex flex-row lg:flex-col items-center lg:items-end gap-6 lg:gap-2 border-t lg:border-t-0 lg:border-l border-white/[0.07] pt-5 lg:pt-0 lg:pl-14 w-full lg:w-auto">
+                  <div className="text-center lg:text-right">
+                    <div className="test-metric-big" style={{fontSize:'clamp(52px,6vw,76px)'}}>{testimonials[0].metric}</div>
+                    <p className="mono-label mt-1" style={{opacity:0.5,fontSize:'9px'}}>{testimonials[0].metricLabel}</p>
                   </div>
-                  <a href={t.url} target="_blank" rel="noopener noreferrer" className="test-co" onClick={e=>e.stopPropagation()}>
-                    Ver web <ExternalLink size={10}/>
-                  </a>
+                  <div className="h-px w-12 bg-[#BFFF00]/15 hidden lg:block self-center" />
+                  <p className="text-zinc-600 text-xs leading-relaxed hidden lg:block text-right max-w-[140px]">Implementación en 30 días</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 2-col grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-14">
+            {testimonials.slice(1).map((t, i) => (
+              <div key={t.company} className={`test-dark-card reveal reveal-${i+1} ${v5?'visible':''}`}>
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <span className="industry-chip-dark">{t.industry}</span>
+                  <div className="flex gap-1 text-[#BFFF00] shrink-0">
+                    {[...Array(5)].map((_,k)=><Star key={k} size={11} fill="currentColor" stroke="none"/>)}
+                  </div>
+                </div>
+                <div style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic',fontSize:'56px',lineHeight:0.8,color:'rgba(191,255,0,0.1)',userSelect:'none'}} aria-hidden="true">"</div>
+                <p className="text-zinc-300 text-sm leading-relaxed font-light italic mt-2 mb-5 flex-1">
+                  {t.quote}
+                </p>
+                <div className="border-t border-white/[0.06] pt-4 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-white/40 text-xs font-bold shrink-0">
+                      {t.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-white text-sm truncate">{t.name}</p>
+                      <p className="text-zinc-600 text-xs truncate">{t.role} · {t.company}</p>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="test-metric-big" style={{fontSize:'28px'}}>{t.metric}</div>
+                    <p className="mono-label" style={{opacity:0.4,fontSize:'7.5px'}}>{t.metricLabel}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          <div ref={r6} className={`reveal text-center mt-12 ${v6?'visible':''}`}>
+
+          {/* CTA */}
+          <div ref={r6} className={`reveal text-center ${v6?'visible':''}`}>
             <button onClick={() => goto('agendar')}
               className="cta-glow bg-[#BFFF00] text-black font-semibold text-sm px-7 py-3.5 rounded-lg inline-flex items-center gap-2 hover:bg-[#d4ff40] transition-colors">
               Quiero resultados como estos <ArrowRight size={14}/>
