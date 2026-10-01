@@ -424,7 +424,7 @@ export default function App() {
               Agendar diagnóstico gratis <ArrowRight size={15} />
             </button>
             <a href="https://wa.me/573125923915" target="_blank" rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2.5 text-zinc-400 hover:text-white text-sm py-3 border border-white/10 rounded-xl hover:border-white/20 transition-all">
+              className="w-full flex items-center justify-center gap-2.5 text-white font-semibold text-base py-4 rounded-full bg-[#25D366] hover:bg-[#20bb5a] transition-colors active:scale-[0.98]">
               <WaIcon /> WhatsApp · +57 312 592 3915
             </a>
           </div>
@@ -468,48 +468,49 @@ export default function App() {
         <div className="hero-overlay" />
 
         {/* Hero content */}
-        <div className="relative z-20 max-w-3xl mx-auto px-5 lg:px-8 py-16 lg:py-24 text-center w-full">
+        <div className="relative z-20 max-w-4xl mx-auto px-5 lg:px-8 py-16 lg:py-20 text-center w-full">
 
           {/* Badge de prueba social */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-7">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.12] mb-8">
             <div className="flex gap-0.5 text-[#BFFF00]">
-              {[...Array(5)].map((_,i) => <Star key={i} size={10} fill="currentColor" stroke="none" />)}
+              {[...Array(5)].map((_,i) => <Star key={i} size={11} fill="currentColor" stroke="none" />)}
             </div>
-            <span className="mono-label" style={{letterSpacing:'0.18em',fontSize:'9px'}}>+20 negocios escalados en Colombia</span>
+            <span className="mono-label" style={{letterSpacing:'0.16em',fontSize:'10px'}}>+20 negocios escalados en Colombia</span>
           </div>
 
-          {/* H1 — promesa específica */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold tracking-tight leading-[1.06] mb-6">
+          {/* H1 — grande y directo, como AgendaPro */}
+          <h1 className="text-5xl sm:text-6xl md:text-[78px] lg:text-[96px] font-bold tracking-tight leading-[1.0] mb-6">
             <span className="block text-white">Tu negocio merece crecer</span>
             <span className="serif-accent">sin depender de ti.</span>
           </h1>
 
-          {/* Subheadline — claro y concreto */}
-          <p className="text-base sm:text-lg md:text-xl text-zinc-300 leading-relaxed max-w-2xl mx-auto mb-8 font-light">
-            Diseñamos y activamos tu sistema de <strong className="text-white font-semibold">ventas, presencia digital y automatización con IA</strong> para que tu operación trabaje 24/7 sin que estés presente. Sin anuncios. Sin contratar más.
+          {/* Subheadline — corto, legible, 2 líneas */}
+          <p className="text-xl sm:text-2xl text-zinc-300 leading-relaxed max-w-2xl mx-auto mb-10 font-light">
+            Ventas, presencia digital y automatización con IA.<br className="hidden sm:block"/>
+            Tu operación trabaja 24/7. Sin anuncios. Sin contratar más.
           </p>
 
-          {/* Micro-trust — 3 garantías rápidas */}
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-10">
-            {['Implementación en 15 días','0 conocimientos técnicos','ROI claro en 60 días'].map(t => (
-              <span key={t} className="flex items-center gap-1.5 text-xs text-zinc-400">
-                <CheckCircle2 size={12} className="text-[#BFFF00] shrink-0"/>{t}
-              </span>
-            ))}
-          </div>
-
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+          {/* CTAs — pill shape, grandes */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <a href="https://calendly.com/veluz-acquisition/30min?hide_landing_page_details=1&primary_color=bfff00"
               target="_blank" rel="noopener noreferrer"
-              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-bold text-base px-8 py-4 rounded-xl transition-colors inline-flex items-center justify-center gap-2">
-              Agenda tu diagnóstico gratis <ArrowRight size={15} />
+              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-bold text-lg px-10 py-5 rounded-full transition-colors inline-flex items-center justify-center gap-2.5">
+              Agenda tu diagnóstico gratis <ArrowRight size={18} />
             </a>
             <a href="https://wa.me/573125923915?text=Hola%20Veluz,%20quiero%20informaci%C3%B3n"
               target="_blank" rel="noopener noreferrer"
-              className="bg-white/[0.06] hover:bg-white/[0.11] border border-white/15 text-white font-medium text-base px-7 py-4 rounded-xl transition-colors inline-flex items-center justify-center gap-2">
+              className="bg-[#25D366] hover:bg-[#20bb5a] text-white font-bold text-lg px-9 py-5 rounded-full transition-colors inline-flex items-center justify-center gap-2.5">
               <WaIcon /> WhatsApp directo
             </a>
+          </div>
+
+          {/* Micro-trust */}
+          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2 mb-10">
+            {['Implementación en 15 días','Sin conocimientos técnicos','ROI en 60 días'].map(t => (
+              <span key={t} className="flex items-center gap-2 text-sm text-zinc-400">
+                <CheckCircle2 size={14} className="text-[#BFFF00] shrink-0"/>{t}
+              </span>
+            ))}
           </div>
 
           {/* Proof chips row */}
@@ -967,14 +968,14 @@ export default function App() {
             <a
               href="https://calendly.com/veluz-acquisition/30min?hide_landing_page_details=1&primary_color=bfff00"
               target="_blank" rel="noopener noreferrer"
-              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-bold text-lg px-10 py-5 rounded-xl inline-flex items-center justify-center gap-2.5 transition-colors">
+              className="cta-glow bg-[#BFFF00] hover:bg-[#d4ff40] text-black font-bold text-xl px-12 py-5 rounded-full inline-flex items-center justify-center gap-2.5 transition-colors">
               <Calendar size={20} strokeWidth={2.5} />
               Agendar diagnóstico gratis
             </a>
             <a
               href="https://wa.me/573125923915?text=Hola%20Veluz%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20gratuito"
               target="_blank" rel="noopener noreferrer"
-              className="bg-white/[0.06] hover:bg-white/[0.11] border border-white/15 text-white font-medium text-base px-8 py-5 rounded-xl inline-flex items-center justify-center gap-2.5 transition-colors">
+              className="bg-[#25D366] hover:bg-[#20bb5a] text-white font-bold text-lg px-8 py-5 rounded-full inline-flex items-center justify-center gap-2.5 transition-colors">
               <WaIcon /> WhatsApp directo
             </a>
           </div>
