@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Zap, CheckCircle2, ChevronDown, Calendar,
-  BrainCircuit, Megaphone, AlertTriangle, Star, Menu, X, Plus,
+  BrainCircuit, Megaphone, AlertTriangle, Star, Menu, X,
   Users, CheckCircle, XCircle, ArrowRight, ExternalLink
 } from 'lucide-react';
 
@@ -337,9 +337,14 @@ export default function App() {
         .test-card .test-co:hover{color:#2d5c00;border-color:rgba(45,92,0,0.5);}
         .test-card .test-industry{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,80,0,0.45);padding:3px 8px;background:rgba(191,255,0,0.12);border-radius:20px;display:inline-block;}
 
-        /* ── Service card ── */
-        .svc-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:28px;transition:all 300ms cubic-bezier(0.16,1,0.3,1);cursor:pointer;}
-        .svc-card:hover,.svc-card.open{border-color:rgba(191,255,0,0.25);background:rgba(191,255,0,0.02);}
+        /* ── Service cards (grid style) ── */
+        .svc-card-new{background:linear-gradient(160deg,rgba(15,28,12,0.65),rgba(8,18,6,0.4));border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:32px;display:flex;flex-direction:column;transition:all 300ms cubic-bezier(0.16,1,0.3,1);}
+        .svc-card-new:hover{border-color:rgba(191,255,0,0.32);transform:translateY(-5px);box-shadow:0 28px 60px -18px rgba(191,255,0,0.14);}
+        .svc-card-new.featured{border-color:rgba(191,255,0,0.38);background:linear-gradient(160deg,rgba(191,255,0,0.06),rgba(8,18,6,0.55));}
+        .svc-card-new.featured:hover{border-color:rgba(191,255,0,0.6);box-shadow:0 32px 68px -18px rgba(191,255,0,0.22);}
+        .svc-icon-wrap{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .svc-icon-wrap.default{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);}
+        .svc-icon-wrap.featured{background:rgba(191,255,0,0.12);border:1px solid rgba(191,255,0,0.25);}
 
         /* ── FAQ ── */
         .faq-item{border:1px solid rgba(0,0,0,0.07);border-radius:14px;overflow:hidden;background:#fff;transition:border-color 250ms ease,box-shadow 250ms ease;}
@@ -354,8 +359,9 @@ export default function App() {
         .hero-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 50%,transparent 0%,rgba(3,7,16,0.4) 60%,rgba(3,7,16,0.95) 100%),linear-gradient(180deg,rgba(3,7,16,0.25) 0%,transparent 30%,transparent 65%,rgba(3,7,16,1) 100%);}
 
         /* ── Integration badges ── */
-        .int-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;white-space:nowrap;transition:all 200ms ease;}
-        .int-badge:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);}
+        .int-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px 8px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:100px;white-space:nowrap;transition:all 220ms ease;}
+        .int-badge:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.18);transform:translateY(-2px);}
+        .int-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;flex-shrink:0;}
 
         /* ── Scrollbar ── */
         ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(191,255,0,0.25);border-radius:2px;}
@@ -621,8 +627,10 @@ export default function App() {
           <div className="flex flex-wrap justify-center gap-2.5">
             {integrations.map(({name,c}) => (
               <div key={name} className="int-badge">
-                <span className="w-2 h-2 rounded-full shrink-0" style={{background:c,boxShadow:`0 0 6px ${c}60`}}/>
-                <span className="text-zinc-400 text-xs font-medium">{name}</span>
+                <div className="int-dot" style={{background:`${c}22`,color:c,boxShadow:`inset 0 0 0 1px ${c}44`}}>
+                  {name.charAt(0)}
+                </div>
+                <span className="text-zinc-300 text-xs font-medium">{name}</span>
               </div>
             ))}
           </div>
@@ -643,55 +651,59 @@ export default function App() {
             </h2>
             <p className="text-base text-zinc-400 max-w-md mx-auto font-light">Cada servicio es un sistema completo. Puedes empezar por uno o activarlos todos.</p>
           </div>
-          <div className="space-y-3">
-            {services.map((s, i) => (
-              <div key={s.id}
-                className={`svc-card ${openService===s.id?'open':''} reveal reveal-${i+1} ${v4?'visible':''}`}
-                onClick={() => setOpenService(prev => prev===s.id ? null : s.id)}>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4 flex-wrap">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${openService===s.id ? 'bg-[#BFFF00] text-black' : 'bg-[#BFFF00]/10 text-[#BFFF00]'}`}>
-                      {s.icon}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {services.map((s, i) => {
+              const isFeatured = s.id === 'ia';
+              return (
+                <div key={s.id}
+                  className={`svc-card-new ${isFeatured ? 'featured' : ''} reveal reveal-${i+1} ${v4 ? 'visible' : ''}`}>
+                  {/* Icon + Tag row */}
+                  <div className="flex items-start justify-between gap-3 mb-6">
+                    <div className={`svc-icon-wrap ${isFeatured ? 'featured' : 'default'}`}>
+                      <div className="text-[#BFFF00]">{s.icon}</div>
                     </div>
-                    <div>
-                      <p className="mono-label mb-0.5" style={{fontSize:'8.5px'}}>{s.tag}</p>
-                      <h3 className={`text-lg md:text-xl font-semibold tracking-tight transition-colors ${openService===s.id?'text-[#BFFF00]':'text-white'}`}>{s.title}</h3>
+                    <span className="mono-label text-right leading-relaxed shrink-0 pt-1" style={{opacity:0.45,fontSize:'7.5px',maxWidth:'100px'}}>{s.tag}</span>
+                  </div>
+
+                  {/* Title & desc */}
+                  <h3 className="text-xl font-bold tracking-tight text-white mb-3 leading-snug">{s.title}</h3>
+                  <p className="text-zinc-400 text-sm leading-relaxed mb-5 font-light" style={{flexGrow:1}}>{s.desc}</p>
+
+                  {/* Features list */}
+                  <div className="space-y-2.5 mb-6">
+                    {s.features.map(f => (
+                      <div key={f} className="flex items-start gap-2.5 text-sm text-zinc-300">
+                        <CheckCircle2 size={13} className="text-[#BFFF00] shrink-0 mt-0.5"/>
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Before / After */}
+                  <div className="grid grid-cols-2 gap-2.5 mb-6 border-t border-white/[0.06] pt-5">
+                    <div className="bg-red-500/[0.06] border border-red-500/[0.1] p-3 rounded-xl">
+                      <p className="text-red-400 font-mono uppercase tracking-wider mb-2 flex items-center gap-1" style={{fontSize:'8px'}}>
+                        <XCircle size={9}/>Antes
+                      </p>
+                      <p className="text-zinc-500 leading-relaxed" style={{fontSize:'11px'}}>{s.before}</p>
+                    </div>
+                    <div className="bg-[#BFFF00]/[0.05] border border-[#BFFF00]/[0.12] p-3 rounded-xl">
+                      <p className="text-[#BFFF00] font-mono uppercase tracking-wider mb-2 flex items-center gap-1" style={{fontSize:'8px'}}>
+                        <CheckCircle2 size={9}/>Después
+                      </p>
+                      <p className="text-zinc-200 leading-relaxed font-medium" style={{fontSize:'11px'}}>{s.after}</p>
                     </div>
                   </div>
-                  <div className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all ${openService===s.id?'border-[#BFFF00]/50 text-[#BFFF00]':'border-white/15 text-zinc-500'}`}>
-                    {openService===s.id ? <X size={12}/> : <Plus size={12}/>}
-                  </div>
+
+                  {/* CTA */}
+                  <button
+                    onClick={() => goto('agendar')}
+                    className={`mt-auto font-semibold text-sm px-5 py-2.5 rounded-xl inline-flex items-center justify-center gap-2 transition-colors w-full ${isFeatured ? 'cta-glow bg-[#BFFF00] text-black hover:bg-[#d4ff40]' : 'bg-white/[0.06] text-white border border-white/10 hover:bg-white/[0.1]'}`}>
+                    Implementar este sistema <ArrowRight size={13}/>
+                  </button>
                 </div>
-                {openService===s.id && (
-                  <div className="mt-5">
-                    <p className="text-zinc-300 leading-relaxed mb-5 text-sm font-light">"{s.desc}"</p>
-                    <div className="grid sm:grid-cols-2 gap-2.5 mb-5">
-                      {s.features.map(f=>(
-                        <div key={f} className="flex items-center gap-2 text-sm text-zinc-300 bg-white/[0.03] border border-white/[0.06] p-3 rounded-xl">
-                          <CheckCircle2 size={12} className="text-[#BFFF00] shrink-0"/>{f}
-                        </div>
-                      ))}
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-3 border-t border-white/[0.07] pt-5">
-                      <div className="bg-red-500/[0.05] border border-red-500/[0.1] p-4 rounded-xl">
-                        <p className="text-red-400 text-[9px] font-mono uppercase tracking-wider mb-2 flex items-center gap-1"><XCircle size={10}/>Antes</p>
-                        <p className="text-zinc-400 text-sm leading-relaxed">{s.before}</p>
-                      </div>
-                      <div className="bg-[#BFFF00]/[0.04] border border-[#BFFF00]/[0.1] p-4 rounded-xl">
-                        <p className="text-[#BFFF00] text-[9px] font-mono uppercase tracking-wider mb-2 flex items-center gap-1"><CheckCircle2 size={10}/>Después</p>
-                        <p className="text-zinc-200 text-sm leading-relaxed font-medium">{s.after}</p>
-                      </div>
-                    </div>
-                    <div className="mt-4">
-                      <button onClick={e=>{e.stopPropagation();goto('agendar');}}
-                        className="cta-glow bg-[#BFFF00] text-black font-semibold text-sm px-5 py-2.5 rounded-lg inline-flex items-center gap-2 hover:bg-[#d4ff40] transition-colors">
-                        Implementar este sistema <ArrowRight size={13}/>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
