@@ -363,13 +363,27 @@ export default function App() {
         .int-badge:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.18);transform:translateY(-2px);}
         .int-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;flex-shrink:0;}
 
-        /* ── Dark testimonial cards (AgendaPro-inspired) ── */
-        .test-dark-card{background:linear-gradient(160deg,rgba(12,24,10,0.8),rgba(6,16,4,0.5));border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:28px;display:flex;flex-direction:column;transition:all 280ms cubic-bezier(0.16,1,0.3,1);}
-        .test-dark-card:hover{border-color:rgba(191,255,0,0.28);transform:translateY(-4px);box-shadow:0 24px 52px -14px rgba(191,255,0,0.1);}
-        .test-dark-featured{background:linear-gradient(140deg,rgba(191,255,0,0.06),rgba(6,16,4,0.75));border:1px solid rgba(191,255,0,0.22);border-radius:28px;padding:40px;transition:all 300ms ease;}
+        /* ── Dark testimonial cards ── */
+        .test-dark-card{background:linear-gradient(160deg,rgba(12,24,10,0.8),rgba(6,16,4,0.5));border:1px solid rgba(255,255,255,0.07);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;transition:all 280ms cubic-bezier(0.16,1,0.3,1);}
+        .test-dark-card:hover{border-color:rgba(191,255,0,0.28);transform:translateY(-5px);box-shadow:0 28px 56px -14px rgba(191,255,0,0.12);}
+        .test-dark-featured{background:linear-gradient(140deg,rgba(191,255,0,0.055),rgba(6,16,4,0.8));border:1px solid rgba(191,255,0,0.22);border-radius:28px;overflow:hidden;transition:all 300ms ease;}
         .test-dark-featured:hover{border-color:rgba(191,255,0,0.42);box-shadow:0 32px 64px -16px rgba(191,255,0,0.15);}
         .industry-chip-dark{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(191,255,0,0.65);padding:4px 10px;background:rgba(191,255,0,0.08);border:1px solid rgba(191,255,0,0.15);border-radius:100px;display:inline-block;white-space:nowrap;}
         .test-metric-big{font-family:'Instrument Serif',serif;font-style:italic;line-height:1;color:#BFFF00;}
+
+        /* ── Browser preview mockup ── */
+        .browser-mock{border-radius:12px 12px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,0.1);border-bottom:none;}
+        .browser-chrome{background:#111827;padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.07);}
+        .browser-dots{display:flex;gap:5px;}
+        .browser-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+        .browser-urlbar{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+        .browser-viewport{overflow:hidden;position:relative;}
+        .browser-viewport-sm{height:180px;}
+        .browser-viewport-lg{height:240px;}
+        .browser-scroll-bg{width:100%;height:100%;background-size:100% auto;background-position:top center;background-repeat:no-repeat;animation:scrollbg 10s ease-in-out infinite alternate;}
+        @keyframes scrollbg{0%{background-position:top center;}100%{background-position:bottom center;}}
+        .browser-mock:hover .browser-scroll-bg,.test-dark-featured:hover .browser-scroll-bg{animation-play-state:paused;}
+        .test-dark-card-body{padding:22px;display:flex;flex-direction:column;flex:1;}
 
         /* ── Clients ticker ── */
         .clients-ticker{border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);padding:16px 0;overflow:hidden;}
@@ -778,86 +792,133 @@ export default function App() {
             </p>
           </div>
 
-          {/* Featured testimonial — LMS Finance */}
+          {/* Featured — LMS Finance: browser izq + quote der */}
           <div className={`reveal mb-5 ${v5?'visible':''}`}>
             <div className="test-dark-featured">
-              <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-start">
-                {/* Quote side */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-3 mb-6">
-                    <span className="industry-chip-dark">{testimonials[0].industry}</span>
-                    <div className="flex gap-1 text-[#BFFF00]">
-                      {[...Array(5)].map((_,k)=><Star key={k} size={12} fill="currentColor" stroke="none"/>)}
+              <div className="flex flex-col lg:flex-row overflow-hidden rounded-2xl">
+                {/* Browser preview */}
+                <div className="lg:w-[52%] shrink-0">
+                  <div className="browser-mock h-full" style={{borderRadius:0,border:'none',borderRight:'1px solid rgba(255,255,255,0.08)'}}>
+                    <div className="browser-chrome">
+                      <div className="browser-dots">
+                        <div className="browser-dot" style={{background:'#ff5f57'}}/>
+                        <div className="browser-dot" style={{background:'#febc2e'}}/>
+                        <div className="browser-dot" style={{background:'#28c840'}}/>
+                      </div>
+                      <div className="browser-urlbar">lms-finance.vercel.app</div>
+                      <a href={testimonials[0].url} target="_blank" rel="noopener noreferrer"
+                        className="shrink-0 text-[#BFFF00]/50 hover:text-[#BFFF00] transition-colors">
+                        <ExternalLink size={11}/>
+                      </a>
                     </div>
-                  </div>
-                  <div style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic',fontSize:'80px',lineHeight:0.8,color:'rgba(191,255,0,0.12)',userSelect:'none'}} aria-hidden="true">"</div>
-                  <p className="text-lg lg:text-xl text-zinc-100 leading-relaxed font-light italic mt-2 mb-7">
-                    {testimonials[0].quote}
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20 flex items-center justify-center text-[#BFFF00] font-bold text-sm shrink-0">
-                      {testimonials[0].name.charAt(0)}
+                    <div className="browser-viewport browser-viewport-lg" style={{minHeight:'240px'}}>
+                      <div className="browser-scroll-bg" style={{backgroundImage:'url(/preview-lms.jpg)'}}/>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-white text-sm">{testimonials[0].name}</p>
-                      <p className="text-zinc-500 text-xs">{testimonials[0].role} · {testimonials[0].company}</p>
-                    </div>
-                    <a href={testimonials[0].url} target="_blank" rel="noopener noreferrer"
-                      className="text-[#BFFF00]/60 hover:text-[#BFFF00] text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 shrink-0 transition-colors">
-                      Ver web <ExternalLink size={10}/>
-                    </a>
                   </div>
                 </div>
-                {/* Metric side */}
-                <div className="shrink-0 flex flex-row lg:flex-col items-center lg:items-end gap-6 lg:gap-2 border-t lg:border-t-0 lg:border-l border-white/[0.07] pt-5 lg:pt-0 lg:pl-14 w-full lg:w-auto">
-                  <div className="text-center lg:text-right">
-                    <div className="test-metric-big" style={{fontSize:'clamp(52px,6vw,76px)'}}>{testimonials[0].metric}</div>
-                    <p className="mono-label mt-1" style={{opacity:0.5,fontSize:'9px'}}>{testimonials[0].metricLabel}</p>
+                {/* Quote + info */}
+                <div className="flex-1 p-8 lg:p-10 flex flex-col justify-between">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-3 mb-5">
+                      <span className="industry-chip-dark">{testimonials[0].industry}</span>
+                      <div className="flex gap-1 text-[#BFFF00]">
+                        {[...Array(5)].map((_,k)=><Star key={k} size={12} fill="currentColor" stroke="none"/>)}
+                      </div>
+                    </div>
+                    <div style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic',fontSize:'64px',lineHeight:0.75,color:'rgba(191,255,0,0.1)',userSelect:'none'}} aria-hidden="true">"</div>
+                    <p className="text-base lg:text-lg text-zinc-100 leading-relaxed font-light italic mt-2 mb-6">
+                      {testimonials[0].quote}
+                    </p>
                   </div>
-                  <div className="h-px w-12 bg-[#BFFF00]/15 hidden lg:block self-center" />
-                  <p className="text-zinc-600 text-xs leading-relaxed hidden lg:block text-right max-w-[140px]">Implementación en 30 días</p>
+                  <div>
+                    <div className="mb-5">
+                      <div className="test-metric-big" style={{fontSize:'clamp(44px,5vw,64px)'}}>{testimonials[0].metric}</div>
+                      <p className="mono-label mt-1" style={{opacity:0.45,fontSize:'9px'}}>{testimonials[0].metricLabel}</p>
+                    </div>
+                    <div className="flex items-center gap-3 pt-4 border-t border-white/[0.07]">
+                      <div className="w-9 h-9 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20 flex items-center justify-center text-[#BFFF00] font-bold text-sm shrink-0">
+                        {testimonials[0].name.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white text-sm">{testimonials[0].name}</p>
+                        <p className="text-zinc-500 text-xs">{testimonials[0].role} · {testimonials[0].company}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 2-col grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-14">
-            {testimonials.slice(1).map((t, i) => (
-              <div key={t.company} className={`test-dark-card reveal reveal-${i+1} ${v5?'visible':''}`}>
-                <div className="flex items-start justify-between gap-3 mb-4">
-                  <span className="industry-chip-dark">{t.industry}</span>
-                  <div className="flex gap-1 text-[#BFFF00] shrink-0">
-                    {[...Array(5)].map((_,k)=><Star key={k} size={11} fill="currentColor" stroke="none"/>)}
-                  </div>
-                </div>
-                <div style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic',fontSize:'56px',lineHeight:0.8,color:'rgba(191,255,0,0.1)',userSelect:'none'}} aria-hidden="true">"</div>
-                <p className="text-zinc-300 text-sm leading-relaxed font-light italic mt-2 mb-5 flex-1">
-                  {t.quote}
-                </p>
-                <div className="border-t border-white/[0.06] pt-4 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-white/40 text-xs font-bold shrink-0">
-                      {t.name.charAt(0)}
+          {/* Grid 2-col — Ana Molano + Soy Origen */}
+          {(() => {
+            const previews = {
+              'Ana Molano Peluquería': {src:'/preview-anamolano.jpg', url:'anamolanopeluqueria.com'},
+              'Soy Origen':            {src:'/preview-origen.jpg',    url:'soyorigen.co'},
+            };
+            return (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-14">
+                {testimonials.slice(1).map((t, i) => {
+                  const prev = previews[t.company] || {};
+                  return (
+                    <div key={t.company} className={`test-dark-card reveal reveal-${i+1} ${v5?'visible':''}`}>
+                      {/* Browser mockup */}
+                      <div className="browser-mock" style={{borderRadius:0,border:'none',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
+                        <div className="browser-chrome">
+                          <div className="browser-dots">
+                            <div className="browser-dot" style={{background:'#ff5f57'}}/>
+                            <div className="browser-dot" style={{background:'#febc2e'}}/>
+                            <div className="browser-dot" style={{background:'#28c840'}}/>
+                          </div>
+                          <div className="browser-urlbar">{prev.url}</div>
+                          <a href={t.url} target="_blank" rel="noopener noreferrer"
+                            className="shrink-0 text-[#BFFF00]/40 hover:text-[#BFFF00] transition-colors">
+                            <ExternalLink size={10}/>
+                          </a>
+                        </div>
+                        <div className="browser-viewport browser-viewport-sm">
+                          <div className="browser-scroll-bg" style={{backgroundImage:`url(${prev.src})`}}/>
+                        </div>
+                      </div>
+                      {/* Card body */}
+                      <div className="test-dark-card-body">
+                        <div className="flex items-center justify-between gap-3 mb-3">
+                          <span className="industry-chip-dark">{t.industry}</span>
+                          <div className="flex gap-1 text-[#BFFF00] shrink-0">
+                            {[...Array(5)].map((_,k)=><Star key={k} size={10} fill="currentColor" stroke="none"/>)}
+                          </div>
+                        </div>
+                        <div style={{fontFamily:"'Instrument Serif',serif",fontStyle:'italic',fontSize:'44px',lineHeight:0.75,color:'rgba(191,255,0,0.1)',userSelect:'none'}} aria-hidden="true">"</div>
+                        <p className="text-zinc-300 text-sm leading-relaxed font-light italic mt-2 mb-4 flex-1">
+                          {t.quote}
+                        </p>
+                        <div className="border-t border-white/[0.06] pt-4 flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-7 h-7 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-white/40 text-xs font-bold shrink-0">
+                              {t.name.charAt(0)}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-white text-sm truncate">{t.name}</p>
+                              <p className="text-zinc-600 text-xs truncate">{t.role} · {t.company}</p>
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <div className="test-metric-big" style={{fontSize:'26px'}}>{t.metric}</div>
+                            <p className="mono-label" style={{opacity:0.35,fontSize:'7.5px'}}>{t.metricLabel}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-white text-sm truncate">{t.name}</p>
-                      <p className="text-zinc-600 text-xs truncate">{t.role} · {t.company}</p>
-                    </div>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <div className="test-metric-big" style={{fontSize:'28px'}}>{t.metric}</div>
-                    <p className="mono-label" style={{opacity:0.4,fontSize:'7.5px'}}>{t.metricLabel}</p>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+            );
+          })()}
 
           {/* CTA */}
           <div ref={r6} className={`reveal text-center ${v6?'visible':''}`}>
             <button onClick={() => goto('agendar')}
-              className="cta-glow bg-[#BFFF00] text-black font-semibold text-sm px-7 py-3.5 rounded-lg inline-flex items-center gap-2 hover:bg-[#d4ff40] transition-colors">
+              className="cta-glow bg-[#BFFF00] text-black font-semibold text-sm px-7 py-3.5 rounded-full inline-flex items-center gap-2 hover:bg-[#d4ff40] transition-colors">
               Quiero resultados como estos <ArrowRight size={14}/>
             </button>
           </div>
