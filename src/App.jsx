@@ -247,9 +247,10 @@ export default function App() {
 
         /* ── Mesh hero bg · proporciones Chispa AI, colores Veluz ── */
         .mesh-bg{background:
-          radial-gradient(ellipse 55% 45% at 16% 0%,rgba(191,255,0,0.52) 0%,transparent 56%),
-          radial-gradient(ellipse 45% 38% at 84% 7%,rgba(150,230,0,0.36) 0%,transparent 52%),
-          radial-gradient(ellipse 60% 50% at 50% 100%,rgba(80,150,0,0.08) 0%,transparent 60%);}
+          radial-gradient(ellipse 65% 55% at 12% 0%,rgba(191,255,0,0.64) 0%,transparent 55%),
+          radial-gradient(ellipse 45% 38% at 88% 5%,rgba(140,220,0,0.42) 0%,transparent 50%),
+          radial-gradient(ellipse 50% 42% at 50% 96%,rgba(100,180,0,0.14) 0%,transparent 55%),
+          radial-gradient(ellipse 28% 22% at 68% 38%,rgba(191,255,0,0.07) 0%,transparent 55%);}
 
         /* ── Section glow ── */
         .section-glow{background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(191,255,0,0.08) 0%,transparent 60%);}
@@ -379,10 +380,11 @@ export default function App() {
         .browser-urlbar{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
         .browser-viewport{overflow:hidden;position:relative;}
         .browser-viewport-sm{height:180px;}
-        .browser-viewport-lg{height:240px;}
-        .browser-scroll-bg{width:100%;height:100%;background-size:100% auto;background-position:top center;background-repeat:no-repeat;animation:scrollbg 10s ease-in-out infinite alternate;}
+        .browser-viewport-lg{height:340px;}
+        .browser-scroll-bg{width:100%;height:100%;background-size:100% auto;background-position:top center;background-repeat:no-repeat;animation:scrollbg 12s ease-in-out infinite alternate;}
+        .browser-scroll-bg-featured{width:100%;height:100%;background-size:cover;background-position:20% top;background-repeat:no-repeat;animation:scrollbg 12s ease-in-out infinite alternate;}
         @keyframes scrollbg{0%{background-position:top center;}100%{background-position:bottom center;}}
-        .browser-mock:hover .browser-scroll-bg,.test-dark-featured:hover .browser-scroll-bg{animation-play-state:paused;}
+        .browser-mock:hover .browser-scroll-bg,.test-dark-featured:hover .browser-scroll-bg,.browser-mock:hover .browser-scroll-bg-featured,.test-dark-featured:hover .browser-scroll-bg-featured{animation-play-state:paused;}
         .test-dark-card-body{padding:22px;display:flex;flex-direction:column;flex:1;}
 
         /* ── Clients ticker ── */
@@ -479,6 +481,9 @@ export default function App() {
 
       <section id="hero-section" className="relative overflow-hidden min-h-[calc(100vh-88px)] flex items-center grid-bg">
         <div className="absolute inset-0 mesh-bg z-0" />
+        {/* Chispa-style glow blobs */}
+        <div className="absolute top-0 left-0 pointer-events-none" style={{width:'560px',height:'560px',background:'rgba(191,255,0,0.20)',borderRadius:'50%',filter:'blur(130px)',transform:'translate(-32%,-48%)',zIndex:1}}/>
+        <div className="absolute -top-8 right-0 pointer-events-none" style={{width:'380px',height:'380px',background:'rgba(120,210,0,0.13)',borderRadius:'50%',filter:'blur(110px)',transform:'translate(28%,-8%)',zIndex:1}}/>
         <div className="hero-overlay" />
 
         {/* Hero content */}
@@ -519,7 +524,7 @@ export default function App() {
           </div>
 
           {/* Micro-trust */}
-          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2 mb-10">
+          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2 mb-4">
             {['Implementación en 15 días','Sin conocimientos técnicos','ROI en 60 días'].map(t => (
               <span key={t} className="flex items-center gap-2 text-sm text-zinc-400">
                 <CheckCircle2 size={14} className="text-[#BFFF00] shrink-0"/>{t}
@@ -527,27 +532,6 @@ export default function App() {
             ))}
           </div>
 
-          {/* Proof chips row */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
-            <div className="proof-float">
-              <div className="w-7 h-7 rounded-full bg-[#BFFF00]/15 flex items-center justify-center shrink-0">
-                <span className="w-2 h-2 bg-[#BFFF00] rounded-full block" style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.6s ease-in-out infinite'}}/>
-              </div>
-              <div>
-                <p className="text-white text-xs font-semibold leading-none mb-0.5">-92% tiempo operativo</p>
-                <p className="mono-label leading-none" style={{fontSize:'8px',opacity:0.5}}>LMS Finance</p>
-              </div>
-            </div>
-            <div className="proof-float" style={{animationDelay:'1.2s'}}>
-              <div className="w-7 h-7 rounded-full bg-[#BFFF00]/15 flex items-center justify-center shrink-0">
-                <span className="w-2 h-2 bg-[#BFFF00] rounded-full block" style={{boxShadow:'0 0 8px rgba(191,255,0,0.8)',animation:'blink 1.6s ease-in-out infinite 0.5s'}}/>
-              </div>
-              <div>
-                <p className="text-white text-xs font-semibold leading-none mb-0.5">+60% pedidos digitales</p>
-                <p className="mono-label leading-none" style={{fontSize:'8px',opacity:0.5}}>Soy Origen</p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -795,7 +779,7 @@ export default function App() {
           {/* Featured — LMS Finance: browser izq + quote der */}
           <div className={`reveal mb-5 ${v5?'visible':''}`}>
             <div className="test-dark-featured">
-              <div className="flex flex-col lg:flex-row overflow-hidden rounded-2xl">
+              <div className="flex flex-col lg:flex-row">
                 {/* Browser preview */}
                 <div className="lg:w-[52%] shrink-0">
                   <div className="browser-mock h-full" style={{borderRadius:0,border:'none',borderRight:'1px solid rgba(255,255,255,0.08)'}}>
@@ -811,8 +795,8 @@ export default function App() {
                         <ExternalLink size={11}/>
                       </a>
                     </div>
-                    <div className="browser-viewport browser-viewport-lg" style={{minHeight:'240px'}}>
-                      <div className="browser-scroll-bg" style={{backgroundImage:'url(/preview-lms.jpg)'}}/>
+                    <div className="browser-viewport browser-viewport-lg">
+                      <div className="browser-scroll-bg-featured" style={{backgroundImage:'url(/preview-lms.jpg)'}}/>
                     </div>
                   </div>
                 </div>
